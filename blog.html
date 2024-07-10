@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>vCard - Personal Portfolio</title>
+
+  <!--
+    - favicon
+  -->
+  <link rel="shortcut icon" href="./assets/images/logo.svg" type="image/x-icon">
+
+  <!--
+    - custom css link
+  -->
+  <link rel="stylesheet" href="./assets/css/style.css">
+
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.5.2/css/all.css" />
+
+  <!--
+    - google font link
+  -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+  <main>
+
+    <!--
+      - #SIDEBAR
+    -->
+
+    <aside class="sidebar" data-sidebar>
+
+      <div class="sidebar-info">
+
+        <figure class="avatar-box">
+          <img src="./assets/images/my-avatar.png" alt="Richard hanrick" width="80">
+        </figure>
+
+        <div class="info-content">
+          <h1 class="name" title="Richard hanrick">Md. Zahid Hasan</h1>
+
+          <p class="title">Data Scientist</p>
+        </div>
+
+        <button class="info_more-btn" data-sidebar-btn>
+          <span>Show Contacts</span>
+
+          <ion-icon name="chevron-down"></ion-icon>
+        </button>
+
+      </div>
+
+      <div class="sidebar-info_more">
+
+        <div class="separator"></div>
+
+        <ul class="contacts-list">
+
+          <li class="contact-item">
+
+            <div class="icon-box">
+              <i class="fa-brands fa-linkedin"></i>
+            </div>
+
+            <div class="contact-info">
+              <p class="contact-title">Email</p>
+
+              <a href="mailto:mdz4hidhasan@gmail.com" class="contact-link">mdz4hidhasan@gmail.com</a>
+            </div>
+
+          </li>
+
+
+
+          <li class="contact-item">
+
+            <div class="icon-box">
+              <ion-icon name="location-outline"></ion-icon>
+            </div>
+
+            <div class="contact-info">
+              <p class="contact-title">Location</p>
+
+              <address>Dhaka, Bangladesh</address>
+            </div>
+
+          </li>
+
+        </ul>
+
+        <div class="separator"></div>
+
+        <ul class="social-list">
+
+
+          <li class="social-item">
+            <a href="https://github.com/z4hid" class="social-link">
+              <i class="fa-brands fa-github"></i>
+            </a>
+          </li>
+
+          <li class="social-item">
+            <a href="https://www.kaggle.com/z4hiid" class="social-link">
+              <i class="fab fa-kaggle"></i>
+            </a>
+          </li>
+
+          <li class="social-item">
+            <a href="https://x.com/z4hidhasan" class="social-link">
+              <i class="fa-brands fa-x-twitter"></i>
+            </a>
+          </li>
+
+          <li class="social-item">
+            <a href="https://www.linkedin.com/in/z4hid/" class="social-link">
+              <i class="fa-brands fa-linkedin"></i>
+              
+            </a>
+          </li>
+
+        </ul>
+
+      </div>
+
+    </aside>
+
+
+
+
+
+    <!--
+      - #main-content
+    -->
+
+    <div class="main-content">
+
+      <!--
+        - #NAVBAR
+      -->
+
+      <nav class="navbar">
+
+        <ul class="navbar-list">
+
+            <li class="navbar-item">
+                <a href="index.html">
+                    <button class="navbar-link  active" data-nav-link>About</button>
+                </a>
+            </li>
+
+            <li class="navbar-item">
+                <a href="resume.html">
+                    <button class="navbar-link" data-nav-link>Resume</button>
+                </a>
+            </li>
+
+            <li class="navbar-item">
+                <a href="portfolio.html">
+                    <button class="navbar-link" data-nav-link>Portfolio</button>
+                </a>
+            </li>
+
+            <li class="navbar-item">
+                <a href="blog.html">
+                    <button class="navbar-link" data-nav-link>Blog</button>
+                </a>
+            </li>
+
+            <li class="navbar-item">
+              <a href="contact.html">
+                <button class="navbar-link" data-nav-link>Contact</button>
+              </a>
+            </li>
+
+        </ul>
+
+    </nav>
+
+
+
+
+        <article class="blog active" >
+
+            <header>
+              <h2 class="h2 article-title">Blog</h2>
+            </header>
+    
+            <section class="blog-posts">
+    
+              <ul class="blog-posts-list">
+    
+                <!-- <li class="blog-post-item">
+                  <a href="#">
+    
+                    <figure class="blog-banner-box">
+                      <img src="./assets/images/blog-1.jpg" alt="Design conferences in 2022" loading="lazy">
+                    </figure>
+    
+                    <div class="blog-content">
+    
+                      <div class="blog-meta">
+                        <p class="blog-category">Design</p>
+    
+                        <span class="dot"></span>
+    
+                        <time datetime="2022-02-23">Fab 23, 2022</time>
+                      </div>
+    
+                      <h3 class="h3 blog-item-title">Design conferences in 2022</h3>
+    
+                      <p class="blog-text">
+                        Veritatis et quasi architecto beatae vitae dicta sunt, explicabo.
+                      </p>
+    
+                    </div>
+    
+                  </a> -->
+             
+              </ul>
+    
+            </section>
+    
+          </article>
+
+
+        </main>
+
+  <!--
+    - custom js link
+  -->
+  <script src="./assets/js/script.js"></script>
+
+  <!--
+    - ionicon link
+  -->
+  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+</body>
+
+</html>
