@@ -3,9 +3,10 @@ import '../../styles/global.css';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import SiteAnalytics from '../../components/SiteAnalytics.astro';
+import NonBlockingFontAwesome from '../../components/NonBlockingFontAwesome.astro';
 import { getCollection } from 'astro:content';
 
-const description = 'I share technical articles on AI engineering, agentic AI, LLMs, RAG systems, machine learning, computer vision, and software development.';
+const description = 'Practical guides on building AI systems that ship: agentic AI, RAG pipelines, LLM engineering, computer vision, and production ML. Written by an AI engineer building these systems daily.';
 
 const base = import.meta.env.BASE_URL;
 
@@ -59,9 +60,7 @@ const sortedTags = Object.entries(tagCounts).sort((a, b) => b[1] - a[1]);
   <meta name="twitter:description" content={description} />
   <meta name="twitter:image" content={new URL(`${base}og-default.png`, Astro.site).href} />
   <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <NonBlockingFontAwesome />
   <link rel="alternate" type="application/rss+xml" title="Md. Zahid Hasan Blog RSS" href={`${base}rss.xml`} />
 
   <script type="application/ld+json" set:html={JSON.stringify({
@@ -93,7 +92,7 @@ const sortedTags = Object.entries(tagCounts).sort((a, b) => b[1] - a[1]);
       <div class="container">
         <span class="section__label">Blog</span>
         <h1>Articles & Insights</h1>
-        <p class="page-hero__desc">I share practical thoughts on AI engineering, machine learning, tools I build, books I read, and the occasional deep dive into research papers.</p>
+        <p class="page-hero__desc">Practical guides and deep dives on building AI systems that actually ship. From RAG pipelines and agentic workflows to production deployment patterns — written from the trenches.</p>
       </div>
     </section>
 

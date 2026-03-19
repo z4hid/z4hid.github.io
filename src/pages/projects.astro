@@ -3,6 +3,7 @@ import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import SiteAnalytics from '../components/SiteAnalytics.astro';
+import NonBlockingFontAwesome from '../components/NonBlockingFontAwesome.astro';
 import { projects, categories } from '../data/projects';
 
 const base = import.meta.env.BASE_URL;
@@ -29,11 +30,9 @@ const description = 'Explore my AI and machine learning portfolio featuring 16+ 
   <meta name="twitter:description" content={description} />
   <meta name="twitter:image" content={new URL(`${base}og-default.png`, Astro.site).href} />
   <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <NonBlockingFontAwesome />
 
-  <!-- JSON-LD: BreadcrumbList + ItemList (AI-SEO: structured project data) -->
+  <!-- JSON-LD: BreadcrumbList + CollectionPage + SoftwareSourceCode items -->
   <script type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",
     "@graph": [
@@ -45,17 +44,36 @@ const description = 'Explore my AI and machine learning portfolio featuring 16+ 
         ]
       },
       {
-        "@type": "ItemList",
+        "@type": "CollectionPage",
         "name": "AI & ML Projects by Md. Zahid Hasan",
         "description": description,
-        "numberOfItems": projects.length,
-        "itemListElement": projects.slice(0, 6).map((p, i) => ({
-          "@type": "ListItem",
-          "position": i + 1,
-          "name": p.title,
-          "description": p.description,
-          "url": p.github
-        }))
+        "url": new URL(`${base}projects`, Astro.site).href,
+        "author": {
+          "@type": "Person",
+          "name": "Md. Zahid Hasan",
+          "url": new URL(base, Astro.site).href
+        },
+        "mainEntity": {
+          "@type": "ItemList",
+          "numberOfItems": projects.length,
+          "itemListElement": projects.map((p, i) => ({
+            "@type": "ListItem",
+            "position": i + 1,
+            "item": {
+              "@type": "SoftwareSourceCode",
+              "name": p.title,
+              "description": p.description,
+              "codeRepository": p.github,
+              "programmingLanguage": p.techStack.filter(t => ["Python", "Django", "JavaScript", "TypeScript"].includes(t)),
+              "author": {
+                "@type": "Person",
+                "name": "Md. Zahid Hasan",
+                "url": new URL(base, Astro.site).href
+              },
+              "about": p.category
+            }
+          }))
+        }
       }
     ]
   })} />

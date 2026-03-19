@@ -4,11 +4,8 @@
    Fonts: Plus Jakarta Sans (body) + Clash Display (headlines)
    ============================================================ */
 
-/* --- Google Fonts --- */
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800&family=JetBrains+Mono:wght@400;500;600&display=swap');
-
-/* --- Clash Display (FontShare CDN) --- */
-@import url('https://api.fontshare.com/v2/css?f[]=clash-display@200,300,400,500,600,700&display=swap');
+/* External webfont imports removed to reduce render blocking and improve mobile LCP.
+   The font stacks below gracefully fall back to local system fonts. */
 
 /* ===== CSS CUSTOM PROPERTIES ===== */
 :root {
@@ -20,7 +17,7 @@
 
   --text-primary: #eef0f6;
   --text-secondary: #a0a4b8;
-  --text-muted: #646880;
+  --text-muted: #8c92ac;
 
   --accent: #3d84d4;
   --accent-light: #5a9ce6;
@@ -106,7 +103,7 @@ body::before {
   inset: 0;
   z-index: 9999;
   pointer-events: none;
-  opacity: 0.025;
+  opacity: 0.02;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
 }
 
@@ -299,7 +296,7 @@ img {
 
 .btn--primary {
   background: var(--accent);
-  color: #fff;
+  color: var(--bg-primary);
   border-color: var(--accent);
   box-shadow: 0 2px 12px var(--accent-glow);
 }
@@ -309,7 +306,7 @@ img {
   border-color: var(--accent-light);
   box-shadow: 0 4px 20px var(--accent-glow);
   transform: translateY(-2px);
-  color: #fff;
+  color: var(--bg-primary);
 }
 
 .btn--outline {
@@ -670,5 +667,19 @@ img {
 
   .container {
     padding: 0 var(--space-lg);
+  }
+
+  body::before {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

@@ -1,0 +1,22 @@
+---
+const fontAwesomeCss = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css';
+---
+
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin />
+<link rel="preload" href={fontAwesomeCss} as="style" crossorigin />
+<link
+  rel="stylesheet"
+  href={fontAwesomeCss}
+  media="print"
+  onload="this.media='all'"
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"
+/>
+<noscript>
+  <link
+    rel="stylesheet"
+    href={fontAwesomeCss}
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  />
+</noscript>

@@ -3,12 +3,13 @@ import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import SiteAnalytics from '../components/SiteAnalytics.astro';
+import NonBlockingFontAwesome from '../components/NonBlockingFontAwesome.astro';
 import { projects } from '../data/projects';
 import { certificates } from '../data/certificates';
 import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
 
-const description = 'I am an AI Engineer who builds production chatbots, agentic workflows, RAG systems, and computer vision apps. I have shipped 5+ chatbots and helped teams reduce manual work by 40%.';
+const description = 'AI Engineer building production chatbots, agentic workflows, RAG systems, and computer vision applications. 5+ AI chatbots shipped, 40% manual work reduction for teams, 16+ open-source projects.';
 
 const featuredProjects = projects.filter(p => p.featured).slice(0, 6);
 
@@ -102,30 +103,85 @@ const faqs = [
   <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
   <link rel="sitemap" href={`${base}sitemap.xml`} />
   <link rel="alternate" type="application/rss+xml" title="Blog RSS" href={`${base}rss.xml`} />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <NonBlockingFontAwesome />
 
   <script type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",
     "@graph": [
-      { "@type": "WebSite", "name": "Md. Zahid Hasan — AI Engineer", "url": new URL(base, Astro.site).href },
       {
-        "@type": "Person", "name": "Md. Zahid Hasan", "jobTitle": "AI Engineer", "url": new URL(base, Astro.site).href,
+        "@type": "WebSite",
+        "name": "Md. Zahid Hasan — AI Engineer",
+        "url": new URL(base, Astro.site).href,
+        "description": description,
+        "inLanguage": "en",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": {
+            "@type": "EntryPoint",
+            "urlTemplate": new URL(base, Astro.site).href + "blog/?q={search_term_string}"
+          },
+          "query-input": "required name=search_term_string"
+        }
+      },
+      {
+        "@type": "Person",
+        "name": "Md. Zahid Hasan",
+        "givenName": "Zahid",
+        "familyName": "Hasan",
+        "jobTitle": "AI Engineer",
+        "description": description,
+        "url": new URL(base, Astro.site).href,
+        "image": new URL(`${base}og-default.png`, Astro.site).href,
         "email": "zahidhasan9297@gmail.com",
-        "worksFor": { "@type": "Organization", "name": "BrainSpark Digital" },
-        "alumniOf": { "@type": "CollegeOrUniversity", "name": "Uttara University" },
-        "knowsAbout": ["Artificial Intelligence", "Machine Learning", "Large Language Models", "Agentic AI", "RAG Systems", "Computer Vision", "Python", "Deep Learning"],
-        "sameAs": ["https://github.com/z4hid", "https://linkedin.com/in/z4hid", "https://twitter.com/z4hiid", "https://huggingface.co/z4hid", "https://kaggle.com/z4hid"],
+        "worksFor": {
+          "@type": "Organization",
+          "name": "BrainSpark Digital",
+          "url": "https://brainsparkd.com/"
+        },
+        "alumniOf": {
+          "@type": "CollegeOrUniversity",
+          "name": "Uttara University",
+          "url": "https://uttarauniversity.edu.bd/"
+        },
+        "knowsAbout": [
+          "Artificial Intelligence", "Machine Learning", "Large Language Models",
+          "Agentic AI", "RAG Systems", "Computer Vision", "Python",
+          "Deep Learning", "Natural Language Processing", "MLOps"
+        ],
+        "knowsLanguage": ["en", "bn"],
+        "nationality": { "@type": "Country", "name": "Bangladesh" },
+        "sameAs": [
+          "https://github.com/z4hid",
+          "https://linkedin.com/in/z4hid",
+          "https://twitter.com/z4hiid",
+          "https://huggingface.co/z4hid",
+          "https://kaggle.com/z4hid"
+        ],
         "hasCredential": [
-          { "@type": "EducationalOccupationalCredential", "name": "Agentic AI", "recognizedBy": { "@type": "Organization", "name": "DeepLearning.AI" }},
-          { "@type": "EducationalOccupationalCredential", "name": "Fundamentals of Agents", "recognizedBy": { "@type": "Organization", "name": "Hugging Face" }},
-          { "@type": "EducationalOccupationalCredential", "name": "5-Day Gen AI Intensive", "recognizedBy": { "@type": "Organization", "name": "Kaggle" }}
-        ]
+          { "@type": "EducationalOccupationalCredential", "name": "Agentic AI", "credentialCategory": "certificate", "recognizedBy": { "@type": "Organization", "name": "DeepLearning.AI" }},
+          { "@type": "EducationalOccupationalCredential", "name": "Fundamentals of Agents", "credentialCategory": "certificate", "recognizedBy": { "@type": "Organization", "name": "Hugging Face" }},
+          { "@type": "EducationalOccupationalCredential", "name": "Hugging Face Agents Course (Excellence)", "credentialCategory": "certificate", "recognizedBy": { "@type": "Organization", "name": "Hugging Face" }},
+          { "@type": "EducationalOccupationalCredential", "name": "5-Day Gen AI Intensive", "credentialCategory": "certificate", "recognizedBy": { "@type": "Organization", "name": "Kaggle" }},
+          { "@type": "EducationalOccupationalCredential", "name": "Convolutional Neural Networks in TensorFlow", "credentialCategory": "certificate", "recognizedBy": { "@type": "Organization", "name": "DeepLearning.AI" }},
+          { "@type": "EducationalOccupationalCredential", "name": "Introduction to TensorFlow for AI, ML, and Deep Learning", "credentialCategory": "certificate", "recognizedBy": { "@type": "Organization", "name": "DeepLearning.AI" }}
+        ],
+        "hasOccupation": {
+          "@type": "Occupation",
+          "name": "AI Engineer",
+          "occupationalCategory": "15-1252.00",
+          "skills": "Large Language Models, Agentic AI, RAG Systems, Computer Vision, Python, Deep Learning"
+        }
       },
       {
         "@type": "FAQPage",
         "mainEntity": faqs.map(faq => ({ "@type": "Question", "name": faq.question, "acceptedAnswer": { "@type": "Answer", "text": faq.answer }}))
       },
-      { "@type": "BreadcrumbList", "itemListElement": [{ "@type": "ListItem", "position": 1, "name": "Home", "item": new URL(base, Astro.site).href }] }
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": new URL(base, Astro.site).href }
+        ]
+      }
     ]
   })} />
 </head>
@@ -160,7 +216,7 @@ const faqs = [
             <span>AI Engineer</span>
           </div>
           <p class="hero__tagline animate-in animate-delay-3">
-            I build <strong>AI systems that work in production</strong> — from LLM chatbots and agentic workflows to computer vision apps that solve real problems, not just demos.
+            I turn AI research into <strong>production systems that actually ship</strong>. LLM chatbots, agentic workflows, RAG pipelines, computer vision — built to solve real problems, not collect dust in a notebook.
           </p>
           <div class="hero__actions animate-in animate-delay-4">
             <a href={`${base}projects`} class="btn btn--primary">
@@ -234,9 +290,9 @@ const faqs = [
         <h2 class="section__title">Building Intelligence,<br/>One System at a Time</h2>
         <div class="about__grid">
           <div class="about__content animate-on-scroll">
-            <p><strong>I am an AI Engineer</strong> at <a href="https://brainsparkd.com/" target="_blank" rel="noopener noreferrer">BrainSpark Digital</a> with 2+ years of experience shipping intelligent applications. I specialize in Large Language Models (LLMs), Agentic AI, RAG systems, and Computer Vision.</p>
-            <p>I've built <strong>5+ production chatbots</strong>, designed agentic workflows that <strong>cut manual tasks by 40%</strong>, and implemented RAG systems that dramatically improved response accuracy by grounding LLMs in real-time data.</p>
-            <p>I graduated from Uttara University with a <strong>B.Sc. in Computer Science</strong>. When I'm not building AI systems, I'm reading research papers, contributing to open-source, or exploring the latest tools and frameworks.</p>
+            <p><strong>I'm an AI Engineer</strong> at <a href="https://brainsparkd.com/" target="_blank" rel="noopener noreferrer">BrainSpark Digital</a> with 2+ years of hands-on experience shipping intelligent applications. My focus areas: Large Language Models, Agentic AI, RAG systems, and Computer Vision.</p>
+            <p>The numbers tell the story: <strong>5+ production chatbots</strong> deployed, agentic workflows that <strong>cut manual work by 40%</strong>, and RAG systems that grounded LLM responses in real-time data — turning hallucinating models into reliable tools.</p>
+            <p>I hold a <strong>B.Sc. in Computer Science</strong> from Uttara University (GPA 3.96/4.0) and certifications from DeepLearning.AI, Hugging Face, and Kaggle. Outside of work, I contribute to open-source, read research papers, and write about what I learn on <a href="/blog">this blog</a>.</p>
           </div>
           <div class="about__stats animate-on-scroll">
             <div class="stat-card">
@@ -269,7 +325,7 @@ const faqs = [
       <div class="container">
         <span class="section__label">What I Do</span>
         <h2 class="section__title">Expertise That Delivers</h2>
-        <p class="section__description">I don't just build AI — I build AI that works in production. Every system I ship is designed for real-world reliability.</p>
+        <p class="section__description">Every system I ship goes from prototype to production. No PowerPoint AI — just working software that handles real-world complexity.</p>
         <div class="grid grid--4 services-grid">
           {services.map((service, i) => (
             <div class="card service-card animate-on-scroll" style={`transition-delay: ${i * 0.1}s`}>
@@ -370,7 +426,7 @@ const faqs = [
                   <Image src={cert.image} alt={`${cert.title} certificate from ${cert.issuer}`} loading="lazy" width={480} height={330} />
                 </div>
                 <div class="cert-slide__info">
-                  <h4 class="cert-slide__title">{cert.title}</h4>
+                  <h3 class="cert-slide__title">{cert.title}</h3>
                   <p class="cert-slide__issuer">{cert.issuer} · {cert.date}</p>
                 </div>
               </div>
@@ -382,7 +438,7 @@ const faqs = [
                   <Image src={cert.image} alt={`${cert.title} certificate from ${cert.issuer}`} loading="lazy" width={480} height={330} />
                 </div>
                 <div class="cert-slide__info">
-                  <h4 class="cert-slide__title">{cert.title}</h4>
+                  <h3 class="cert-slide__title">{cert.title}</h3>
                   <p class="cert-slide__issuer">{cert.issuer} · {cert.date}</p>
                 </div>
               </div>
@@ -457,8 +513,8 @@ const faqs = [
       <div class="container">
         <div class="cta-block animate-on-scroll">
           <div class="cta-block__glow"></div>
-          <h2 class="cta-block__title">Ready to Build Something<br/><span class="cta-block__accent">Intelligent?</span></h2>
-          <p class="cta-block__desc">Every week spent on manual processes is a week your competitors are automating. Let's build the AI system that gives you an edge.</p>
+          <h2 class="cta-block__title">Have an AI Problem<br/><span class="cta-block__accent">Worth Solving?</span></h2>
+          <p class="cta-block__desc">Whether you need a chatbot that actually works, a RAG system grounded in your data, or a computer vision pipeline for production — I can help you build it.</p>
           <div class="cta-block__actions">
             <a href={`${base}contact`} class="btn btn--primary">
               <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
@@ -471,9 +527,8 @@ const faqs = [
       </div>
     </section>
 
+    <Footer />
   </main>
-
-  <Footer />
 </body>
 </html>
 
@@ -692,6 +747,11 @@ const faqs = [
     .hero__actions { justify-content: center; }
     .hero__visual { display: none; }
     .hero__title-badge { margin-left: auto; margin-right: auto; }
+    .hero__glow,
+    .hero__glow--2,
+    .hero__grid-lines,
+    .hero__particles { display: none; }
+    .hero { min-height: auto; }
   }
 
   /* ===== PROOF BAR ===== */

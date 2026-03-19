@@ -124,7 +124,12 @@ const socialLinks = [
   }
 
   .footer__bottom p { margin: 0; color: var(--text-muted); }
-  .footer__credit a { color: var(--accent); }
+  .footer__credit a {
+    color: var(--accent-light);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    text-decoration-thickness: 1.5px;
+  }
 
   @media (max-width: 640px) {
     .footer__inner {

@@ -5,10 +5,34 @@ const googleSiteVerification = rawGoogleSiteVerification?.startsWith('google-sit
   ? rawGoogleSiteVerification.replace('google-site-verification=', '')
   : rawGoogleSiteVerification;
 const gaInlineScript = gaId
-  ? `window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-gtag('config', '${gaId}', { anonymize_ip: true });`
+  ? `(function () {
+  var GA_ID = '${gaId}';
+  var loaded = false;
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){window.dataLayer.push(arguments);}
+  window.gtag = window.gtag || gtag;
+
+  function loadGa() {
+    if (loaded) return;
+    loaded = true;
+    var s = document.createElement('script');
+    s.async = true;
+    s.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_ID;
+    document.head.appendChild(s);
+    gtag('js', new Date());
+    gtag('config', GA_ID, { anonymize_ip: true });
+  }
+
+  if ('requestIdleCallback' in window) {
+    requestIdleCallback(loadGa, { timeout: 3000 });
+  } else {
+    setTimeout(loadGa, 1500);
+  }
+
+  ['scroll', 'pointerdown', 'keydown', 'touchstart'].forEach(function (eventName) {
+    window.addEventListener(eventName, loadGa, { once: true, passive: true });
+  });
+})();`
   : '';
 ---
 
@@ -17,8 +41,5 @@ gtag('config', '${gaId}', { anonymize_ip: true });`
 )}
 
 {gaId && (
-  <>
-    <script async src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}></script>
-    <script is:inline set:html={gaInlineScript} />
-  </>
+  <script is:inline set:html={gaInlineScript} />
 )}

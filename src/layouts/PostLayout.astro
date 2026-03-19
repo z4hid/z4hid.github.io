@@ -3,6 +3,7 @@ import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import SiteAnalytics from '../components/SiteAnalytics.astro';
+import NonBlockingFontAwesome from '../components/NonBlockingFontAwesome.astro';
 
 interface Props {
   title: string;
@@ -26,6 +27,8 @@ const updatedFormatted = updatedDate?.toLocaleDateString('en-US', {
 const base = import.meta.env.BASE_URL;
 const siteTitle = `${title} | Md. Zahid Hasan`;
 const canonicalURL = Astro.url.href;
+const shareUrl = encodeURIComponent(canonicalURL);
+const shareTitle = encodeURIComponent(title);
 ---
 <!DOCTYPE html>
 <html lang="en">
@@ -55,11 +58,8 @@ const canonicalURL = Astro.url.href;
   <meta name="twitter:image" content={new URL(`${base}og-default.png`, Astro.site).href} />
 
   <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <NonBlockingFontAwesome />
 
-  <!-- JSON-LD: BlogPosting + BreadcrumbList (AI-SEO: rich structured data) -->
   <script type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",
     "@graph": [
@@ -67,6 +67,7 @@ const canonicalURL = Astro.url.href;
         "@type": "BlogPosting",
         "headline": title,
         "description": description,
+        "image": image ? new URL(image, Astro.site).href : new URL(`${base}og-default.png`, Astro.site).href,
         "datePublished": pubDate.toISOString(),
         "dateModified": (updatedDate || pubDate).toISOString(),
         "author": {
@@ -74,16 +75,28 @@ const canonicalURL = Astro.url.href;
           "name": "Md. Zahid Hasan",
           "url": new URL(base, Astro.site).href,
           "jobTitle": "AI Engineer",
-          "worksFor": { "@type": "Organization", "name": "BrainSpark Digital" }
+          "worksFor": { "@type": "Organization", "name": "BrainSpark Digital" },
+          "sameAs": [
+            "https://github.com/z4hid",
+            "https://linkedin.com/in/z4hid",
+            "https://twitter.com/z4hiid",
+            "https://huggingface.co/z4hid",
+            "https://kaggle.com/z4hid"
+          ]
         },
         "publisher": {
           "@type": "Person",
           "name": "Md. Zahid Hasan",
           "url": new URL(base, Astro.site).href
         },
-        "mainEntityOfPage": canonicalURL,
+        "mainEntityOfPage": {
+          "@type": "WebPage",
+          "@id": canonicalURL
+        },
         "keywords": tags.join(', '),
-        "inLanguage": "en"
+        "articleSection": tags[0] || "AI Engineering",
+        "inLanguage": "en",
+        "isAccessibleForFree": true
       },
       {
         "@type": "BreadcrumbList",
@@ -98,13 +111,18 @@ const canonicalURL = Astro.url.href;
 </head>
 <body>
   <a href="#main-content" class="skip-link">Skip to content</a>
+
+  <!-- Reading progress bar -->
+  <div class="reading-progress" id="reading-progress" aria-hidden="true">
+    <div class="reading-progress__bar" id="reading-progress-bar"></div>
+  </div>
+
   <Header />
 
   <main id="main-content">
     <article class="post section">
       <div class="container container--narrow">
         <header class="post__header">
-          <!-- CRO: Breadcrumb navigation (also good for SEO) -->
           <nav class="post__breadcrumb" aria-label="Breadcrumb">
             <a href={`${base}`}>Home</a>
             <span class="post__breadcrumb-sep">/</span>
@@ -115,7 +133,10 @@ const canonicalURL = Astro.url.href;
 
           <div class="post__meta">
             <time datetime={pubDate.toISOString()}>{formattedDate}</time>
-            {updatedFormatted && <span> · Updated {updatedFormatted}</span>}
+            {updatedFormatted && (
+              <span class="post__updated"> · Last updated {updatedFormatted}</span>
+            )}
+            <span class="post__reading-time" id="reading-time"></span>
           </div>
 
           <h1 class="post__title">{title}</h1>
@@ -128,11 +149,41 @@ const canonicalURL = Astro.url.href;
           )}
         </header>
 
-        <div class="prose">
+        <!-- Table of Contents -->
+        <nav class="toc" id="toc" aria-label="Table of Contents">
+          <details open>
+            <summary class="toc__toggle">
+              <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="15" y2="12"/><line x1="3" y1="18" x2="9" y2="18"/></svg>
+              Table of Contents
+            </summary>
+            <ol class="toc__list" id="toc-list"></ol>
+          </details>
+        </nav>
+
+        <div class="prose" id="article-content">
           <slot />
         </div>
 
-        <!-- AI-SEO + Psychology: Author bio for E-E-A-T signals + Authority Bias -->
+        <!-- Share buttons -->
+        <div class="post__share">
+          <span class="post__share-label">Share this article</span>
+          <div class="post__share-buttons">
+            <a href={`https://twitter.com/intent/tweet?text=${shareTitle}&url=${shareUrl}`} target="_blank" rel="noopener noreferrer" class="post__share-btn post__share-btn--twitter" title="Share on X/Twitter">
+              <i class="fa-brands fa-x-twitter"></i>
+            </a>
+            <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${shareUrl}`} target="_blank" rel="noopener noreferrer" class="post__share-btn post__share-btn--linkedin" title="Share on LinkedIn">
+              <i class="fa-brands fa-linkedin-in"></i>
+            </a>
+            <a href={`https://news.ycombinator.com/submitlink?u=${shareUrl}&t=${shareTitle}`} target="_blank" rel="noopener noreferrer" class="post__share-btn post__share-btn--hn" title="Share on Hacker News">
+              <i class="fa-brands fa-hacker-news"></i>
+            </a>
+            <button class="post__share-btn post__share-btn--copy" id="copy-link-btn" title="Copy link">
+              <i class="fa-solid fa-link"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Author bio -->
         <footer class="post__author">
           <div class="post__author-info">
             <div class="post__author-avatar">ZH</div>
@@ -143,7 +194,7 @@ const canonicalURL = Astro.url.href;
           </div>
         </footer>
 
-        <!-- CRO: Contextual CTA matching blog content -->
+        <!-- CTA -->
         <div class="post__cta">
           <p class="post__cta-text">Want to build something like this? <strong>Let's talk about your AI project.</strong></p>
           <a href={`${base}contact`} class="btn btn--primary">Get In Touch →</a>
@@ -157,9 +208,27 @@ const canonicalURL = Astro.url.href;
 </html>
 
 <style>
+  /* Reading progress bar */
+  .reading-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    z-index: 9999;
+    background: transparent;
+  }
+
+  .reading-progress__bar {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--accent), var(--accent-light));
+    transition: width 50ms linear;
+    border-radius: 0 2px 2px 0;
+  }
 
   .post__header {
-    margin-bottom: var(--space-3xl);
+    margin-bottom: var(--space-2xl);
     padding-top: 100px;
   }
 
@@ -187,6 +256,16 @@ const canonicalURL = Astro.url.href;
     font-size: 0.8rem;
     color: var(--text-muted);
     margin-bottom: var(--space-md);
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0;
+  }
+
+  .post__updated { color: var(--accent); }
+
+  .post__reading-time::before {
+    content: ' · ';
   }
 
   .post__title {
@@ -206,9 +285,131 @@ const canonicalURL = Astro.url.href;
     gap: var(--space-sm);
   }
 
+  /* Table of Contents */
+  .toc {
+    margin-bottom: var(--space-2xl);
+    padding: var(--space-lg) var(--space-xl);
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+  }
+
+  .toc__toggle {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-family: var(--font-display);
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+  }
+
+  .toc__toggle::-webkit-details-marker { display: none; }
+
+  .toc__toggle svg { color: var(--accent); }
+
+  .toc__list {
+    margin-top: var(--space-md);
+    padding-left: var(--space-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    counter-reset: toc-counter;
+    list-style: none;
+  }
+
+  .toc__list li {
+    counter-increment: toc-counter;
+    padding-left: 0;
+  }
+
+  .toc__list li::before {
+    content: counter(toc-counter) ".";
+    color: var(--accent);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-right: var(--space-sm);
+  }
+
+  .toc__list a {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color var(--duration-fast) var(--ease-out);
+  }
+
+  .toc__list a:hover { color: var(--accent); }
+
+  .toc__list li.toc__h3 {
+    padding-left: var(--space-xl);
+    font-size: 0.8rem;
+  }
+
+  .toc__list li.toc__h3::before {
+    font-size: 0.7rem;
+  }
+
+  /* Share buttons */
+  .post__share {
+    margin-top: var(--space-2xl);
+    padding: var(--space-lg) var(--space-xl);
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--space-md);
+  }
+
+  .post__share-label {
+    font-family: var(--font-display);
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+  }
+
+  .post__share-buttons {
+    display: flex;
+    gap: var(--space-sm);
+  }
+
+  .post__share-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-subtle);
+    background: var(--bg-elevated);
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all var(--duration-fast) var(--ease-out);
+  }
+
+  .post__share-btn:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent);
+    color: var(--accent);
+    box-shadow: 0 4px 12px rgba(61, 132, 212, 0.15);
+  }
+
+  .post__share-btn--copy.copied {
+    border-color: #4ade80;
+    color: #4ade80;
+  }
+
   /* Author bio */
   .post__author {
-    margin-top: var(--space-3xl);
+    margin-top: var(--space-2xl);
     padding-top: var(--space-2xl);
     border-top: 1px solid var(--border-subtle);
   }
@@ -275,5 +476,87 @@ const canonicalURL = Astro.url.href;
   @media (max-width: 640px) {
     .post__cta { flex-direction: column; text-align: center; }
     .post__author-info { flex-direction: column; align-items: center; text-align: center; }
+    .post__share { flex-direction: column; text-align: center; }
   }
 </style>
+
+<script>
+  // Reading progress bar
+  const progressBar = document.getElementById('reading-progress-bar');
+  const article = document.getElementById('article-content');
+
+  if (progressBar && article) {
+    window.addEventListener('scroll', () => {
+      const articleRect = article.getBoundingClientRect();
+      const articleTop = articleRect.top + window.scrollY;
+      const articleHeight = article.offsetHeight;
+      const windowHeight = window.innerHeight;
+      const scrollY = window.scrollY;
+
+      const progress = Math.min(
+        Math.max((scrollY - articleTop + windowHeight * 0.3) / articleHeight, 0),
+        1
+      );
+      progressBar.style.width = `${progress * 100}%`;
+    }, { passive: true });
+  }
+
+  // Reading time calculation
+  const content = document.getElementById('article-content');
+  const readingTimeEl = document.getElementById('reading-time');
+
+  if (content && readingTimeEl) {
+    const text = content.textContent || '';
+    const wordCount = text.trim().split(/\s+/).length;
+    const minutes = Math.max(1, Math.ceil(wordCount / 230));
+    readingTimeEl.textContent = `${minutes} min read`;
+  }
+
+  // Table of contents generation
+  const tocList = document.getElementById('toc-list');
+  const headings = document.querySelectorAll('#article-content h2, #article-content h3');
+
+  if (tocList && headings.length > 0) {
+    headings.forEach((heading, i) => {
+      if (!heading.id) {
+        heading.id = heading.textContent
+          ?.toLowerCase()
+          .replace(/[^a-z0-9\s-]/g, '')
+          .replace(/\s+/g, '-')
+          .replace(/-+/g, '-')
+          .trim() || `heading-${i}`;
+      }
+
+      const li = document.createElement('li');
+      if (heading.tagName === 'H3') li.classList.add('toc__h3');
+
+      const a = document.createElement('a');
+      a.href = `#${heading.id}`;
+      a.textContent = heading.textContent;
+      li.appendChild(a);
+      tocList.appendChild(li);
+    });
+  } else if (tocList) {
+    const toc = document.getElementById('toc');
+    if (toc) toc.style.display = 'none';
+  }
+
+  // Copy link button
+  const copyBtn = document.getElementById('copy-link-btn');
+  copyBtn?.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      copyBtn.classList.add('copied');
+      const icon = copyBtn.querySelector('i');
+      if (icon) {
+        icon.className = 'fa-solid fa-check';
+        setTimeout(() => {
+          icon.className = 'fa-solid fa-link';
+          copyBtn.classList.remove('copied');
+        }, 2000);
+      }
+    } catch {
+      // Fallback for older browsers
+    }
+  });
+</script>
