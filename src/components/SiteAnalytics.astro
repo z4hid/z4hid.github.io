@@ -1,0 +1,24 @@
+---
+const gaId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID?.trim();
+const rawGoogleSiteVerification = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION?.trim();
+const googleSiteVerification = rawGoogleSiteVerification?.startsWith('google-site-verification=')
+  ? rawGoogleSiteVerification.replace('google-site-verification=', '')
+  : rawGoogleSiteVerification;
+const gaInlineScript = gaId
+  ? `window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', '${gaId}', { anonymize_ip: true });`
+  : '';
+---
+
+{googleSiteVerification && (
+  <meta name="google-site-verification" content={googleSiteVerification} />
+)}
+
+{gaId && (
+  <>
+    <script async src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}></script>
+    <script is:inline set:html={gaInlineScript} />
+  </>
+)}

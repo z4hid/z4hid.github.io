@@ -68,6 +68,16 @@ Your content here. Use images from `/blog/`:
 
 Automatically deploys to GitHub Pages via `.github/workflows/deploy.yml` on push to `main`.
 
+## 📊 Analytics & Search Console
+
+1. Copy env template and set values:
+   - `cp .env.example .env`
+   - `PUBLIC_GA_MEASUREMENT_ID=G-XXXXXXXXXX`
+   - `PUBLIC_GOOGLE_SITE_VERIFICATION=your_verification_token`
+2. Build and deploy. GA script and Search Console meta tag are injected site-wide.
+3. In Google Search Console, submit sitemap:
+   - `https://z4hid.github.io/sitemap-index.xml`
+
 ## 📄 License
 
 MIT — feel free to fork and customize for your own portfolio.

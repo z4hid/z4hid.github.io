@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import SiteAnalytics from '../components/SiteAnalytics.astro';
 import { certificates } from '../data/certificates';
 import { Image } from 'astro:assets';
 
@@ -13,6 +14,7 @@ const description = 'Browse my AI and machine learning certifications, including
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <SiteAnalytics />
   <title>Certificates & Credentials | Md. Zahid Hasan — AI Engineer</title>
   <meta name="description" content={description} />
   <meta name="author" content="Md. Zahid Hasan" />
