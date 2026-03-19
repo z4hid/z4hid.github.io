@@ -1,5 +1,7 @@
 import { getCollection } from 'astro:content';
 
+export const prerender = true;
+
 const staticPaths = ['/', '/projects/', '/contact/', '/certificates/', '/blog/'];
 
 function buildUrl(base: URL, path: string): string {
@@ -11,10 +13,8 @@ function toW3CDate(date: Date): string {
 }
 
 export async function GET(context: any) {
-  const site = context.site;
-  if (!site) {
-    return new Response('Missing site URL for sitemap generation.', { status: 500 });
-  }
+  const siteUrl = context.site?.toString() || import.meta.env.SITE || 'https://z4hid.github.io';
+  const site = new URL(siteUrl);
 
   let posts: any[] = [];
   try {
