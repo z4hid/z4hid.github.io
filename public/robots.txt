@@ -28,4 +28,4 @@ Allow: /
 User-agent: CCBot
 Disallow: /
 
-Sitemap: https://z4hid.github.io/sitemap-index.xml
+Sitemap: https://z4hid.github.io/sitemap.xml

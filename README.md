@@ -76,7 +76,7 @@ Automatically deploys to GitHub Pages via `.github/workflows/deploy.yml` on push
    - `PUBLIC_GOOGLE_SITE_VERIFICATION=your_verification_token`
 2. Build and deploy. GA script and Search Console meta tag are injected site-wide.
 3. In Google Search Console, submit sitemap:
-   - `https://z4hid.github.io/sitemap-index.xml`
+   - `https://z4hid.github.io/sitemap.xml`
 
 ## 📄 License
 
