@@ -500,21 +500,15 @@ const contactFormAccessKey = (import.meta.env.PUBLIC_WEB3FORMS_KEY || '').trim()
     e.preventDefault();
     if (!submitBtn || !statusEl) return;
 
-    const accessKey = accessKeyInput?.value?.trim() || '';
-    if (!accessKey || accessKey === 'your_access_key_here') {
-      setStatus(
-        'error',
-        '<i class="fa-solid fa-circle-xmark"></i> Form is not configured yet. Please add a valid Web3Forms key in deployment settings.'
-      );
-      return;
-    }
-
     submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Sending...';
     submitBtn.setAttribute('disabled', 'true');
 
     try {
       const formData = new FormData(form);
-      formData.set('access_key', accessKey);
+      const accessKey = accessKeyInput?.value?.trim() || '';
+      if (accessKey) {
+        formData.set('access_key', accessKey);
+      }
       const res = await fetch(form.action, {
         method: 'POST',
         body: formData,
@@ -534,7 +528,7 @@ const contactFormAccessKey = (import.meta.env.PUBLIC_WEB3FORMS_KEY || '').trim()
       if (lowerMessage.includes('access key') || lowerMessage.includes('invalid key')) {
         setStatus(
           'error',
-          '<i class="fa-solid fa-circle-xmark"></i> Contact form key is invalid. I will fix deployment configuration.'
+          '<i class="fa-solid fa-circle-xmark"></i> Contact form is not configured on this deployment yet. Please try again shortly.'
         );
       } else if (lowerMessage.includes('network') || lowerMessage.includes('failed to fetch')) {
         setStatus(
