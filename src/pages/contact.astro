@@ -1,0 +1,519 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const base = import.meta.env.BASE_URL;
+const description = 'Contact me for AI engineering work including chatbot development, agentic workflows, RAG systems, and computer vision projects. I typically respond within 24 hours.';
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact | Md. Zahid Hasan — AI Engineer</title>
+  <meta name="description" content={description} />
+  <meta name="author" content="Md. Zahid Hasan" />
+  <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site).href} />
+  <meta property="og:title" content="Contact Md. Zahid Hasan — AI Engineer" />
+  <meta property="og:description" content={description} />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content={new URL(Astro.url.pathname, Astro.site).href} />
+  <meta property="og:image" content={new URL(`${base}og-default.png`, Astro.site).href} />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@z4hiid" />
+  <meta name="twitter:title" content="Contact Md. Zahid Hasan — AI Engineer" />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={new URL(`${base}og-default.png`, Astro.site).href} />
+  <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <!-- JSON-LD: BreadcrumbList + ContactPage (AI-SEO) -->
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": new URL(base, Astro.site).href },
+          { "@type": "ListItem", "position": 2, "name": "Contact", "item": new URL(`${base}contact`, Astro.site).href }
+        ]
+      },
+      {
+        "@type": "ContactPage",
+        "name": "Contact Md. Zahid Hasan",
+        "description": description,
+        "url": new URL(`${base}contact`, Astro.site).href
+      }
+    ]
+  })} />
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Skip to content</a>
+  <Header />
+
+  <main id="main-content">
+    <section class="contact-hero">
+      <div class="container">
+        <span class="section__label">Get in Touch</span>
+        <h1>Let's Build Something <span class="text-accent">Intelligent</span></h1>
+        <p class="contact-hero__desc">Have a project idea or just want to chat about AI? I'd love to hear from you.</p>
+      </div>
+    </section>
+
+    <section class="section" style="padding-top: 0;">
+      <div class="container">
+        <!-- Trust indicators -->
+        <div class="contact-trust">
+          <div class="contact-trust__item">
+            <i class="fa-solid fa-bolt contact-trust__icon"></i>
+            <div>
+              <strong>24h response</strong>
+              <span>I reply fast</span>
+            </div>
+          </div>
+          <div class="contact-trust__item">
+            <i class="fa-solid fa-comments contact-trust__icon"></i>
+            <div>
+              <strong>Free consultation</strong>
+              <span>No commitment</span>
+            </div>
+          </div>
+          <div class="contact-trust__item">
+            <i class="fa-solid fa-earth-americas contact-trust__icon"></i>
+            <div>
+              <strong>Available worldwide</strong>
+              <span>Remote-friendly</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-layout">
+          <!-- Form side -->
+          <div class="contact-form-card">
+            <h2 class="contact-form-card__title"><i class="fa-regular fa-paper-plane"></i> Send a Message</h2>
+            <p class="contact-form-card__subtitle">Tell me about your project — I'll get back within 24 hours.</p>
+
+            <form id="contact-form" action="https://api.web3forms.com/submit" method="POST">
+              <input type="hidden" name="access_key" value={import.meta.env.PUBLIC_WEB3FORMS_KEY ?? ''} />
+              <input type="hidden" name="subject" value="New Contact from Portfolio" />
+              <input type="hidden" name="from_name" value="Portfolio Contact Form" />
+              <input type="checkbox" name="botcheck" style="display: none;" />
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="name" class="form-label"><i class="fa-regular fa-user"></i> Name</label>
+                  <input type="text" id="name" name="name" class="form-input" placeholder="Zahid Hasan" required />
+                </div>
+                <div class="form-group">
+                  <label for="email" class="form-label"><i class="fa-regular fa-envelope"></i> Email</label>
+                  <input type="email" id="email" name="email" class="form-input" placeholder="you@company.com" required />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="subject" class="form-label"><i class="fa-regular fa-lightbulb"></i> What are you looking for?</label>
+                <select id="subject" name="form_subject" class="form-input" required>
+                  <option value="" disabled selected>Select a topic</option>
+                  <option value="AI Chatbot / Agent Development">AI Chatbot / Agent Development</option>
+                  <option value="RAG System / LLM Integration">RAG System / LLM Integration</option>
+                  <option value="Computer Vision Project">Computer Vision Project</option>
+                  <option value="Full-Stack AI Application">Full-Stack AI Application</option>
+                  <option value="Consulting / Advisory">Consulting / Advisory</option>
+                  <option value="Collaboration / Open Source">Collaboration / Open Source</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="message" class="form-label"><i class="fa-regular fa-message"></i> Your message</label>
+                <textarea id="message" name="message" class="form-textarea" placeholder="What problem are you trying to solve? What would success look like?" rows="5" required></textarea>
+              </div>
+
+              <button type="submit" class="btn btn--primary contact-submit" id="submit-btn">
+                <i class="fa-solid fa-paper-plane"></i>
+                Send Message
+              </button>
+
+              <p class="form-privacy"><i class="fa-solid fa-lock"></i> Your info stays private. No spam, ever.</p>
+
+              <div id="form-status" class="form-status"></div>
+            </form>
+          </div>
+
+          <!-- Info side -->
+          <div class="contact-sidebar">
+            <div class="contact-info-card">
+              <div class="contact-info-card__icon contact-info-card__icon--email">
+                <i class="fa-solid fa-envelope"></i>
+              </div>
+              <h2 class="contact-info-card__title">Email</h2>
+              <a href="mailto:zahidhasan9297@gmail.com" class="contact-info-card__link">zahidhasan9297@gmail.com</a>
+              <p class="contact-info-card__note">I typically respond the same day.</p>
+            </div>
+
+            <div class="contact-info-card">
+              <div class="contact-info-card__icon contact-info-card__icon--location">
+                <i class="fa-solid fa-location-dot"></i>
+              </div>
+              <h2 class="contact-info-card__title">Location</h2>
+              <p class="contact-info-card__text">Gazipur, Dhaka, Bangladesh</p>
+              <p class="contact-info-card__note">Open to remote work globally.</p>
+            </div>
+
+            <div class="contact-info-card">
+              <div class="contact-info-card__icon contact-info-card__icon--social">
+                <i class="fa-solid fa-share-nodes"></i>
+              </div>
+              <h2 class="contact-info-card__title">Connect</h2>
+              <div class="contact-socials">
+                <a href="https://github.com/z4hid" target="_blank" rel="noopener noreferrer" class="contact-social" title="GitHub">
+                  <i class="fa-brands fa-github"></i>
+                </a>
+                <a href="https://linkedin.com/in/z4hid" target="_blank" rel="noopener noreferrer" class="contact-social" title="LinkedIn">
+                  <i class="fa-brands fa-linkedin-in"></i>
+                </a>
+                <a href="https://twitter.com/z4hiid" target="_blank" rel="noopener noreferrer" class="contact-social" title="X/Twitter">
+                  <i class="fa-brands fa-x-twitter"></i>
+                </a>
+                <a href="https://huggingface.co/z4hid" target="_blank" rel="noopener noreferrer" class="contact-social" title="Hugging Face">
+                  <i class="fa-solid fa-face-smile"></i>
+                </a>
+                <a href="https://kaggle.com/z4hid" target="_blank" rel="noopener noreferrer" class="contact-social" title="Kaggle">
+                  <i class="fa-brands fa-kaggle"></i>
+                </a>
+              </div>
+            </div>
+
+            <a href={`${base}MD.-ZAHID-HASAN-CV.pdf`} target="_blank" rel="noopener" class="contact-cv-btn">
+              <i class="fa-solid fa-file-arrow-down"></i>
+              <div>
+                <strong>Download CV</strong>
+                <span>See the full picture</span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</body>
+</html>
+
+<style>
+  .contact-hero {
+    padding-top: calc(72px + var(--space-4xl));
+    padding-bottom: var(--space-3xl);
+  }
+
+  .contact-hero h1 {
+    margin-bottom: var(--space-md);
+  }
+
+  .text-accent { color: var(--accent); }
+
+  .contact-hero__desc {
+    max-width: 520px;
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    line-height: 1.7;
+  }
+
+  /* Trust indicators */
+  .contact-trust {
+    display: flex;
+    gap: var(--space-2xl);
+    margin-bottom: var(--space-3xl);
+    padding: var(--space-xl) var(--space-2xl);
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+  }
+
+  .contact-trust__item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+  }
+
+  .contact-trust__icon {
+    font-size: 1.2rem;
+    color: var(--accent);
+    width: 36px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+
+  .contact-trust__item div {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .contact-trust__item strong {
+    color: var(--text-primary);
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+
+  .contact-trust__item span {
+    color: var(--text-muted);
+    font-size: 0.75rem;
+  }
+
+  /* Layout */
+  .contact-layout {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: var(--space-2xl);
+    align-items: start;
+  }
+
+  /* Form card */
+  .contact-form-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-xl);
+    padding: var(--space-2xl);
+  }
+
+  .contact-form-card__title {
+    font-size: 1.3rem;
+    margin-bottom: var(--space-xs);
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+  }
+
+  .contact-form-card__title i {
+    color: var(--accent);
+  }
+
+  .contact-form-card__subtitle {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin-bottom: var(--space-xl);
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-lg);
+  }
+
+  .form-label i {
+    color: var(--text-muted);
+    margin-right: 4px;
+    font-size: 0.75rem;
+  }
+
+  .contact-submit {
+    width: 100%;
+    justify-content: center;
+    padding: 0.9rem 2rem;
+    font-size: 0.95rem;
+    margin-top: var(--space-sm);
+  }
+
+  .form-privacy {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    margin-top: var(--space-md);
+  }
+
+  .form-privacy i {
+    margin-right: 4px;
+    color: var(--accent);
+    opacity: 0.7;
+  }
+
+  .form-status { margin-top: var(--space-md); text-align: center; }
+  .form-status.success { color: #4ade80; }
+  .form-status.error { color: var(--danger); }
+
+  /* Sidebar */
+  .contact-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+  }
+
+  .contact-info-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: var(--space-xl);
+    transition: all var(--duration-normal) var(--ease-out);
+  }
+
+  .contact-info-card:hover {
+    border-color: var(--border-accent);
+    transform: translateY(-2px);
+  }
+
+  .contact-info-card__icon {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    margin-bottom: var(--space-md);
+  }
+
+  .contact-info-card__icon--email {
+    background: rgba(61, 132, 212, 0.1);
+    color: #3d84d4;
+  }
+
+  .contact-info-card__icon--location {
+    background: rgba(168, 85, 247, 0.1);
+    color: #a855f7;
+  }
+
+  .contact-info-card__icon--social {
+    background: rgba(6, 182, 212, 0.1);
+    color: #06b6d4;
+  }
+
+  .contact-info-card__title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: var(--space-xs);
+  }
+
+  .contact-info-card__link {
+    color: var(--accent-light);
+    font-size: 0.9rem;
+    word-break: break-all;
+  }
+
+  .contact-info-card__text {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin-bottom: 0;
+  }
+
+  .contact-info-card__note {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    margin-top: var(--space-xs);
+  }
+
+  /* Social icons */
+  .contact-socials {
+    display: flex;
+    gap: var(--space-sm);
+    margin-top: var(--space-sm);
+  }
+
+  .contact-social {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+    font-size: 1rem;
+    transition: all var(--duration-fast) var(--ease-out);
+  }
+
+  .contact-social:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+    background: var(--accent-subtle);
+    transform: translateY(-2px);
+  }
+
+  /* CV download button */
+  .contact-cv-btn {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg) var(--space-xl);
+    text-decoration: none;
+    transition: all var(--duration-normal) var(--ease-out);
+  }
+
+  .contact-cv-btn:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-glow);
+  }
+
+  .contact-cv-btn i {
+    font-size: 1.4rem;
+    color: var(--accent);
+  }
+
+  .contact-cv-btn strong {
+    display: block;
+    color: var(--text-primary);
+    font-size: 0.9rem;
+  }
+
+  .contact-cv-btn span {
+    display: block;
+    color: var(--text-muted);
+    font-size: 0.75rem;
+  }
+
+  /* Mobile */
+  @media (max-width: 768px) {
+    .contact-layout {
+      grid-template-columns: 1fr;
+    }
+    .contact-trust {
+      flex-direction: column;
+      gap: var(--space-lg);
+    }
+    .form-row {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<script>
+  const form = document.getElementById('contact-form') as HTMLFormElement;
+  const statusEl = document.getElementById('form-status');
+  const submitBtn = document.getElementById('submit-btn');
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!submitBtn || !statusEl) return;
+
+    submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Sending...';
+    submitBtn.setAttribute('disabled', 'true');
+
+    try {
+      const formData = new FormData(form);
+      const res = await fetch(form.action, {
+        method: 'POST',
+        body: formData,
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        statusEl.className = 'form-status success';
+        statusEl.innerHTML = '<i class="fa-solid fa-circle-check"></i> Message sent! I\'ll reply within 24 hours.';
+        form.reset();
+      } else {
+        throw new Error('Submission failed');
+      }
+    } catch (err) {
+      statusEl.className = 'form-status error';
+      statusEl.innerHTML = '<i class="fa-solid fa-circle-xmark"></i> Something went wrong. Try emailing me directly.';
+    }
+
+    submitBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Send Message';
+    submitBtn.removeAttribute('disabled');
+  });
+</script>

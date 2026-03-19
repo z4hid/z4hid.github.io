@@ -1,0 +1,1112 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { projects } from '../data/projects';
+import { certificates } from '../data/certificates';
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
+
+const description = 'I am an AI Engineer who builds production chatbots, agentic workflows, RAG systems, and computer vision apps. I have shipped 5+ chatbots and helped teams reduce manual work by 40%.';
+
+const featuredProjects = projects.filter(p => p.featured).slice(0, 6);
+
+let blogPosts: any[] = [];
+try {
+  const allPosts = await getCollection('blog');
+  blogPosts = allPosts
+    .filter((p: any) => !p.data.draft)
+    .sort((a: any, b: any) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+    .slice(0, 3);
+} catch (e) {}
+
+const base = import.meta.env.BASE_URL;
+
+const skills = [
+  {
+    category: 'AI & Machine Learning',
+    icon: `<svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a4 4 0 0 1 4 4c0 1.5-.8 2.8-2 3.5v1h3a3 3 0 0 1 3 3v1h1a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-3a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h1v-1a1 1 0 0 0-1-1H6a1 1 0 0 0-1 1v1h1a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h1v-1a3 3 0 0 1 3-3h3v-1a4 4 0 0 1-2-3.5A4 4 0 0 1 12 2z"/></svg>`,
+    items: ['Large Language Models', 'Agentic AI', 'RAG Systems', 'Deep Learning', 'Computer Vision', 'NLP', 'Prompt Engineering'],
+  },
+  {
+    category: 'Development',
+    icon: `<svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/><line x1="14" y1="4" x2="10" y2="20"/></svg>`,
+    items: ['Python', 'Django', 'FastAPI', 'Flask', 'PostgreSQL', 'Docker', 'Git'],
+  },
+  {
+    category: 'MLOps & Tools',
+    icon: `<svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1.08-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09a1.65 1.65 0 0 0 1.51-1.08 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1.08 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1.08z"/></svg>`,
+    items: ['DVC', 'MLflow', 'LangChain', 'Agno', 'OpenAI API', 'Google AI Studio', 'Linux'],
+  },
+];
+
+const services = [
+  {
+    icon: `<svg aria-hidden="true" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/><circle cx="12" cy="16" r="1"/></svg>`,
+    title: 'AI Chatbots & Agents',
+    desc: 'Custom LLM-powered chatbots and agentic workflows that handle complex business tasks — reducing manual work by 40%.',
+    stat: '5+ shipped',
+  },
+  {
+    icon: `<svg aria-hidden="true" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`,
+    title: 'Computer Vision',
+    desc: 'Image classification, object detection, and visual AI for healthcare, security, and real-world applications.',
+    stat: '3+ deployed',
+  },
+  {
+    icon: `<svg aria-hidden="true" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>`,
+    title: 'RAG & LLM Systems',
+    desc: 'Retrieval-Augmented Generation pipelines that ground LLMs in your data — cutting hallucinations and boosting accuracy.',
+    stat: '40% more accurate',
+  },
+  {
+    icon: `<svg aria-hidden="true" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>`,
+    title: 'Full-Stack AI Apps',
+    desc: 'End-to-end web applications with Django/FastAPI backends, integrated ML models, and production deployment.',
+    stat: '16+ projects',
+  },
+];
+
+const faqs = [
+  { question: 'What AI services do you offer?', answer: 'I build custom AI chatbots, agentic workflows, RAG systems, computer vision applications, and full-stack AI-powered web apps. I specialize in taking projects from concept to production deployment.' },
+  { question: 'What technologies do you work with?', answer: 'My primary stack includes Python, LangChain, Agno, OpenAI API, Google AI Studio, PyTorch, Django, FastAPI, and PostgreSQL. I also work with DVC, MLflow, and Docker for MLOps.' },
+  { question: 'Can you build AI solutions for my business?', answer: 'Absolutely. I\'ve built 5+ production AI chatbots and agentic workflows that reduced manual work by 40%. I can evaluate your use case and build a tailored solution.' },
+  { question: 'What is your experience with LLMs and Agentic AI?', answer: 'I have hands-on experience building agentic AI systems using LangChain and Agno. I hold certifications from DeepLearning.AI, HuggingFace, and Kaggle. My projects include multi-modal agents, prompt optimization tools, and email automation agents.' },
+  { question: 'How can I contact you for a project?', answer: 'You can reach me through the contact form on this website, or email me at zahidhasan9297@gmail.com. I\'m also on LinkedIn and GitHub.' },
+];
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="generator" content={Astro.generator} />
+  <title>Md. Zahid Hasan — AI Engineer | LLMs, Agentic AI, Computer Vision</title>
+  <meta name="description" content={description} />
+  <meta name="author" content="Md. Zahid Hasan" />
+  <meta name="keywords" content="AI Engineer, Machine Learning Engineer, LLM Developer, Agentic AI, RAG Systems, Computer Vision, Python Developer, Bangladesh" />
+  <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site).href} />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content={new URL(Astro.url.pathname, Astro.site).href} />
+  <meta property="og:title" content="Md. Zahid Hasan — AI Engineer" />
+  <meta property="og:description" content={description} />
+  <meta property="og:image" content={new URL(`${base}og-default.png`, Astro.site).href} />
+  <meta property="og:site_name" content="Md. Zahid Hasan" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@z4hiid" />
+  <meta name="twitter:title" content="Md. Zahid Hasan — AI Engineer" />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={new URL(`${base}og-default.png`, Astro.site).href} />
+  <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
+  <link rel="sitemap" href={`${base}sitemap-index.xml`} />
+  <link rel="alternate" type="application/rss+xml" title="Blog RSS" href={`${base}rss.xml`} />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@graph": [
+      { "@type": "WebSite", "name": "Md. Zahid Hasan — AI Engineer", "url": new URL(base, Astro.site).href },
+      {
+        "@type": "Person", "name": "Md. Zahid Hasan", "jobTitle": "AI Engineer", "url": new URL(base, Astro.site).href,
+        "email": "zahidhasan9297@gmail.com",
+        "worksFor": { "@type": "Organization", "name": "BrainSpark Digital" },
+        "alumniOf": { "@type": "CollegeOrUniversity", "name": "Uttara University" },
+        "knowsAbout": ["Artificial Intelligence", "Machine Learning", "Large Language Models", "Agentic AI", "RAG Systems", "Computer Vision", "Python", "Deep Learning"],
+        "sameAs": ["https://github.com/z4hid", "https://linkedin.com/in/z4hid", "https://twitter.com/z4hiid", "https://huggingface.co/z4hid", "https://kaggle.com/z4hid"],
+        "hasCredential": [
+          { "@type": "EducationalOccupationalCredential", "name": "Agentic AI", "recognizedBy": { "@type": "Organization", "name": "DeepLearning.AI" }},
+          { "@type": "EducationalOccupationalCredential", "name": "Fundamentals of Agents", "recognizedBy": { "@type": "Organization", "name": "Hugging Face" }},
+          { "@type": "EducationalOccupationalCredential", "name": "5-Day Gen AI Intensive", "recognizedBy": { "@type": "Organization", "name": "Kaggle" }}
+        ]
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": faqs.map(faq => ({ "@type": "Question", "name": faq.question, "acceptedAnswer": { "@type": "Answer", "text": faq.answer }}))
+      },
+      { "@type": "BreadcrumbList", "itemListElement": [{ "@type": "ListItem", "position": 1, "name": "Home", "item": new URL(base, Astro.site).href }] }
+    ]
+  })} />
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Skip to content</a>
+  <Header />
+
+  <main id="main-content">
+
+    <!-- ===== HERO ===== -->
+    <section class="hero" id="hero">
+      <div class="hero__bg">
+        <div class="hero__glow"></div>
+        <div class="hero__glow hero__glow--2"></div>
+        <div class="hero__grid-lines"></div>
+        <div class="hero__particles">
+          <span class="particle particle--1"></span>
+          <span class="particle particle--2"></span>
+          <span class="particle particle--3"></span>
+          <span class="particle particle--4"></span>
+          <span class="particle particle--5"></span>
+        </div>
+      </div>
+      <div class="container hero__content">
+        <div class="hero__text">
+          <p class="hero__greeting animate-in">Hi, I'm</p>
+          <h1 class="hero__name animate-in animate-delay-1">
+            Zahid<br/><span class="hero__name-accent">Hasan</span>
+          </h1>
+          <div class="hero__title-badge animate-in animate-delay-2">
+            <i class="fa-solid fa-microchip"></i>
+            <span>AI Engineer</span>
+          </div>
+          <p class="hero__tagline animate-in animate-delay-3">
+            I build <strong>AI systems that work in production</strong> — from LLM chatbots and agentic workflows to computer vision apps that solve real problems, not just demos.
+          </p>
+          <div class="hero__actions animate-in animate-delay-4">
+            <a href={`${base}projects`} class="btn btn--primary">
+              <i class="fa-solid fa-bolt"></i>
+              See What I've Built
+            </a>
+            <a href={`${base}contact`} class="btn btn--outline"><i class="fa-solid fa-handshake"></i> Work With Me</a>
+          </div>
+        </div>
+        <div class="hero__visual animate-in animate-delay-3">
+          <div class="hero__orbit">
+            <div class="hero__orbit-ring hero__orbit-ring--1"></div>
+            <div class="hero__orbit-ring hero__orbit-ring--2"></div>
+            <div class="hero__orbit-ring hero__orbit-ring--3"></div>
+            <!-- Orbiting nodes with distinct colors -->
+            <div class="hero__orbit-path hero__orbit-path--1">
+              <div class="hero__orbit-node hero__orbit-node--ai" title="Artificial Intelligence">
+                <i class="fa-solid fa-brain"></i>
+              </div>
+            </div>
+            <div class="hero__orbit-path hero__orbit-path--2">
+              <div class="hero__orbit-node hero__orbit-node--code" title="Code">
+                <i class="fa-solid fa-code"></i>
+              </div>
+            </div>
+            <div class="hero__orbit-path hero__orbit-path--3">
+              <div class="hero__orbit-node hero__orbit-node--web" title="Web">
+                <i class="fa-solid fa-globe"></i>
+              </div>
+            </div>
+            <!-- Center AI brain icon -->
+            <div class="hero__orbit-center">
+              <svg aria-hidden="true" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2a4 4 0 0 1 4 4c0 1.5-.8 2.8-2 3.5v1h3a3 3 0 0 1 3 3v1h1a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-3a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h1v-1a1 1 0 0 0-1-1H6a1 1 0 0 0-1 1v1h1a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h1v-1a3 3 0 0 1 3-3h3v-1a4 4 0 0 1-2-3.5A4 4 0 0 1 12 2z"/></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== SOCIAL PROOF BAR ===== -->
+    <section class="proof-bar">
+      <div class="container">
+        <div class="proof-bar__items">
+          <div class="proof-bar__item animate-on-scroll">
+            <span class="proof-bar__number">5+</span>
+            <span class="proof-bar__label">AI Chatbots<br/>in Production</span>
+          </div>
+          <div class="proof-bar__divider"></div>
+          <div class="proof-bar__item animate-on-scroll">
+            <span class="proof-bar__number">40%</span>
+            <span class="proof-bar__label">Manual Work<br/>Reduced</span>
+          </div>
+          <div class="proof-bar__divider"></div>
+          <div class="proof-bar__item animate-on-scroll">
+            <span class="proof-bar__number">16+</span>
+            <span class="proof-bar__label">Open Source<br/>Projects</span>
+          </div>
+          <div class="proof-bar__divider"></div>
+          <div class="proof-bar__item animate-on-scroll">
+            <span class="proof-bar__number">2+</span>
+            <span class="proof-bar__label">Years<br/>Experience</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== ABOUT ===== -->
+    <section class="section" id="about">
+      <div class="container">
+        <span class="section__label">About</span>
+        <h2 class="section__title">Building Intelligence,<br/>One System at a Time</h2>
+        <div class="about__grid">
+          <div class="about__content animate-on-scroll">
+            <p><strong>I am an AI Engineer</strong> at <a href="https://brainsparkd.com/" target="_blank" rel="noopener noreferrer">BrainSpark Digital</a> with 2+ years of experience shipping intelligent applications. I specialize in Large Language Models (LLMs), Agentic AI, RAG systems, and Computer Vision.</p>
+            <p>I've built <strong>5+ production chatbots</strong>, designed agentic workflows that <strong>cut manual tasks by 40%</strong>, and implemented RAG systems that dramatically improved response accuracy by grounding LLMs in real-time data.</p>
+            <p>I graduated from Uttara University with a <strong>B.Sc. in Computer Science</strong>. When I'm not building AI systems, I'm reading research papers, contributing to open-source, or exploring the latest tools and frameworks.</p>
+          </div>
+          <div class="about__stats animate-on-scroll">
+            <div class="stat-card">
+              <div class="stat-card__icon"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 7V5a4 4 0 0 0-8 0v2"/></svg></div>
+              <span class="stat-card__number">2+</span>
+              <span class="stat-card__label">Years Experience</span>
+            </div>
+            <div class="stat-card">
+              <div class="stat-card__icon"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+              <span class="stat-card__number">5+</span>
+              <span class="stat-card__label">AI Chatbots Built</span>
+            </div>
+            <div class="stat-card">
+              <div class="stat-card__icon"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
+              <span class="stat-card__number">40%</span>
+              <span class="stat-card__label">Work Automated</span>
+            </div>
+            <div class="stat-card">
+              <div class="stat-card__icon"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
+              <span class="stat-card__number">16+</span>
+              <span class="stat-card__label">Open Source Projects</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== SERVICES ===== -->
+    <section class="section section--alt" id="services">
+      <div class="container">
+        <span class="section__label">What I Do</span>
+        <h2 class="section__title">Expertise That Delivers</h2>
+        <p class="section__description">I don't just build AI — I build AI that works in production. Every system I ship is designed for real-world reliability.</p>
+        <div class="grid grid--4 services-grid">
+          {services.map((service, i) => (
+            <div class="card service-card animate-on-scroll" style={`transition-delay: ${i * 0.1}s`}>
+              <div class="service-card__icon" set:html={service.icon} />
+              <span class="service-card__stat">{service.stat}</span>
+              <h3 class="service-card__title">{service.title}</h3>
+              <p class="service-card__desc">{service.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== SKILLS ===== -->
+    <section class="section" id="skills">
+      <div class="container">
+        <span class="section__label">Tech Stack</span>
+        <h2 class="section__title">Tools I Work With</h2>
+        <div class="grid grid--3">
+          {skills.map((skillGroup, i) => (
+            <div class="card skill-group animate-on-scroll" style={`transition-delay: ${i * 0.1}s`}>
+              <div class="skill-group__header">
+                <div class="skill-group__icon" set:html={skillGroup.icon} />
+                <h3 class="skill-group__title">{skillGroup.category}</h3>
+              </div>
+              <div class="skill-group__items">
+                {skillGroup.items.map(item => (
+                  <span class="tag">{item}</span>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== PROJECTS ===== -->
+    <section class="section section--alt" id="projects">
+      <div class="container">
+        <div class="section__header-row">
+          <div>
+            <span class="section__label">Projects</span>
+            <h2 class="section__title">Featured Work</h2>
+          </div>
+          <a href={`${base}projects`} class="btn btn--ghost">
+            Explore All Projects
+            <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
+        </div>
+        <div class="grid grid--3">
+          {featuredProjects.map((project, i) => (
+            <a href={project.github} class="card project-card animate-on-scroll" target="_blank" rel="noopener noreferrer" style={`transition-delay: ${i * 0.08}s`}>
+              <div class="project-card__header">
+                <span class="project-card__category">{project.category}</span>
+                <svg aria-hidden="true" class="project-card__arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+              </div>
+              <h3 class="project-card__title">{project.title}</h3>
+              <p class="project-card__desc">{project.description}</p>
+              <div class="project-card__tech">
+                {project.techStack.slice(0, 3).map(tech => (
+                  <span class="tag">{tech}</span>
+                ))}
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== CERTIFICATES SLIDESHOW ===== -->
+    <section class="section" id="certificates">
+      <div class="container">
+        <div class="section__header-row">
+          <div>
+            <span class="section__label">Credentials</span>
+            <h2 class="section__title">Certified by Industry Leaders</h2>
+          </div>
+          <a href={`${base}certificates`} class="btn btn--ghost">
+            View All
+            <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
+        </div>
+        <div class="trust-logos animate-on-scroll">
+          <span class="trust-logos__label">Certified by</span>
+          <div class="trust-logos__items">
+            <span class="trust-logo">DeepLearning.AI</span>
+            <span class="trust-logo">Hugging Face</span>
+            <span class="trust-logo">Kaggle</span>
+            <span class="trust-logo">Coursera</span>
+          </div>
+        </div>
+        <!-- Certificate Slideshow -->
+        <div class="cert-slideshow animate-on-scroll" id="cert-slideshow">
+          <div class="cert-slideshow__track" id="cert-track">
+            {certificates.map(cert => (
+              <div class="cert-slide">
+                <div class="cert-slide__img">
+                  <Image src={cert.image} alt={`${cert.title} certificate from ${cert.issuer}`} loading="lazy" width={480} height={330} />
+                </div>
+                <div class="cert-slide__info">
+                  <h4 class="cert-slide__title">{cert.title}</h4>
+                  <p class="cert-slide__issuer">{cert.issuer} · {cert.date}</p>
+                </div>
+              </div>
+            ))}
+            {/* Duplicate for infinite scroll effect */}
+            {certificates.map(cert => (
+              <div class="cert-slide">
+                <div class="cert-slide__img">
+                  <Image src={cert.image} alt={`${cert.title} certificate from ${cert.issuer}`} loading="lazy" width={480} height={330} />
+                </div>
+                <div class="cert-slide__info">
+                  <h4 class="cert-slide__title">{cert.title}</h4>
+                  <p class="cert-slide__issuer">{cert.issuer} · {cert.date}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== BLOG ===== -->
+    {blogPosts.length > 0 && (
+      <section class="section section--alt" id="blog">
+        <div class="container">
+          <div class="section__header-row">
+            <div>
+              <span class="section__label">Blog</span>
+              <h2 class="section__title">Latest Articles</h2>
+            </div>
+            <a href={`${base}blog`} class="btn btn--ghost">
+              Read All
+              <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </a>
+          </div>
+          <div class="grid grid--3">
+            {blogPosts.map((post: any, i: number) => {
+              const slug = post.id;
+              return (
+                <a href={`${base}blog/${slug}`} class="card blog-card animate-on-scroll" style={`transition-delay: ${i * 0.1}s`}>
+                  <div class="blog-card__meta">
+                    <time datetime={post.data.pubDate.toISOString()}>
+                      {post.data.pubDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                    </time>
+                  </div>
+                  <h3 class="blog-card__title">{post.data.title}</h3>
+                  <p class="blog-card__desc">{post.data.description}</p>
+                  {post.data.tags?.length > 0 && (
+                    <div class="blog-card__tags">
+                      {post.data.tags.slice(0, 3).map((tag: string) => (
+                        <span class="tag">{tag}</span>
+                      ))}
+                    </div>
+                  )}
+                </a>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+    )}
+
+    <!-- ===== FAQ ===== -->
+    <section class="section" id="faq">
+      <div class="container container--narrow">
+        <span class="section__label">FAQ</span>
+        <h2 class="section__title">Common Questions</h2>
+        <div class="faq-list">
+          {faqs.map((faq, i) => (
+            <details class="faq-item animate-on-scroll" style={`transition-delay: ${i * 0.05}s`}>
+              <summary class="faq-item__question">
+                <span>{faq.question}</span>
+                <svg aria-hidden="true" class="faq-item__chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </summary>
+              <div class="faq-item__answer"><p>{faq.answer}</p></div>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== CTA ===== -->
+    <section class="section cta-section">
+      <div class="container">
+        <div class="cta-block animate-on-scroll">
+          <div class="cta-block__glow"></div>
+          <h2 class="cta-block__title">Ready to Build Something<br/><span class="cta-block__accent">Intelligent?</span></h2>
+          <p class="cta-block__desc">Every week spent on manual processes is a week your competitors are automating. Let's build the AI system that gives you an edge.</p>
+          <div class="cta-block__actions">
+            <a href={`${base}contact`} class="btn btn--primary">
+              <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              Start a Conversation
+            </a>
+            <a href="mailto:zahidhasan9297@gmail.com" class="btn btn--outline">Email Directly</a>
+          </div>
+          <p class="cta-block__note">No commitment required. I respond within 24 hours.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <Footer />
+</body>
+</html>
+
+<style>
+  /* ===== HERO ===== */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    padding-top: 72px;
+  }
+
+  .hero__bg { position: absolute; inset: 0; z-index: 0; }
+
+  .hero__glow {
+    position: absolute;
+    top: -20%;
+    right: -15%;
+    width: 60%;
+    height: 70%;
+    background: radial-gradient(ellipse, rgba(61, 132, 212, 0.07) 0%, transparent 70%);
+    filter: blur(80px);
+    animation: float 12s ease-in-out infinite;
+  }
+
+  .hero__glow--2 {
+    top: 40%;
+    left: -20%;
+    right: auto;
+    width: 40%;
+    height: 50%;
+    background: radial-gradient(ellipse, rgba(61, 132, 212, 0.04) 0%, transparent 70%);
+    animation-delay: -6s;
+  }
+
+  .hero__grid-lines {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 80px 80px;
+    mask-image: radial-gradient(ellipse 60% 50% at 60% 40%, black, transparent);
+  }
+
+  /* Floating particles */
+  .hero__particles { position: absolute; inset: 0; }
+  .particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--accent);
+    opacity: 0.3;
+    animation: float 8s ease-in-out infinite;
+  }
+  .particle--1 { top: 15%; left: 10%; animation-delay: 0s; }
+  .particle--2 { top: 25%; right: 20%; animation-delay: -2s; width: 3px; height: 3px; }
+  .particle--3 { bottom: 30%; left: 25%; animation-delay: -4s; }
+  .particle--4 { bottom: 20%; right: 10%; animation-delay: -1s; width: 5px; height: 5px; }
+  .particle--5 { top: 50%; left: 60%; animation-delay: -3s; width: 3px; height: 3px; }
+
+  .hero__content {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: var(--space-3xl);
+    padding: var(--space-5xl) 0;
+  }
+
+  .hero__greeting {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--accent);
+    margin-bottom: var(--space-md);
+  }
+
+  .hero__name {
+    font-size: clamp(3.2rem, 7vw, 5.5rem);
+    font-weight: 700;
+    line-height: 1.05;
+    margin-bottom: var(--space-lg);
+    letter-spacing: -0.03em;
+  }
+
+  .hero__name-accent { color: var(--accent); }
+
+  .hero__title-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--accent);
+    background: var(--accent-subtle);
+    border: 1px solid rgba(61, 132, 212, 0.15);
+    padding: 0.4rem 1rem;
+    border-radius: var(--radius-full);
+    margin-bottom: var(--space-xl);
+  }
+
+  .hero__title-badge svg { color: var(--accent); }
+
+  .hero__tagline {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    max-width: 480px;
+    margin-bottom: var(--space-2xl);
+    line-height: 1.8;
+  }
+
+  .hero__tagline strong { color: var(--text-primary); }
+
+  .hero__actions { display: flex; gap: var(--space-md); flex-wrap: wrap; }
+
+  /* Orbit Visual */
+  .hero__visual { display: flex; justify-content: center; align-items: center; }
+
+  .hero__orbit { position: relative; width: 400px; height: 400px; }
+
+  .hero__orbit-ring {
+    position: absolute;
+    border: 1px solid var(--border-subtle);
+    border-radius: 50%;
+  }
+
+  .hero__orbit-ring--1 { inset: 0; border-color: rgba(61,132,212,0.1); }
+  .hero__orbit-ring--2 { inset: 70px; border-color: rgba(168, 85, 247, 0.1); }
+  .hero__orbit-ring--3 { inset: 140px; border-color: rgba(6, 182, 212, 0.08); }
+
+  /* Orbit paths — these rotate to carry nodes around */
+  .hero__orbit-path {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+  }
+
+  .hero__orbit-path--1 { animation: orbit 20s linear infinite; }
+  .hero__orbit-path--2 { animation: orbit 25s linear infinite reverse; inset: 70px; }
+  .hero__orbit-path--3 { animation: orbit 15s linear infinite; inset: 140px; }
+
+  @keyframes orbit {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  /* Node base */
+  .hero__orbit-node {
+    position: absolute;
+    width: 42px;
+    height: 42px;
+    background: var(--bg-surface);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    /* counter-rotate so icons stay upright */
+    top: -21px;
+    left: 50%;
+    margin-left: -21px;
+  }
+
+  /* AI node — Blue */
+  .hero__orbit-node--ai {
+    animation: orbit 20s linear infinite reverse;
+    color: #3d84d4;
+    border: 2px solid rgba(61, 132, 212, 0.4);
+    box-shadow: 0 0 20px rgba(61, 132, 212, 0.3), inset 0 0 8px rgba(61, 132, 212, 0.1);
+  }
+
+  /* Code node — Purple */
+  .hero__orbit-node--code {
+    animation: orbit 25s linear infinite;
+    color: #a855f7;
+    border: 2px solid rgba(168, 85, 247, 0.4);
+    box-shadow: 0 0 20px rgba(168, 85, 247, 0.3), inset 0 0 8px rgba(168, 85, 247, 0.1);
+  }
+
+  /* Web node — Cyan */
+  .hero__orbit-node--web {
+    animation: orbit 15s linear infinite reverse;
+    color: #06b6d4;
+    border: 2px solid rgba(6, 182, 212, 0.4);
+    box-shadow: 0 0 20px rgba(6, 182, 212, 0.3), inset 0 0 8px rgba(6, 182, 212, 0.1);
+  }
+
+  .hero__orbit-center {
+    position: absolute;
+    inset: 170px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: var(--bg-surface);
+    border: 2px solid var(--accent);
+    box-shadow: var(--shadow-glow-lg);
+    color: var(--accent);
+    font-size: 1.6rem;
+    animation: centerPulse 3s ease-in-out infinite;
+  }
+
+  @keyframes centerPulse {
+    0%, 100% { box-shadow: 0 0 24px var(--accent-glow); }
+    50% { box-shadow: 0 0 48px var(--accent-glow), 0 0 80px rgba(61,132,212,0.1); }
+  }
+
+  @media (max-width: 768px) {
+    .hero__content { grid-template-columns: 1fr; text-align: center; padding: var(--space-3xl) 0; }
+    .hero__tagline { margin-left: auto; margin-right: auto; }
+    .hero__actions { justify-content: center; }
+    .hero__visual { display: none; }
+    .hero__title-badge { margin-left: auto; margin-right: auto; }
+  }
+
+  /* ===== PROOF BAR ===== */
+  .proof-bar {
+    border-top: 1px solid var(--border-subtle);
+    border-bottom: 1px solid var(--border-subtle);
+    background: var(--bg-secondary);
+    padding: var(--space-xl) 0;
+  }
+
+  .proof-bar__items { display: flex; justify-content: center; align-items: center; gap: var(--space-2xl); }
+
+  .proof-bar__item { text-align: center; }
+
+  .proof-bar__number {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1.1;
+  }
+
+  .proof-bar__label {
+    display: block;
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    line-height: 1.4;
+    margin-top: var(--space-xs);
+  }
+
+  .proof-bar__divider { width: 1px; height: 40px; background: var(--border-subtle); }
+
+  @media (max-width: 640px) {
+    .proof-bar__items { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-lg); }
+    .proof-bar__divider { display: none; }
+  }
+
+  /* ===== ABOUT ===== */
+  .about__grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: var(--space-3xl); align-items: start; }
+
+  .about__content p { font-size: 1.05rem; line-height: 1.85; }
+  .about__content strong { color: var(--text-primary); }
+
+  .about__stats { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-md); }
+
+  .stat-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: var(--space-xl);
+    text-align: center;
+    transition: all var(--duration-normal) var(--ease-out);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    opacity: 0;
+    transition: opacity var(--duration-normal) var(--ease-out);
+  }
+
+  .stat-card:hover { border-color: var(--border-accent); transform: translateY(-3px); box-shadow: var(--shadow-glow); }
+  .stat-card:hover::before { opacity: 1; }
+
+  .stat-card__icon { color: var(--accent); margin-bottom: var(--space-sm); }
+
+  .stat-card__number {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1.2;
+  }
+
+  .stat-card__label { display: block; font-size: 0.75rem; color: var(--text-muted); margin-top: var(--space-xs); }
+
+  @media (max-width: 768px) { .about__grid { grid-template-columns: 1fr; } }
+
+  /* ===== SERVICES ===== */
+  .service-card { text-align: center; }
+
+  .service-card__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    border-radius: var(--radius-md);
+    background: var(--accent-subtle);
+    border: 1px solid rgba(61, 132, 212, 0.12);
+    color: var(--accent);
+    margin: 0 auto var(--space-md);
+    transition: all var(--duration-normal) var(--ease-out);
+  }
+
+  .service-card:hover .service-card__icon {
+    background: var(--accent);
+    color: var(--bg-primary);
+    transform: scale(1.1);
+    box-shadow: var(--shadow-glow);
+  }
+
+  .service-card__stat {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    font-weight: 600;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: var(--space-sm);
+  }
+
+  .service-card__title { font-size: 1.05rem; margin-bottom: var(--space-sm); }
+  .service-card__desc { font-size: 0.875rem; color: var(--text-muted); margin: 0; }
+
+  /* ===== SKILLS ===== */
+  .skill-group__header { display: flex; align-items: center; gap: var(--space-md); margin-bottom: var(--space-lg); }
+
+  .skill-group__icon {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-sm);
+    background: var(--accent-subtle);
+    border: 1px solid rgba(61, 132, 212, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+
+  .skill-group__title { font-size: 0.95rem; font-weight: 600; }
+
+  .skill-group__items { display: flex; flex-wrap: wrap; gap: var(--space-sm); }
+
+  /* ===== PROJECTS ===== */
+  .section__header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: var(--space-2xl);
+  }
+
+  .project-card {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .project-card__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-md);
+  }
+
+  .project-card__category {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+
+  .project-card__arrow {
+    color: var(--text-muted);
+    transition: all var(--duration-normal) var(--ease-spring);
+  }
+
+  .project-card:hover .project-card__arrow {
+    color: var(--accent);
+    transform: translate(4px, -4px);
+  }
+
+  .project-card__title { font-size: 1.15rem; margin-bottom: var(--space-sm); transition: color var(--duration-fast) var(--ease-out); }
+  .project-card:hover .project-card__title { color: var(--accent-light); }
+
+  .project-card__desc { font-size: 0.85rem; color: var(--text-muted); flex-grow: 1; margin-bottom: var(--space-lg); }
+
+  .project-card__tech { display: flex; flex-wrap: wrap; gap: var(--space-xs); }
+
+  /* ===== TRUST LOGOS ===== */
+  .trust-logos {
+    display: flex;
+    align-items: center;
+    gap: var(--space-lg);
+    margin-bottom: var(--space-2xl);
+    padding: var(--space-lg) var(--space-xl);
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    flex-wrap: wrap;
+  }
+
+  .trust-logos__label {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+  }
+
+  .trust-logos__items { display: flex; flex-wrap: wrap; gap: var(--space-md); }
+
+  .trust-logo {
+    font-family: var(--font-display);
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    padding: 0.35rem 0.75rem;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    transition: all var(--duration-fast) var(--ease-out);
+  }
+
+  .trust-logo:hover { color: var(--accent); border-color: var(--accent); }
+
+  /* ===== CERTIFICATE SLIDESHOW ===== */
+  .cert-slideshow {
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    position: relative;
+  }
+
+  .cert-slideshow::before,
+  .cert-slideshow::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 80px;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  .cert-slideshow::before {
+    left: 0;
+    background: linear-gradient(90deg, var(--bg-primary), transparent);
+  }
+
+  .cert-slideshow::after {
+    right: 0;
+    background: linear-gradient(-90deg, var(--bg-primary), transparent);
+  }
+
+  .cert-slideshow__track {
+    display: flex;
+    gap: var(--space-xl);
+    animation: scroll-left 30s linear infinite;
+    width: max-content;
+  }
+
+  .cert-slideshow__track:hover {
+    animation-play-state: paused;
+  }
+
+  @keyframes scroll-left {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  .cert-slide {
+    flex-shrink: 0;
+    width: 320px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    transition: all var(--duration-normal) var(--ease-out);
+  }
+
+  .cert-slide:hover {
+    border-color: var(--border-accent);
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .cert-slide__img {
+    aspect-ratio: 16/11;
+    overflow: hidden;
+    background: var(--bg-elevated);
+  }
+
+  .cert-slide__img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--duration-slow) var(--ease-out);
+  }
+
+  .cert-slide:hover .cert-slide__img img { transform: scale(1.05); }
+
+  .cert-slide__info { padding: var(--space-lg); }
+  .cert-slide__title { font-size: 0.9rem; font-weight: 600; margin-bottom: var(--space-2xs); }
+  .cert-slide__issuer { font-size: 0.75rem; color: var(--text-muted); margin: 0; }
+
+  /* ===== BLOG CARDS ===== */
+  .blog-card { text-decoration: none; color: inherit; display: flex; flex-direction: column; }
+
+  .blog-card__meta {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    margin-bottom: var(--space-sm);
+  }
+
+  .blog-card__title { font-size: 1.1rem; margin-bottom: var(--space-sm); transition: color var(--duration-fast) var(--ease-out); }
+  .blog-card:hover .blog-card__title { color: var(--accent-light); }
+
+  .blog-card__desc { font-size: 0.85rem; color: var(--text-muted); flex-grow: 1; margin-bottom: var(--space-md); }
+
+  .blog-card__tags { display: flex; flex-wrap: wrap; gap: var(--space-xs); }
+
+  /* ===== FAQ ===== */
+  .faq-list { display: flex; flex-direction: column; }
+
+  .faq-item { border-bottom: 1px solid var(--border-subtle); }
+  .faq-item:first-child { border-top: 1px solid var(--border-subtle); }
+
+  .faq-item__question {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-lg) 0;
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    cursor: pointer;
+    list-style: none;
+    transition: color var(--duration-fast) var(--ease-out);
+  }
+
+  .faq-item__question::-webkit-details-marker { display: none; }
+
+  .faq-item__chevron {
+    color: var(--accent);
+    transition: transform var(--duration-normal) var(--ease-out);
+    flex-shrink: 0;
+    margin-left: var(--space-md);
+  }
+
+  .faq-item[open] .faq-item__chevron { transform: rotate(180deg); }
+
+  .faq-item__question:hover { color: var(--accent-light); }
+
+  .faq-item__answer { padding-bottom: var(--space-lg); }
+  .faq-item__answer p { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.75; margin: 0; }
+
+  /* ===== CTA ===== */
+  .cta-section { padding: var(--space-5xl) 0; }
+
+  .cta-block {
+    text-align: center;
+    padding: var(--space-4xl) var(--space-2xl);
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-xl);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-block__glow {
+    position: absolute;
+    top: -50%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 400px;
+    height: 300px;
+    background: radial-gradient(ellipse, rgba(61, 132, 212, 0.08), transparent 70%);
+    pointer-events: none;
+  }
+
+  .cta-block__title { font-size: clamp(1.8rem, 4vw, 2.8rem); margin-bottom: var(--space-lg); position: relative; }
+  .cta-block__accent { color: var(--accent); }
+
+  .cta-block__desc {
+    max-width: 550px;
+    margin: 0 auto var(--space-2xl);
+    color: var(--text-secondary);
+    font-size: 1rem;
+    position: relative;
+  }
+
+  .cta-block__actions { display: flex; gap: var(--space-md); justify-content: center; flex-wrap: wrap; position: relative; }
+
+  .cta-block__note { font-size: 0.75rem; color: var(--text-muted); margin-top: var(--space-lg); margin-bottom: 0; position: relative; }
+
+  @media (max-width: 768px) {
+    .section__header-row { flex-direction: column; align-items: flex-start; gap: var(--space-md); }
+  }
+
+  @media (max-width: 640px) {
+    .services-grid { grid-template-columns: 1fr !important; }
+  }
+</style>
+
+<!-- Scroll animation script -->
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.animate-on-scroll').forEach(el => observer.observe(el));
+</script>

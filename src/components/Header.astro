@@ -1,0 +1,240 @@
+---
+const currentPath = Astro.url.pathname;
+
+const base = import.meta.env.BASE_URL;
+
+const navLinks = [
+  { href: `${base}`, label: 'Home' },
+  { href: `${base}projects`, label: 'Projects' },
+  { href: `${base}blog`, label: 'Blog' },
+  { href: `${base}certificates`, label: 'Certificates' },
+  { href: `${base}contact`, label: 'Contact' },
+];
+---
+
+<header class="header" id="site-header">
+  <nav class="header__nav container" aria-label="Main navigation">
+    <a href={base} class="header__brand" aria-label="Home">
+      <span class="header__brand-name">ZAHID</span>
+      <span class="header__brand-accent">HASAN</span>
+    </a>
+
+    <ul class="header__links" id="nav-links">
+      {navLinks.map(link => (
+        <li>
+          <a
+            href={link.href}
+            class:list={['header__link', { 'header__link--active': currentPath === link.href || (link.href !== '/' && currentPath.startsWith(link.href)) }]}
+          >
+            {link.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    <a href={`${base}MD.-ZAHID-HASAN-CV.pdf`} class="btn btn--primary header__cta" target="_blank" rel="noopener">
+      Download CV
+    </a>
+
+    <button class="header__hamburger" id="hamburger-btn" aria-label="Toggle menu" aria-expanded="false">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </nav>
+
+  <!-- Mobile overlay -->
+  <div class="header__mobile-overlay" id="mobile-overlay">
+    <ul class="header__mobile-links">
+      {navLinks.map(link => (
+        <li>
+          <a
+            href={link.href}
+            class:list={['header__mobile-link', { 'header__mobile-link--active': currentPath === link.href }]}
+          >
+            {link.label}
+          </a>
+        </li>
+      ))}
+      <li>
+        <a href={`${base}MD.-ZAHID-HASAN-CV.pdf`} class="btn btn--primary" target="_blank" rel="noopener" style="margin-top: 1rem; display: inline-flex;">
+          Download CV
+        </a>
+      </li>
+    </ul>
+  </div>
+</header>
+
+<style>
+  .header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background: rgba(7, 8, 12, 0.88);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border-subtle);
+    transition: all var(--duration-normal) var(--ease-out);
+  }
+
+  .header.menu-open {
+    bottom: 0;
+    background: rgba(7, 8, 12, 0.98);
+  }
+
+  .header__nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 72px;
+    position: relative;
+    z-index: 1003;
+  }
+
+  .header__brand {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-decoration: none;
+    display: flex;
+    gap: 0.3rem;
+  }
+
+  .header__brand-name { color: var(--text-primary); }
+  .header__brand-accent { color: var(--accent); }
+
+  .header__links {
+    display: flex;
+    list-style: none;
+    gap: var(--space-xs);
+  }
+
+  .header__link {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    text-decoration: none;
+    padding: 0.5rem 0.9rem;
+    border-radius: var(--radius-full);
+    transition: all var(--duration-fast) var(--ease-out);
+  }
+
+  .header__link:hover {
+    color: var(--text-primary);
+    background: var(--bg-elevated);
+  }
+
+  .header__link--active {
+    color: var(--accent);
+    background: var(--accent-subtle);
+  }
+
+  .header__cta {
+    font-size: 0.85rem;
+    padding: 0.6rem 1.3rem;
+  }
+
+  /* Hamburger */
+  .header__hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 6px;
+    z-index: 1002;
+  }
+
+  .header__hamburger span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: var(--text-primary);
+    border-radius: 2px;
+    transition: all var(--duration-normal) var(--ease-out);
+  }
+
+  .header__hamburger.active span:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+  }
+  .header__hamburger.active span:nth-child(2) { opacity: 0; }
+  .header__hamburger.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(5px, -5px);
+  }
+
+  /* Mobile overlay */
+  .header__mobile-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(7, 8, 12, 0.97);
+    backdrop-filter: blur(20px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all var(--duration-normal) var(--ease-out);
+    z-index: 1001;
+  }
+
+  .header__mobile-overlay.active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .header__mobile-links {
+    list-style: none;
+    text-align: center;
+  }
+
+  .header__mobile-link {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-secondary);
+    text-decoration: none;
+    padding: 0.75rem;
+    transition: color var(--duration-fast) var(--ease-out);
+  }
+
+  .header__mobile-link:hover,
+  .header__mobile-link--active {
+    color: var(--accent);
+  }
+
+  @media (max-width: 768px) {
+    .header__links, .header__cta { display: none; }
+    .header__hamburger { display: flex; }
+  }
+</style>
+
+<script>
+  const hamburger = document.getElementById('hamburger-btn');
+  const overlay = document.getElementById('mobile-overlay');
+  const header = document.getElementById('site-header');
+
+  hamburger?.addEventListener('click', () => {
+    hamburger.classList.toggle('active');
+    overlay?.classList.toggle('active');
+    header?.classList.toggle('menu-open');
+    hamburger.setAttribute('aria-expanded',
+      hamburger.classList.contains('active') ? 'true' : 'false'
+    );
+    document.body.style.overflow = hamburger.classList.contains('active') ? 'hidden' : '';
+  });
+
+  // Close on link click
+  overlay?.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      hamburger?.classList.remove('active');
+      overlay?.classList.remove('active');
+      header?.classList.remove('menu-open');
+      document.body.style.overflow = '';
+    });
+  });
+</script>

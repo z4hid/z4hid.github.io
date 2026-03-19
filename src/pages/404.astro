@@ -1,0 +1,72 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+const base = import.meta.env.BASE_URL;
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>404 — Page Not Found | Md. Zahid Hasan</title>
+  <meta name="description" content="The page you're looking for doesn't exist. Return to Zahid Hasan's AI Engineer portfolio." />
+  <meta property="og:title" content="404 — Page Not Found" />
+  <meta property="og:description" content="The page you're looking for doesn't exist." />
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
+</head>
+<body>
+  <Header />
+  <main id="main-content" class="error-page">
+    <div class="container">
+      <div class="error-content">
+        <span class="error-code">404</span>
+        <h1>Lost in the neural network</h1>
+        <p>The page you're looking for doesn't exist or has been moved.</p>
+        <a href={`${base}`} class="btn btn--primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          Back to Home
+        </a>
+      </div>
+    </div>
+  </main>
+  <Footer />
+</body>
+</html>
+
+<style>
+  .error-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding-top: 72px;
+  }
+
+  .error-content {
+    max-width: 500px;
+  }
+
+  .error-code {
+    font-family: var(--font-display);
+    font-size: clamp(6rem, 15vw, 10rem);
+    font-weight: 800;
+    color: var(--accent);
+    line-height: 1;
+    opacity: 0.15;
+    display: block;
+    margin-bottom: var(--space-md);
+  }
+
+  .error-content h1 {
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    margin-bottom: var(--space-md);
+  }
+
+  .error-content p {
+    color: var(--text-muted);
+    margin-bottom: var(--space-2xl);
+  }
+</style>

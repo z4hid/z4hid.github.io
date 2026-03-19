@@ -1,0 +1,277 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  pubDate: Date;
+  updatedDate?: Date;
+  tags?: string[];
+  image?: string;
+}
+
+const { title, description, pubDate, updatedDate, tags = [], image } = Astro.props;
+
+const formattedDate = pubDate.toLocaleDateString('en-US', {
+  year: 'numeric', month: 'long', day: 'numeric'
+});
+
+const updatedFormatted = updatedDate?.toLocaleDateString('en-US', {
+  year: 'numeric', month: 'long', day: 'numeric'
+});
+
+const base = import.meta.env.BASE_URL;
+const siteTitle = `${title} | Md. Zahid Hasan`;
+const canonicalURL = Astro.url.href;
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="generator" content={Astro.generator} />
+
+  <title>{siteTitle}</title>
+  <meta name="description" content={description} />
+  <meta name="author" content="Md. Zahid Hasan" />
+  <link rel="canonical" href={canonicalURL} />
+
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content={canonicalURL} />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:image" content={new URL(`${base}og-default.png`, Astro.site).href} />
+  <meta property="article:published_time" content={pubDate.toISOString()} />
+  {updatedDate && <meta property="article:modified_time" content={updatedDate.toISOString()} />}
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@z4hiid" />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={new URL(`${base}og-default.png`, Astro.site).href} />
+
+  <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <!-- JSON-LD: BlogPosting + BreadcrumbList (AI-SEO: rich structured data) -->
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "BlogPosting",
+        "headline": title,
+        "description": description,
+        "datePublished": pubDate.toISOString(),
+        "dateModified": (updatedDate || pubDate).toISOString(),
+        "author": {
+          "@type": "Person",
+          "name": "Md. Zahid Hasan",
+          "url": new URL(base, Astro.site).href,
+          "jobTitle": "AI Engineer",
+          "worksFor": { "@type": "Organization", "name": "BrainSpark Digital" }
+        },
+        "publisher": {
+          "@type": "Person",
+          "name": "Md. Zahid Hasan",
+          "url": new URL(base, Astro.site).href
+        },
+        "mainEntityOfPage": canonicalURL,
+        "keywords": tags.join(', '),
+        "inLanguage": "en"
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": new URL(base, Astro.site).href },
+          { "@type": "ListItem", "position": 2, "name": "Blog", "item": new URL(`${base}blog`, Astro.site).href },
+          { "@type": "ListItem", "position": 3, "name": title, "item": canonicalURL }
+        ]
+      }
+    ]
+  })} />
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Skip to content</a>
+  <Header />
+
+  <main id="main-content">
+    <article class="post section">
+      <div class="container container--narrow">
+        <header class="post__header">
+          <!-- CRO: Breadcrumb navigation (also good for SEO) -->
+          <nav class="post__breadcrumb" aria-label="Breadcrumb">
+            <a href={`${base}`}>Home</a>
+            <span class="post__breadcrumb-sep">/</span>
+            <a href={`${base}blog`}>Blog</a>
+            <span class="post__breadcrumb-sep">/</span>
+            <span>{title}</span>
+          </nav>
+
+          <div class="post__meta">
+            <time datetime={pubDate.toISOString()}>{formattedDate}</time>
+            {updatedFormatted && <span> · Updated {updatedFormatted}</span>}
+          </div>
+
+          <h1 class="post__title">{title}</h1>
+          <p class="post__description">{description}</p>
+
+          {tags.length > 0 && (
+            <div class="post__tags">
+              {tags.map(tag => <span class="tag">{tag}</span>)}
+            </div>
+          )}
+        </header>
+
+        <div class="prose">
+          <slot />
+        </div>
+
+        <!-- AI-SEO + Psychology: Author bio for E-E-A-T signals + Authority Bias -->
+        <footer class="post__author">
+          <div class="post__author-info">
+            <div class="post__author-avatar">ZH</div>
+            <div>
+              <strong class="post__author-name">Md. Zahid Hasan</strong>
+              <p class="post__author-bio">AI Engineer at <a href="https://brainsparkd.com/" target="_blank" rel="noopener noreferrer">BrainSpark Digital</a>. Building intelligent systems with LLMs, Agentic AI, and Computer Vision. B.Sc. in Computer Science (GPA 3.96/4.0).</p>
+            </div>
+          </div>
+        </footer>
+
+        <!-- CRO: Contextual CTA matching blog content -->
+        <div class="post__cta">
+          <p class="post__cta-text">Want to build something like this? <strong>Let's talk about your AI project.</strong></p>
+          <a href={`${base}contact`} class="btn btn--primary">Get In Touch →</a>
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <Footer />
+</body>
+</html>
+
+<style>
+
+  .post__header {
+    margin-bottom: var(--space-3xl);
+    padding-top: 100px;
+  }
+
+  .post__breadcrumb {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-bottom: var(--space-xl);
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+  }
+
+  .post__breadcrumb a {
+    color: var(--text-muted);
+    transition: color var(--duration-fast) var(--ease-out);
+  }
+
+  .post__breadcrumb a:hover { color: var(--accent); }
+
+  .post__breadcrumb-sep { color: var(--border-default); }
+
+  .post__meta {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-bottom: var(--space-md);
+  }
+
+  .post__title {
+    font-size: clamp(2rem, 5vw, 3rem);
+    margin-bottom: var(--space-md);
+  }
+
+  .post__description {
+    font-size: 1.15rem;
+    color: var(--text-secondary);
+    margin-bottom: var(--space-lg);
+  }
+
+  .post__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+  }
+
+  /* Author bio */
+  .post__author {
+    margin-top: var(--space-3xl);
+    padding-top: var(--space-2xl);
+    border-top: 1px solid var(--border-subtle);
+  }
+
+  .post__author-info {
+    display: flex;
+    gap: var(--space-lg);
+    align-items: flex-start;
+  }
+
+  .post__author-avatar {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: var(--accent-subtle);
+    border: 2px solid var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display);
+    font-weight: 800;
+    color: var(--accent);
+    font-size: 0.9rem;
+    flex-shrink: 0;
+  }
+
+  .post__author-name {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 1rem;
+    color: var(--text-primary);
+    margin-bottom: var(--space-xs);
+  }
+
+  .post__author-bio {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  /* Post CTA */
+  .post__cta {
+    margin-top: var(--space-2xl);
+    padding: var(--space-xl);
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-lg);
+    flex-wrap: wrap;
+  }
+
+  .post__cta-text {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    margin: 0;
+  }
+
+  .post__cta-text strong { color: var(--text-primary); }
+
+  @media (max-width: 640px) {
+    .post__cta { flex-direction: column; text-align: center; }
+    .post__author-info { flex-direction: column; align-items: center; text-align: center; }
+  }
+</style>

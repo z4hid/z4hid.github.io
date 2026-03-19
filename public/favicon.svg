@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" fill="none">
+  <rect width="36" height="36" rx="8" fill="#08080a"/>
+  <rect x="1" y="1" width="34" height="34" rx="7" stroke="#00d4aa" stroke-width="1.5" fill="none"/>
+  <text x="50%" y="54%" dominant-baseline="central" text-anchor="middle" fill="#00d4aa" font-family="sans-serif" font-weight="800" font-size="16">ZH</text>
+</svg>
