@@ -4,6 +4,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import SiteAnalytics from '../components/SiteAnalytics.astro';
 import NonBlockingFontAwesome from '../components/NonBlockingFontAwesome.astro';
+import InteractiveBackground from '../components/InteractiveBackground.astro';
 
 interface Props {
   title: string;
@@ -74,8 +75,8 @@ const shareTitle = encodeURIComponent(title);
           "@type": "Person",
           "name": "Md. Zahid Hasan",
           "url": new URL(base, Astro.site).href,
-          "jobTitle": "AI Engineer",
-          "worksFor": { "@type": "Organization", "name": "BrainSpark Digital" },
+          "jobTitle": "AI & Cybersecurity Engineer",
+          "worksFor": { "@type": "Organization", "name": "BrainSpark Digital", "url": "https://brainsparkd.com/" },
           "sameAs": [
             "https://github.com/z4hid",
             "https://linkedin.com/in/z4hid",
@@ -87,7 +88,11 @@ const shareTitle = encodeURIComponent(title);
         "publisher": {
           "@type": "Person",
           "name": "Md. Zahid Hasan",
-          "url": new URL(base, Astro.site).href
+          "url": new URL(base, Astro.site).href,
+          "logo": {
+            "@type": "ImageObject",
+            "url": new URL(`${base}favicon.svg`, Astro.site).href
+          }
         },
         "mainEntityOfPage": {
           "@type": "WebPage",
@@ -111,6 +116,12 @@ const shareTitle = encodeURIComponent(title);
 </head>
 <body>
   <a href="#main-content" class="skip-link">Skip to content</a>
+  
+  <style>
+    body {
+      background-color: var(--bg-canvas) !important;
+    }
+  </style>
 
   <!-- Reading progress bar -->
   <div class="reading-progress" id="reading-progress" aria-hidden="true">
@@ -189,7 +200,7 @@ const shareTitle = encodeURIComponent(title);
             <div class="post__author-avatar">ZH</div>
             <div>
               <strong class="post__author-name">Md. Zahid Hasan</strong>
-              <p class="post__author-bio">AI Engineer at <a href="https://brainsparkd.com/" target="_blank" rel="noopener noreferrer">BrainSpark Digital</a>. Building intelligent systems with LLMs, Agentic AI, and Computer Vision. B.Sc. in Computer Science (GPA 3.96/4.0).</p>
+              <p class="post__author-bio">AI Engineer at <a href="https://brainsparkd.com/" target="_blank" rel="noopener noreferrer">BrainSpark Digital</a>. Building intelligent systems with LLMs, Agentic AI, and Computer Vision. B.Sc. in Computer Science & Engineering.</p>
             </div>
           </div>
         </footer>
@@ -197,7 +208,7 @@ const shareTitle = encodeURIComponent(title);
         <!-- CTA -->
         <div class="post__cta">
           <p class="post__cta-text">Want to build something like this? <strong>Let's talk about your AI project.</strong></p>
-          <a href={`${base}contact`} class="btn btn--primary">Get In Touch →</a>
+          <a href={`${base}contact`} class="btn btn--filled">Get In Touch →</a>
         </div>
       </div>
     </article>
@@ -222,86 +233,90 @@ const shareTitle = encodeURIComponent(title);
   .reading-progress__bar {
     height: 100%;
     width: 0%;
-    background: linear-gradient(90deg, var(--accent), var(--accent-light));
+    background: var(--accent);
     transition: width 50ms linear;
     border-radius: 0 2px 2px 0;
   }
 
   .post__header {
-    margin-bottom: var(--space-2xl);
-    padding-top: 100px;
+    margin-bottom: var(--space-6);
+    padding-top: calc(60px + var(--space-6));
   }
 
   .post__breadcrumb {
     font-family: var(--font-mono);
-    font-size: 0.75rem;
+    font-size: var(--fs-xs);
     color: var(--text-muted);
-    margin-bottom: var(--space-xl);
+    margin-bottom: var(--space-5);
     display: flex;
     align-items: center;
-    gap: var(--space-sm);
+    gap: var(--space-2);
+    flex-wrap: wrap;
   }
 
   .post__breadcrumb a {
     color: var(--text-muted);
-    transition: color var(--duration-fast) var(--ease-out);
+    transition: color var(--duration) var(--ease-out);
   }
 
   .post__breadcrumb a:hover { color: var(--accent); }
 
-  .post__breadcrumb-sep { color: var(--border-default); }
+  .post__breadcrumb-sep { color: var(--ink-faint); }
 
   .post__meta {
     font-family: var(--font-mono);
-    font-size: 0.8rem;
+    font-size: var(--fs-xs);
     color: var(--text-muted);
-    margin-bottom: var(--space-md);
+    margin-bottom: var(--space-3);
     display: flex;
     align-items: center;
     flex-wrap: wrap;
     gap: 0;
   }
 
-  .post__updated { color: var(--accent); }
+  .post__updated { color: var(--text-faint); }
 
   .post__reading-time::before {
     content: ' · ';
   }
 
   .post__title {
-    font-size: clamp(2rem, 5vw, 3rem);
-    margin-bottom: var(--space-md);
+    font-size: clamp(1.9rem, 5vw, 2.75rem);
+    letter-spacing: -0.025em;
+    margin-bottom: var(--space-3);
   }
 
   .post__description {
-    font-size: 1.15rem;
-    color: var(--text-secondary);
-    margin-bottom: var(--space-lg);
+    font-size: var(--fs-xl);
+    color: var(--text-muted);
+    margin-bottom: var(--space-4);
   }
 
   .post__tags {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--space-sm);
+    gap: var(--space-2);
   }
 
   /* Table of Contents */
   .toc {
-    margin-bottom: var(--space-2xl);
-    padding: var(--space-lg) var(--space-xl);
-    background: var(--bg-surface);
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-lg);
+    margin-bottom: var(--space-6);
+    padding: var(--space-4) var(--space-5);
+    background: var(--bg-card);
+    border: 1px solid var(--border-muted);
+    border-radius: var(--radius-card);
   }
 
   .toc__toggle {
     display: flex;
     align-items: center;
-    gap: var(--space-sm);
-    font-family: var(--font-display);
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: var(--text-primary);
+    gap: var(--space-2);
+    font-family: var(--font-mono);
+    font-size: var(--fs-sm);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-strong);
     cursor: pointer;
     list-style: none;
     user-select: none;
@@ -312,11 +327,11 @@ const shareTitle = encodeURIComponent(title);
   .toc__toggle svg { color: var(--accent); }
 
   .toc__list {
-    margin-top: var(--space-md);
-    padding-left: var(--space-lg);
+    margin-top: var(--space-3);
+    padding-left: var(--space-4);
     display: flex;
     flex-direction: column;
-    gap: var(--space-xs);
+    gap: var(--space-2);
     counter-reset: toc-counter;
     list-style: none;
   }
@@ -328,150 +343,147 @@ const shareTitle = encodeURIComponent(title);
 
   .toc__list li::before {
     content: counter(toc-counter) ".";
-    color: var(--accent);
+    color: var(--text-faint);
     font-family: var(--font-mono);
-    font-size: 0.75rem;
-    font-weight: 600;
-    margin-right: var(--space-sm);
+    font-size: var(--fs-xs);
+    margin-right: var(--space-2);
   }
 
   .toc__list a {
-    font-size: 0.85rem;
-    color: var(--text-secondary);
+    font-size: var(--fs-md);
+    color: var(--text-body);
     text-decoration: none;
-    transition: color var(--duration-fast) var(--ease-out);
+    transition: color var(--duration) var(--ease-out);
   }
 
   .toc__list a:hover { color: var(--accent); }
 
   .toc__list li.toc__h3 {
-    padding-left: var(--space-xl);
-    font-size: 0.8rem;
-  }
-
-  .toc__list li.toc__h3::before {
-    font-size: 0.7rem;
+    padding-left: var(--space-5);
   }
 
   /* Share buttons */
   .post__share {
-    margin-top: var(--space-2xl);
-    padding: var(--space-lg) var(--space-xl);
-    background: var(--bg-surface);
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-lg);
+    margin-top: var(--space-6);
+    padding: var(--space-4) var(--space-5);
+    background: var(--bg-card);
+    border: 1px solid var(--border-muted);
+    border-radius: var(--radius-card);
     display: flex;
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
-    gap: var(--space-md);
+    gap: var(--space-3);
   }
 
   .post__share-label {
-    font-family: var(--font-display);
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: var(--text-secondary);
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
   }
 
   .post__share-buttons {
     display: flex;
-    gap: var(--space-sm);
+    gap: var(--space-2);
   }
 
   .post__share-btn {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 40px;
-    height: 40px;
-    border-radius: var(--radius-md);
-    border: 1px solid var(--border-subtle);
-    background: var(--bg-elevated);
-    color: var(--text-secondary);
-    font-size: 0.95rem;
+    width: 38px;
+    height: 38px;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--ink-faint);
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 0.9rem;
     cursor: pointer;
     text-decoration: none;
-    transition: all var(--duration-fast) var(--ease-out);
+    transition: color var(--duration) var(--ease-out),
+                border-color var(--duration) var(--ease-out),
+                background-color var(--duration) var(--ease-out);
   }
 
   .post__share-btn:hover {
-    transform: translateY(-2px);
-    border-color: var(--accent);
-    color: var(--accent);
-    box-shadow: 0 4px 12px rgba(61, 132, 212, 0.15);
+    border-color: var(--border-strong);
+    color: var(--text-strong);
+    background: var(--btn-neutral-bg);
   }
 
   .post__share-btn--copy.copied {
-    border-color: #4ade80;
-    color: #4ade80;
+    border-color: var(--success);
+    color: var(--success);
   }
 
   /* Author bio */
   .post__author {
-    margin-top: var(--space-2xl);
-    padding-top: var(--space-2xl);
-    border-top: 1px solid var(--border-subtle);
+    margin-top: var(--space-6);
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--border-muted);
   }
 
   .post__author-info {
     display: flex;
-    gap: var(--space-lg);
+    gap: var(--space-4);
     align-items: flex-start;
   }
 
   .post__author-avatar {
-    width: 52px;
-    height: 52px;
-    border-radius: 50%;
-    background: var(--accent-subtle);
-    border: 2px solid var(--accent);
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-pill);
+    background: var(--btn-neutral-bg);
+    border: 1px solid var(--ink);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-family: var(--font-display);
-    font-weight: 800;
-    color: var(--accent);
-    font-size: 0.9rem;
+    font-family: var(--font-mono);
+    font-weight: 600;
+    color: var(--text-strong);
+    font-size: var(--fs-md);
     flex-shrink: 0;
   }
 
   .post__author-name {
     display: block;
-    font-family: var(--font-display);
-    font-size: 1rem;
-    color: var(--text-primary);
-    margin-bottom: var(--space-xs);
+    font-size: var(--fs-lg);
+    font-weight: 550;
+    color: var(--text-strong);
+    margin-bottom: var(--space-1);
   }
 
   .post__author-bio {
-    font-size: 0.875rem;
+    font-size: var(--fs-md);
     color: var(--text-muted);
     margin: 0;
     line-height: 1.6;
   }
+  .post__author-bio a { text-decoration: underline; text-decoration-color: var(--ink); text-underline-offset: 3px; }
 
   /* Post CTA */
   .post__cta {
-    margin-top: var(--space-2xl);
-    padding: var(--space-xl);
-    background: var(--bg-surface);
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-lg);
+    margin-top: var(--space-6);
+    padding: var(--space-5);
+    background: var(--bg-inset);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-card);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: var(--space-lg);
+    gap: var(--space-4);
     flex-wrap: wrap;
   }
 
   .post__cta-text {
-    font-size: 0.95rem;
-    color: var(--text-secondary);
+    font-size: var(--fs-lg);
+    color: var(--text-muted);
     margin: 0;
   }
 
-  .post__cta-text strong { color: var(--text-primary); }
+  .post__cta-text strong { color: var(--text-strong); }
 
   @media (max-width: 640px) {
     .post__cta { flex-direction: column; text-align: center; }

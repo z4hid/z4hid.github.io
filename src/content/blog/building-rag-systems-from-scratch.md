@@ -1,6 +1,6 @@
 ---
-title: 'Building RAG Systems from Scratch: A Practical Guide'
-description: 'A step-by-step guide to building production Retrieval-Augmented Generation systems. Covers chunking strategies, embedding models, vector databases, retrieval tuning, and evaluation metrics.'
+title: 'Building Production-Ready RAG Systems from Scratch'
+description: 'A step-by-step guide to building production RAG pipelines with Python, ChromaDB, and LangChain.'
 pubDate: 2025-11-20
 updatedDate: 2026-03-19
 tags: ['RAG', 'LLMs', 'Python', 'Vector Search']

@@ -1,8 +1,8 @@
-# AI-SEO: Allow all AI crawlers to index and cite content
+# AI-SEO & Search Engine Indexing: Allow search crawlers and AI search agents
 User-agent: *
 Allow: /
 
-# Explicitly allow AI search bots (AI-SEO: Pillar 3 — Be where AI looks)
+# Explicitly allow major AI search & citation crawlers
 User-agent: GPTBot
 Allow: /
 
@@ -15,6 +15,9 @@ Allow: /
 User-agent: ClaudeBot
 Allow: /
 
+User-agent: Claude-User
+Allow: /
+
 User-agent: anthropic-ai
 Allow: /
 
@@ -24,8 +27,10 @@ Allow: /
 User-agent: Bingbot
 Allow: /
 
-# Block only training-focused crawlers (not search/citation bots)
+User-agent: Applebot
+Allow: /
+
 User-agent: CCBot
-Disallow: /
+Allow: /
 
 Sitemap: https://z4hid.github.io/sitemap.xml

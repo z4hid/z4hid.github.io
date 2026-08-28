@@ -1,0 +1,311 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import SiteAnalytics from '../components/SiteAnalytics.astro';
+import NonBlockingFontAwesome from '../components/NonBlockingFontAwesome.astro';
+import InteractiveBackground from '../components/InteractiveBackground.astro';
+import { certificates } from '../data/certificates';
+
+const base = import.meta.env.BASE_URL;
+const description = 'About Md. Zahid Hasan — AI Engineer & Cybersecurity Expert specializing in LLMs, agentic workflows, and security forensics.';
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <SiteAnalytics />
+  <meta name="generator" content={Astro.generator} />
+
+  <title>About | Md. Zahid Hasan — AI & Cybersecurity Engineer</title>
+  <meta name="description" content={description} />
+  <meta name="author" content="Md. Zahid Hasan" />
+  <meta name="keywords" content="Md. Zahid Hasan, AI Engineer, Cybersecurity Expert, Offensive Security, Defensive Security, Red Team, Blue Team, Machine Learning, BrainSpark Digital, Bangladesh" />
+  <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site).href} />
+
+  <meta property="og:type" content="profile" />
+  <meta property="og:url" content={new URL(Astro.url.pathname, Astro.site).href} />
+  <meta property="og:title" content="About Md. Zahid Hasan — AI & Cybersecurity Engineer" />
+  <meta property="og:description" content={description} />
+  <meta property="og:image" content={new URL(`${base}og-default.png`, Astro.site).href} />
+  <meta property="og:site_name" content="Md. Zahid Hasan" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@z4hiid" />
+  <meta name="twitter:title" content="About Md. Zahid Hasan — AI & Cybersecurity Engineer" />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={new URL(`${base}og-default.png`, Astro.site).href} />
+
+  <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
+  <NonBlockingFontAwesome />
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": new URL(base, Astro.site).href },
+          { "@type": "ListItem", "position": 2, "name": "About", "item": new URL(`${base}about`, Astro.site).href }
+        ]
+      },
+      {
+        "@type": "ProfilePage",
+        "name": "About Md. Zahid Hasan",
+        "description": description,
+        "url": new URL(`${base}about`, Astro.site).href,
+        "mainEntity": {
+          "@type": "Person",
+          "name": "Md. Zahid Hasan",
+          "givenName": "Zahid",
+          "familyName": "Hasan",
+          "jobTitle": "AI & Cybersecurity Engineer",
+          "email": "zahidhasan9297@gmail.com",
+          "worksFor": {
+            "@type": "Organization",
+            "name": "BrainSpark Digital",
+            "url": "https://brainsparkd.com/"
+          },
+          "alumniOf": {
+            "@type": "CollegeOrUniversity",
+            "name": "Uttara University",
+            "url": "https://uttarauniversity.edu.bd/"
+          },
+          "knowsAbout": [
+            "Artificial Intelligence", "Large Language Models", "Agentic AI", "RAG Systems",
+            "DSPy", "Computer Vision", "Python", "Cybersecurity", "Offensive Security", "Defensive Security",
+            "Penetration Testing", "Active Directory Exploitation", "Memory Forensics", "Threat Hunting", "Incident Response"
+          ],
+          "sameAs": [
+            "https://github.com/z4hid",
+            "https://linkedin.com/in/z4hid",
+            "https://twitter.com/z4hiid",
+            "https://huggingface.co/z4hid",
+            "https://kaggle.com/z4hid"
+          ]
+        }
+      }
+    ]
+  })} />
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Skip to content</a>
+  <InteractiveBackground />
+  <Header />
+
+  <main id="main-content" class="about-page">
+    <div class="container container--narrow">
+
+      <!-- Breadcrumb -->
+      <nav class="post__breadcrumb" aria-label="Breadcrumb" style="margin-bottom: var(--space-4);">
+        <a href={`${base}`}>Home</a>
+        <span class="post__breadcrumb-sep">/</span>
+        <span>About</span>
+      </nav>
+
+      <!-- Hero Header -->
+      <section class="page-hero" style="padding-top: var(--space-4);">
+        <span class="section__label">BACKGROUND & EXPERTISE</span>
+        <h1 class="page-title">Engineering Intelligence & Securing Systems</h1>
+        <p class="page-desc">
+          I am an <strong>AI Engineer & Cybersecurity Specialist</strong> at <a href="https://brainsparkd.com/" target="_blank" rel="noopener noreferrer">BrainSpark Digital</a>. I bridge high-reliability machine learning systems with deep offensive and defensive security expertise.
+        </p>
+      </section>
+
+      <!-- Main Prose Content -->
+      <div class="prose about-prose">
+        
+        <h2>Who I Am</h2>
+        <p>
+          I hold a <strong>B.Sc. in Computer Science & Engineering</strong> from <a href="https://uttarauniversity.edu.bd/" target="_blank" rel="noopener noreferrer">Uttara University</a>. My engineering philosophy is simple: build production systems that solve hard, measurable operational problems without superficial hype.
+        </p>
+
+        <div class="about-stats-grid">
+          <div class="stat-card">
+            <span class="stat-card__val">2+</span>
+            <span class="stat-card__lbl">Years Experience</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-card__val">5+</span>
+            <span class="stat-card__lbl">AI Chatbots Deployed</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-card__val">40%</span>
+            <span class="stat-card__lbl">Manual Work Reduced</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-card__val">17+</span>
+            <span class="stat-card__lbl">Shipped Projects</span>
+          </div>
+        </div>
+
+        <h2>Cybersecurity: Offensive & Defensive Mastery</h2>
+        <p>
+          Beyond machine learning, I operate deeply in <strong>cybersecurity</strong>, executing both offensive red-teaming audits and defensive blue-team investigations:
+        </p>
+
+        <ul>
+          <li><strong>Offensive Security (Red Teaming):</strong> Web application penetration testing, Active Directory domain compromise, Kerberoasting, ACL abuse, privilege escalation, and vulnerability research.</li>
+          <li><strong>Defensive Security (Blue Teaming):</strong> Volatile memory analysis with Volatility 3, digital forensics, incident response triage, C2 beacon extraction, threat hunting, and network traffic correlation in Wireshark.</li>
+        </ul>
+
+        <p>
+          Explore my hands-on lab breakdowns and security audits in the <a href={`${base}writeups`}><strong>Cybersecurity Writeups</strong></a> section.
+        </p>
+
+        <h2>AI & Machine Learning Focus</h2>
+        <p>
+          My AI engineering focus centers on production Large Language Models (LLMs), Agentic multi-agent topologies (using LangChain and Agno), RAG knowledge grounding pipelines, and Computer Vision architectures with PyTorch and OpenCV.
+        </p>
+
+        <h2>Credentials & Industry Certifications</h2>
+        <p>
+          I continuously refine my expertise with industry-recognized certifications from global leaders:
+        </p>
+
+        <div class="cert-chips-list">
+          {certificates.map(cert => (
+            <div class="cert-chip">
+              <span class="cert-chip__issuer">{cert.issuer}</span>
+              <span class="cert-chip__title">{cert.title}</span>
+            </div>
+          ))}
+        </div>
+
+        <h2>Let's Connect</h2>
+        <p>
+          Whether you need a custom LLM agent, a security audit, or full-stack machine learning architecture, I am open for consultation and collaborations.
+        </p>
+
+        <div class="about-cta-box">
+          <a href={`${base}contact`} class="btn btn--filled">Get In Touch →</a>
+          <a href="mailto:zahidhasan9297@gmail.com" class="btn btn--neutral">zahidhasan9297@gmail.com</a>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <Footer />
+</body>
+</html>
+
+<style>
+  .about-page {
+    padding-top: calc(60px + var(--space-7));
+    padding-bottom: var(--space-8);
+  }
+
+  .post__breadcrumb {
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .post__breadcrumb a {
+    color: var(--text-muted);
+    text-decoration: none;
+  }
+  .post__breadcrumb a:hover {
+    color: var(--text-strong);
+  }
+
+  .page-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.2rem, 5vw, 3.4rem);
+    font-weight: 550;
+    line-height: 1.15;
+    margin-bottom: var(--space-3);
+    color: var(--text-strong);
+  }
+
+  .page-desc {
+    font-size: var(--fs-lg);
+    line-height: 1.65;
+    color: var(--text-muted);
+    max-width: 65ch;
+  }
+
+  .page-desc a {
+    color: var(--text-strong);
+    text-decoration: underline;
+  }
+
+  .about-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: var(--space-4);
+    margin: var(--space-6) 0;
+  }
+
+  .stat-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-muted);
+    border-radius: var(--radius-card);
+    padding: var(--space-4);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .stat-card__val {
+    font-family: var(--font-display);
+    font-size: var(--fs-3xl);
+    font-weight: 600;
+    color: var(--text-strong);
+  }
+
+  .stat-card__lbl {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    letter-spacing: 0.04em;
+  }
+
+  .cert-chips-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    margin: var(--space-4) 0;
+  }
+
+  .cert-chip {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    padding: 0.6rem 1rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border-muted);
+    border-radius: 8px;
+    font-size: var(--fs-sm);
+  }
+
+  .cert-chip__issuer {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--text-faint);
+    flex-shrink: 0;
+  }
+
+  .cert-chip__title {
+    color: var(--text-strong);
+    font-weight: 500;
+  }
+
+  .about-cta-box {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+    margin-top: var(--space-6);
+    padding-top: var(--space-5);
+    border-top: 1px solid var(--border-muted);
+  }
+</style>

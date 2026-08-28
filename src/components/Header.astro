@@ -1,22 +1,40 @@
 ---
 const currentPath = Astro.url.pathname;
-
 const base = import.meta.env.BASE_URL;
 
 const navLinks = [
-  { href: `${base}`, label: 'Home' },
-  { href: `${base}projects`, label: 'Projects' },
-  { href: `${base}blog`, label: 'Blog' },
-  { href: `${base}certificates`, label: 'Certificates' },
-  { href: `${base}contact`, label: 'Contact' },
+  { href: `${base}`, label: 'HOME' },
+  { href: `${base}about`, label: 'ABOUT' },
+  { href: `${base}projects`, label: 'PROJECTS' },
+  { href: `${base}writeups`, label: 'WRITEUPS' },
+  { href: `${base}blog`, label: 'BLOG' },
+  { href: `${base}certificates`, label: 'CERTIFICATES' },
+  { href: `${base}contact`, label: 'CONTACT' },
 ];
+
 ---
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <filter id="sk-rough-1" x="-25%" y="-25%" width="150%" height="150%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.019" numOctaves="4" seed="11" result="n"></feTurbulence>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="5.6" xChannelSelector="R" yChannelSelector="G"></feDisplacementMap>
+    </filter>
+    <filter id="sk-rough-2" x="-25%" y="-25%" width="150%" height="150%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.023" numOctaves="4" seed="19" result="n"></feTurbulence>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="6.4" xChannelSelector="R" yChannelSelector="G"></feDisplacementMap>
+    </filter>
+    <filter id="sk-rough-3" x="-10%" y="-10%" width="120%" height="120%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="3" seed="7" result="n"></feTurbulence>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"></feDisplacementMap>
+    </filter>
+  </defs>
+</svg>
 
 <header class="header" id="site-header">
   <nav class="header__nav container" aria-label="Main navigation">
-    <a href={base} class="header__brand" aria-label="Home">
-      <span class="header__brand-name">ZAHID</span>
-      <span class="header__brand-accent">HASAN</span>
+    <a href={base} class="header__brand" aria-label="Zahid Hasan — Home">
+      <span class="header__brand-mark">Zahid Hasan</span>
     </a>
 
     <ul class="header__links" id="nav-links">
@@ -32,15 +50,42 @@ const navLinks = [
       ))}
     </ul>
 
-    <a href={`${base}MD.-ZAHID-HASAN-CV.pdf`} class="btn btn--primary header__cta" target="_blank" rel="noopener">
-      Download CV
-    </a>
+    <div class="header__actions">
+      <!-- Theme Toggle Button -->
+      <button class="header__theme-btn" id="theme-toggle-btn" aria-label="Toggle theme" title="Toggle theme">
+        <svg class="icon-moon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+        <svg class="icon-sun" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+          <circle cx="12" cy="12" r="5"></circle>
+          <line x1="12" y1="1" x2="12" y2="3"></line>
+          <line x1="12" y1="21" x2="12" y2="23"></line>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+          <line x1="1" y1="12" x2="3" y2="12"></line>
+          <line x1="21" y1="12" x2="23" y2="12"></line>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+      </button>
 
-    <button class="header__hamburger" id="hamburger-btn" aria-label="Toggle menu" aria-expanded="false">
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
+      <!-- RSS Pill Button -->
+      <a href={`${base}rss.xml`} class="btn btn--neutral header__rss-btn" target="_blank" rel="noopener">
+        RSS
+      </a>
+
+      <!-- GitHub Pill Button -->
+      <a href="https://github.com/z4hid" class="btn btn--filled header__github-btn" target="_blank" rel="noopener noreferrer">
+        GITHUB
+      </a>
+
+      <!-- Hamburger -->
+      <button class="header__hamburger" id="hamburger-btn" aria-label="Toggle menu" aria-expanded="false" aria-controls="mobile-overlay">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
   </nav>
 
   <!-- Mobile overlay -->
@@ -56,9 +101,12 @@ const navLinks = [
           </a>
         </li>
       ))}
-      <li>
-        <a href={`${base}MD.-ZAHID-HASAN-CV.pdf`} class="btn btn--primary" target="_blank" rel="noopener" style="margin-top: 1rem; display: inline-flex;">
-          Download CV
+      <li class="header__mobile-actions">
+        <a href={`${base}rss.xml`} class="btn btn--neutral" target="_blank" rel="noopener">
+          RSS FEED
+        </a>
+        <a href="https://github.com/z4hid" class="btn btn--filled" target="_blank" rel="noopener noreferrer">
+          GITHUB
         </a>
       </li>
     </ul>
@@ -72,112 +120,154 @@ const navLinks = [
     left: 0;
     right: 0;
     z-index: 1000;
-    background: rgba(7, 8, 12, 0.88);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border-bottom: 1px solid var(--border-subtle);
-    transition: all var(--duration-normal) var(--ease-out);
+    background: color-mix(in oklab, var(--bg-canvas) 85%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border-muted);
   }
 
   .header.menu-open {
     bottom: 0;
-    background: rgba(7, 8, 12, 0.98);
   }
 
   .header__nav {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 72px;
+    gap: var(--space-4);
+    height: 64px;
     position: relative;
     z-index: 1003;
   }
 
   .header__brand {
-    font-family: var(--font-display);
-    font-size: 1.2rem;
-    font-weight: 800;
-    letter-spacing: 0.08em;
     text-decoration: none;
-    display: flex;
-    gap: 0.3rem;
+    display: inline-flex;
+    align-items: baseline;
   }
 
-  .header__brand-name { color: var(--text-primary); }
-  .header__brand-accent { color: var(--accent); }
+  .header__brand-mark {
+    font-family: var(--font-mono);
+    font-size: var(--fs-md);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--text-strong);
+  }
 
   .header__links {
     display: flex;
     list-style: none;
-    gap: var(--space-xs);
+    gap: var(--space-3);
   }
 
   .header__link {
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: var(--text-secondary);
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
     text-decoration: none;
-    padding: 0.5rem 0.9rem;
-    border-radius: var(--radius-full);
-    transition: all var(--duration-fast) var(--ease-out);
+    padding: 0.375rem 0.5rem;
+    transition: color var(--duration) var(--ease-out);
   }
 
-  .header__link:hover {
-    color: var(--text-primary);
-    background: var(--bg-elevated);
-  }
-
+  .header__link:hover,
   .header__link--active {
-    color: var(--accent);
-    background: var(--accent-subtle);
+    color: var(--text-strong);
   }
 
-  .header__cta {
-    font-size: 0.85rem;
-    padding: 0.6rem 1.3rem;
+  .header__actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .header__theme-btn {
+    position: relative;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: color var(--duration) var(--ease-out), background-color var(--duration) var(--ease-out);
+  }
+
+  .header__theme-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 1.5px solid var(--ink-faint);
+    pointer-events: none;
+  }
+
+  .header__theme-btn:hover {
+    color: var(--text-strong);
+    background: var(--btn-neutral-bg);
+  }
+
+  .header__rss-btn {
+    min-height: 2.125rem;
+    padding-inline: var(--space-3);
+    font-size: 0.72rem;
+  }
+
+  .header__github-btn {
+    min-height: 2.125rem;
+    padding-inline: var(--space-4);
+    font-size: 0.72rem;
   }
 
   /* Hamburger */
   .header__hamburger {
     display: none;
     flex-direction: column;
+    justify-content: center;
     gap: 5px;
+    width: 36px;
+    height: 36px;
+    padding: 6px;
     background: none;
     border: none;
+    border-radius: var(--radius-pill);
     cursor: pointer;
-    padding: 6px;
     z-index: 1002;
   }
 
   .header__hamburger span {
     display: block;
-    width: 24px;
-    height: 2px;
-    background: var(--text-primary);
+    width: 100%;
+    height: 1.5px;
+    background: var(--text-strong);
     border-radius: 2px;
-    transition: all var(--duration-normal) var(--ease-out);
+    transition: transform var(--duration) var(--ease-out), opacity var(--duration) var(--ease-out);
   }
 
   .header__hamburger.active span:nth-child(1) {
-    transform: rotate(45deg) translate(5px, 5px);
+    transform: translateY(6.5px) rotate(45deg);
   }
   .header__hamburger.active span:nth-child(2) { opacity: 0; }
   .header__hamburger.active span:nth-child(3) {
-    transform: rotate(-45deg) translate(5px, -5px);
+    transform: translateY(-6.5px) rotate(-45deg);
   }
 
   /* Mobile overlay */
   .header__mobile-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(7, 8, 12, 0.97);
-    backdrop-filter: blur(20px);
+    background: color-mix(in oklab, var(--bg-canvas) 98%, transparent);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
     display: flex;
     align-items: center;
     justify-content: center;
     opacity: 0;
     visibility: hidden;
-    transition: all var(--duration-normal) var(--ease-out);
+    transition: opacity var(--duration) var(--ease-out), visibility var(--duration);
     z-index: 1001;
   }
 
@@ -189,43 +279,96 @@ const navLinks = [
   .header__mobile-links {
     list-style: none;
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding: var(--space-4);
   }
 
   .header__mobile-link {
     display: block;
-    font-family: var(--font-display);
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--text-secondary);
+    font-family: var(--font-mono);
+    font-size: var(--fs-xl);
+    font-weight: 500;
+    color: var(--text-muted);
     text-decoration: none;
-    padding: 0.75rem;
-    transition: color var(--duration-fast) var(--ease-out);
+    padding: 0.5rem 1rem;
+    transition: color var(--duration) var(--ease-out);
   }
 
   .header__mobile-link:hover,
   .header__mobile-link--active {
-    color: var(--accent);
+    color: var(--text-strong);
   }
 
-  @media (max-width: 768px) {
-    .header__links, .header__cta { display: none; }
+  .header__mobile-actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    margin-top: var(--space-4);
+  }
+
+  @media (max-width: 960px) {
+    .header__links, .header__rss-btn, .header__github-btn { display: none; }
     .header__hamburger { display: flex; }
   }
 </style>
 
 <script>
+  // Theme toggle logic
+  const themeBtn = document.getElementById('theme-toggle-btn');
+  const moonIcon = themeBtn?.querySelector('.icon-moon') as HTMLElement;
+  const sunIcon = themeBtn?.querySelector('.icon-sun') as HTMLElement;
+
+  function updateThemeIcons(theme: string) {
+    if (moonIcon && sunIcon) {
+      if (theme === 'light') {
+        moonIcon.style.display = 'none';
+        sunIcon.style.display = 'block';
+      } else {
+        moonIcon.style.display = 'block';
+        sunIcon.style.display = 'none';
+      }
+    }
+  }
+
+  // Check saved or system preference
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme === 'light') {
+    document.documentElement.classList.add('light-mode');
+    updateThemeIcons('light');
+  }
+
+  themeBtn?.addEventListener('click', () => {
+    const isLight = document.documentElement.classList.toggle('light-mode');
+    const newTheme = isLight ? 'light' : 'dark';
+    localStorage.setItem('theme', newTheme);
+    updateThemeIcons(newTheme);
+  });
+
+  // Mobile menu logic
   const hamburger = document.getElementById('hamburger-btn');
   const overlay = document.getElementById('mobile-overlay');
   const header = document.getElementById('site-header');
 
   hamburger?.addEventListener('click', () => {
-    hamburger.classList.toggle('active');
-    overlay?.classList.toggle('active');
-    header?.classList.toggle('menu-open');
-    hamburger.setAttribute('aria-expanded',
-      hamburger.classList.contains('active') ? 'true' : 'false'
-    );
-    document.body.style.overflow = hamburger.classList.contains('active') ? 'hidden' : '';
+    const open = !overlay?.classList.contains('active');
+    hamburger.classList.toggle('active', open);
+    overlay?.classList.toggle('active', open);
+    header?.classList.toggle('menu-open', open);
+    hamburger.setAttribute('aria-expanded', String(open));
+    document.body.style.overflow = open ? 'hidden' : '';
+  });
+
+  // Close on Escape
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && overlay?.classList.contains('active')) {
+      hamburger?.classList.remove('active');
+      overlay.classList.remove('active');
+      header?.classList.remove('menu-open');
+      hamburger?.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    }
   });
 
   // Close on link click
@@ -238,3 +381,4 @@ const navLinks = [
     });
   });
 </script>
+

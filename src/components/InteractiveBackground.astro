@@ -1,0 +1,255 @@
+---
+// Ultra-refined 2D Canvas Starfield & Nebula
+---
+<div class="galaxy-bg-wrapper" aria-hidden="true">
+  <div class="nebula-layer"></div>
+  <canvas id="galaxy-starfield-canvas" class="galaxy-starfield-canvas"></canvas>
+</div>
+
+<style>
+  .galaxy-bg-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: -1;
+    overflow: hidden;
+    background-color: #000000;
+  }
+
+  .nebula-layer {
+    display: none;
+  }
+
+  @keyframes slow-spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  .galaxy-starfield-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 1;
+  }
+
+  html.light-mode .galaxy-bg-wrapper {
+    background-color: #f8fafc;
+  }
+
+  html.light-mode .nebula-layer {
+    background-image: 
+      radial-gradient(circle at 30% 40%, rgba(224, 231, 255, 0.6) 0%, transparent 40%),
+      radial-gradient(circle at 70% 60%, rgba(219, 234, 254, 0.5) 0%, transparent 40%);
+    opacity: 1;
+  }
+
+  html.light-mode .galaxy-starfield-canvas {
+    opacity: 0.5;
+  }
+</style>
+
+<script>
+  function initAdvancedCanvas() {
+    const canvas = document.getElementById('galaxy-starfield-canvas') as HTMLCanvasElement;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d', { alpha: true });
+    if (!ctx) return;
+
+    let width = canvas.width = window.innerWidth;
+    let height = canvas.height = window.innerHeight;
+
+    const isLightMode = () => document.documentElement.classList.contains('light-mode');
+
+    // STAR CLASSES
+    class Star {
+      x: number;
+      y: number;
+      size: number;
+      alpha: number;
+      speed: number;
+      twinkleSpeed: number;
+      twinklePhase: number;
+      color: string;
+      layer: number; // 1 (far), 2 (mid), 3 (near)
+
+      constructor() {
+        this.reset(true);
+      }
+
+      reset(randomY = false) {
+        this.x = Math.random() * width;
+        this.y = randomY ? Math.random() * height : -10;
+        this.layer = Math.random() > 0.8 ? 3 : Math.random() > 0.5 ? 2 : 1;
+        this.size = this.layer * (Math.random() * 0.7 + 0.3);
+        this.alpha = Math.random() * 0.5 + 0.3;
+        this.speed = this.layer * 0.15;
+        this.twinkleSpeed = Math.random() * 0.02 + 0.01;
+        this.twinklePhase = Math.random() * Math.PI * 2;
+        
+        const colors = ['#ffffff', '#e0f2fe', '#fef08a', '#c084fc'];
+        this.color = colors[Math.floor(Math.random() * colors.length)];
+      }
+
+      draw(ctx: CanvasRenderingContext2D, lightMode: boolean, mouseX: number, mouseY: number) {
+        this.twinklePhase += this.twinkleSpeed;
+        const currentAlpha = this.alpha * (Math.sin(this.twinklePhase) * 0.3 + 0.7);
+        
+        // Parallax offset based on layer and mouse
+        const offsetX = (mouseX * this.layer * 0.05);
+        const offsetY = (mouseY * this.layer * 0.05);
+        
+        let drawX = this.x - offsetX;
+        let drawY = this.y - offsetY;
+
+        // Wrap around
+        if (drawX < 0) drawX += width;
+        if (drawX > width) drawX -= width;
+        if (drawY < 0) drawY += height;
+        if (drawY > height) drawY -= height;
+
+        ctx.beginPath();
+        ctx.arc(drawX, drawY, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = lightMode ? `rgba(15, 23, 42, ${currentAlpha})` : this.color;
+        ctx.globalAlpha = lightMode ? currentAlpha * 1.5 : currentAlpha;
+        ctx.fill();
+        ctx.globalAlpha = 1.0;
+        
+        // Subtle glow for near stars
+        if (this.layer === 3 && !lightMode && currentAlpha > 0.5) {
+          ctx.beginPath();
+          ctx.arc(drawX, drawY, this.size * 3, 0, Math.PI * 2);
+          const grad = ctx.createRadialGradient(drawX, drawY, this.size, drawX, drawY, this.size * 3);
+          grad.addColorStop(0, this.color);
+          grad.addColorStop(1, 'transparent');
+          ctx.fillStyle = grad;
+          ctx.globalAlpha = currentAlpha * 0.3;
+          ctx.fill();
+          ctx.globalAlpha = 1.0;
+        }
+
+        // Slow drift
+        this.y -= this.speed * 0.2; 
+        if (this.y < -50) this.y = height + 50;
+      }
+    }
+
+    class Meteor {
+      x: number;
+      y: number;
+      len: number;
+      angle: number;
+      speed: number;
+      life: number;
+      active: boolean;
+
+      constructor() {
+        this.active = false;
+      }
+
+      spawn() {
+        this.x = Math.random() * width;
+        this.y = Math.random() * height * 0.5;
+        this.angle = (Math.PI / 180) * (Math.random() * 20 + 35); // 35 to 55 degrees
+        this.len = Math.random() * 80 + 40;
+        this.speed = Math.random() * 10 + 15;
+        this.life = 1.0;
+        this.active = true;
+      }
+
+      draw(ctx: CanvasRenderingContext2D, lightMode: boolean) {
+        if (!this.active) return;
+        
+        this.x += Math.cos(this.angle) * this.speed;
+        this.y += Math.sin(this.angle) * this.speed;
+        this.life -= 0.02;
+
+        if (this.life <= 0 || this.x > width || this.y > height) {
+          this.active = false;
+          return;
+        }
+
+        const tailX = this.x - Math.cos(this.angle) * this.len;
+        const tailY = this.y - Math.sin(this.angle) * this.len;
+
+        const grad = ctx.createLinearGradient(tailX, tailY, this.x, this.y);
+        grad.addColorStop(0, 'transparent');
+        grad.addColorStop(0.8, lightMode ? `rgba(2, 132, 199, ${this.life * 0.5})` : `rgba(125, 211, 252, ${this.life * 0.8})`);
+        grad.addColorStop(1, lightMode ? `rgba(15, 23, 42, ${this.life})` : `rgba(255, 255, 255, ${this.life})`);
+
+        ctx.beginPath();
+        ctx.moveTo(tailX, tailY);
+        ctx.lineTo(this.x, this.y);
+        ctx.strokeStyle = grad;
+        ctx.lineWidth = 1.5;
+        ctx.lineCap = 'round';
+        ctx.stroke();
+      }
+    }
+
+    const starCount = Math.min(Math.floor((width * height) / 4000), 300);
+    const stars = Array.from({ length: starCount }, () => new Star());
+    const meteors = [new Meteor(), new Meteor()];
+
+    let mouseX = 0;
+    let mouseY = 0;
+    let targetX = 0;
+    let targetY = 0;
+    let windowHalfX = width / 2;
+    let windowHalfY = height / 2;
+
+    document.addEventListener('mousemove', (e) => {
+      targetX = e.clientX - windowHalfX;
+      targetY = e.clientY - windowHalfY;
+    }, { passive: true });
+
+    window.addEventListener('resize', () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+      windowHalfX = width / 2;
+      windowHalfY = height / 2;
+    }, { passive: true });
+
+    setInterval(() => {
+      if (Math.random() > 0.3) {
+        const inactive = meteors.find(m => !m.active);
+        if (inactive) inactive.spawn();
+      }
+    }, 3000);
+
+    let animId: number;
+
+    function render() {
+      ctx.clearRect(0, 0, width, height);
+      const light = isLightMode();
+
+      // Smooth mouse interpolation for parallax
+      mouseX += (targetX - mouseX) * 0.05;
+      mouseY += (targetY - mouseY) * 0.05;
+
+      stars.forEach(s => s.draw(ctx, light, mouseX, mouseY));
+      meteors.forEach(m => m.draw(ctx, light));
+
+      animId = requestAnimationFrame(render);
+    }
+
+    render();
+  }
+
+  // Astro page-load support
+  document.addEventListener('astro:page-load', initAdvancedCanvas);
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAdvancedCanvas);
+  } else {
+    // Only init if canvas exists and hasn't been initialized
+    const canvas = document.getElementById('galaxy-starfield-canvas') as any;
+    if (canvas && !canvas.dataset.initialized) {
+      initAdvancedCanvas();
+      canvas.dataset.initialized = 'true';
+    }
+  }
+</script>

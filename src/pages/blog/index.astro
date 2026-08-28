@@ -4,9 +4,10 @@ import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import SiteAnalytics from '../../components/SiteAnalytics.astro';
 import NonBlockingFontAwesome from '../../components/NonBlockingFontAwesome.astro';
+import InteractiveBackground from '../../components/InteractiveBackground.astro';
 import { getCollection } from 'astro:content';
 
-const description = 'Practical guides on building AI systems that ship: agentic AI, RAG pipelines, LLM engineering, computer vision, and production ML. Written by an AI engineer building these systems daily.';
+const description = 'Practical engineering guides on Large Language Models, agentic AI workflows, RAG systems, and production AI architectures by Md. Zahid Hasan.';
 
 const base = import.meta.env.BASE_URL;
 
@@ -20,24 +21,28 @@ try {
   // No blog posts yet
 }
 
-// Build archive data: { "2025": { "November": 1, "October": 1 } }
-const archive: Record<string, Record<string, number>> = {};
-posts.forEach(post => {
-  const d = post.data.pubDate;
-  const year = d.getFullYear().toString();
-  const month = d.toLocaleDateString('en-US', { month: 'long' });
-  if (!archive[year]) archive[year] = {};
-  archive[year][month] = (archive[year][month] || 0) + 1;
-});
+// Function to estimate word count and format date
+function getPostMeta(post: any) {
+  const bodyText = post.body || '';
+  const wordCount = bodyText.trim().split(/\s+/).filter(Boolean).length || 1200;
+  const formattedWords = wordCount >= 1000 ? `~${(wordCount / 1000).toFixed(1)}K words` : `~${wordCount} words`;
+  return {
+    words: formattedWords,
+    dateStr: post.data.pubDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).toUpperCase(),
+  };
+}
 
-// Build unique tags with counts
-const tagCounts: Record<string, number> = {};
-posts.forEach(post => {
-  post.data.tags?.forEach((tag: string) => {
-    tagCounts[tag] = (tagCounts[tag] || 0) + 1;
-  });
-});
-const sortedTags = Object.entries(tagCounts).sort((a, b) => b[1] - a[1]);
+// Tag color assignment helper
+function getTagColorClass(tag: string): string {
+  const t = tag.toLowerCase();
+  if (t.includes('agent') || t.includes('autonomous')) return 'badge-cyan';
+  if (t.includes('rag') || t.includes('vector') || t.includes('retrieval')) return 'badge-purple';
+  if (t.includes('vision') || t.includes('cv') || t.includes('image')) return 'badge-pink';
+  if (t.includes('python') || t.includes('data') || t.includes('ml')) return 'badge-blue';
+  if (t.includes('security') || t.includes('laravel')) return 'badge-red';
+  if (t.includes('career') || t.includes('work') || t.includes('mindset')) return 'badge-yellow';
+  return 'badge-green';
+}
 ---
 <!DOCTYPE html>
 <html lang="en">
@@ -45,18 +50,18 @@ const sortedTags = Object.entries(tagCounts).sort((a, b) => b[1] - a[1]);
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <SiteAnalytics />
-  <title>Blog | Md. Zahid Hasan — AI Engineer</title>
+  <title>Blog | Md. Zahid Hasan — AI & Security</title>
   <meta name="description" content={description} />
   <meta name="author" content="Md. Zahid Hasan" />
   <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site).href} />
-  <meta property="og:title" content="AI Engineering Blog — Md. Zahid Hasan" />
+  <meta property="og:title" content="Blog — Md. Zahid Hasan" />
   <meta property="og:description" content={description} />
   <meta property="og:type" content="website" />
   <meta property="og:url" content={new URL(Astro.url.pathname, Astro.site).href} />
   <meta property="og:image" content={new URL(`${base}og-default.png`, Astro.site).href} />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:site" content="@z4hiid" />
-  <meta name="twitter:title" content="AI Engineering Blog — Md. Zahid Hasan" />
+  <meta name="twitter:title" content="Blog — Md. Zahid Hasan" />
   <meta name="twitter:description" content={description} />
   <meta name="twitter:image" content={new URL(`${base}og-default.png`, Astro.site).href} />
   <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
@@ -85,121 +90,102 @@ const sortedTags = Object.entries(tagCounts).sort((a, b) => b[1] - a[1]);
 </head>
 <body>
   <a href="#main-content" class="skip-link">Skip to content</a>
+  <InteractiveBackground />
   <Header />
 
-  <main id="main-content">
-    <section class="page-hero">
-      <div class="container">
-        <span class="section__label">Blog</span>
-        <h1>Articles & Insights</h1>
-        <p class="page-hero__desc">Practical guides and deep dives on building AI systems that actually ship. From RAG pipelines and agentic workflows to production deployment patterns — written from the trenches.</p>
+  <main id="main-content" class="blog-page">
+    <div class="container container--narrow">
+
+      <h1 class="sr-only">AI & Engineering Blog</h1>
+
+      <!-- Top Search & RSS Bar matching Screenshot 3 -->
+      <div class="blog-search-bar">
+        <div class="search-input-wrapper">
+          <svg class="search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input
+            type="text"
+            id="blog-search-input"
+            class="blog-search-input"
+            placeholder="Type to filter posts..."
+            autocomplete="off"
+            aria-label="Filter blog posts"
+          />
+          <button id="search-clear-btn" class="search-clear-btn" aria-label="Clear blog search" style="display: none;">
+            ✕
+          </button>
+        </div>
+
+        <a href={`${base}rss.xml`} class="btn btn--neutral rss-btn" target="_blank" rel="noopener" aria-label="Subscribe via RSS">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 11a9 9 0 0 1 9 9"></path>
+            <path d="M4 4a16 16 0 0 1 16 16"></path>
+            <circle cx="5" cy="19" r="1"></circle>
+          </svg>
+          <span>RSS</span>
+        </a>
       </div>
-    </section>
 
-    <section class="section" style="padding-top: 0;">
-      <div class="container">
-        {posts.length === 0 ? (
-          <div class="empty-state">
-            <i class="fa-solid fa-pen-nib empty-state__icon"></i>
-            <h3>Coming soon</h3>
-            <p>New articles on AI, machine learning, and tech are on the way. Stay tuned!</p>
-          </div>
-        ) : (
-          <div class="blog-layout">
-            <!-- Main content -->
-            <div class="blog-main">
-              <div class="blog-list" id="blog-list">
-                {posts.map((post: any) => {
-                  const slug = post.id.replace(/\.md$/, '');
-                  const tags = post.data.tags || [];
-                  return (
-                    <a
-                      href={`${base}blog/${slug}`}
-                      class="blog-list-item"
-                      data-tags={tags.join(',')}
-                      data-year={post.data.pubDate.getFullYear()}
-                      data-month={post.data.pubDate.toLocaleDateString('en-US', { month: 'long' })}
-                    >
-                      <div class="blog-list-item__content">
-                        <div class="blog-list-item__meta">
-                          <time datetime={post.data.pubDate.toISOString()}>
-                            {post.data.pubDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
-                          </time>
-                        </div>
-                        <h2 class="blog-list-item__title">{post.data.title}</h2>
-                        <p class="blog-list-item__desc">{post.data.description}</p>
-                        {tags.length > 0 && (
-                          <div class="blog-list-item__tags">
-                            {tags.map((tag: string) => (
-                              <span class="tag">{tag}</span>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                      <span class="blog-list-item__arrow"><i class="fa-solid fa-arrow-right"></i></span>
-                    </a>
-                  );
-                })}
-              </div>
-              <div class="blog-empty-filter" id="blog-empty-filter" style="display:none;">
-                <i class="fa-solid fa-filter-circle-xmark"></i>
-                <p>No posts match this filter. <button id="clear-filter-btn" class="btn--ghost">Clear filter</button></p>
-              </div>
-            </div>
+      <!-- Blog Posts Feed matching Screenshot 3 -->
+      <div class="blog-feed" id="blog-feed">
+        {posts.map((post: any, idx: number) => {
+          const slug = post.id.replace(/\.md$/, '');
+          const meta = getPostMeta(post);
+          const tags = post.data.tags || [];
+          const primaryTag = tags[0] || 'AI Engineering';
+          const isLatest = idx === 0;
 
-            <!-- Sidebar -->
-            <aside class="blog-sidebar">
-              <!-- Tags -->
-              <div class="sidebar-card">
-                <h3 class="sidebar-card__title"><i class="fa-solid fa-tags"></i> Topics</h3>
-                <div class="sidebar-tags" id="sidebar-tags">
-                  <button class="sidebar-tag sidebar-tag--active" data-tag="all">
-                    All <span class="sidebar-tag__count">{posts.length}</span>
-                  </button>
-                  {sortedTags.map(([tag, count]) => (
-                    <button class="sidebar-tag" data-tag={tag}>
-                      {tag} <span class="sidebar-tag__count">{count}</span>
-                    </button>
-                  ))}
-                </div>
+          return (
+            <article
+              class="blog-article-item"
+              data-title={post.data.title.toLowerCase()}
+              data-desc={(post.data.description || '').toLowerCase()}
+              data-tags={tags.join(' ').toLowerCase()}
+            >
+              <!-- Date & Latest Badge -->
+              <div class="blog-article__top">
+                <span class="blog-article__date">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                  </svg>
+                  <time datetime={post.data.pubDate.toISOString()}>{meta.dateStr}</time>
+                </span>
+                {isLatest && <span class="badge-latest">Latest Post</span>}
               </div>
 
-              <!-- Archive -->
-              <div class="sidebar-card">
-                <h3 class="sidebar-card__title"><i class="fa-solid fa-calendar-days"></i> Archive</h3>
-                <div class="sidebar-archive" id="sidebar-archive">
-                  {Object.entries(archive)
-                    .sort(([a], [b]) => Number(b) - Number(a))
-                    .map(([year, months]) => (
-                      <div class="archive-year">
-                        <button class="archive-year__toggle" data-year={year}>
-                          <i class="fa-solid fa-chevron-down"></i>
-                          <span>{year}</span>
-                          <span class="archive-year__count">{Object.values(months).reduce((a, b) => a + b, 0)}</span>
-                        </button>
-                        <div class="archive-months">
-                          {Object.entries(months).map(([month, count]) => (
-                            <button class="archive-month" data-year={year} data-month={month}>
-                              {month} <span class="sidebar-tag__count">{count}</span>
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-                    ))
-                  }
-                </div>
-              </div>
+              <!-- Title -->
+              <h2 class="blog-article__title">
+                <a href={`${base}blog/${slug}`}>{post.data.title}</a>
+              </h2>
 
-              <!-- RSS -->
-              <a href={`${base}rss.xml`} class="sidebar-rss" target="_blank">
-                <i class="fa-solid fa-rss"></i>
-                <span>Subscribe via RSS</span>
-              </a>
-            </aside>
-          </div>
-        )}
+              <!-- Excerpt Description -->
+              <p class="blog-article__desc">{post.data.description}</p>
+
+              <!-- Footer Meta & Badges -->
+              <div class="blog-article__meta">
+                <span class="blog-article__words">{meta.words}</span>
+                <span class="meta-dot">·</span>
+                {tags.slice(0, 3).map((tag: string) => (
+                  <span class:list={['category-badge', getTagColorClass(tag)]}>{tag}</span>
+                ))}
+              </div>
+            </article>
+          );
+        })}
       </div>
-    </section>
+
+      <!-- Empty Search State -->
+      <div id="blog-search-empty" class="blog-search-empty" style="display: none;">
+        <p>No posts matching <strong id="empty-query-text"></strong></p>
+        <button id="reset-search-btn" class="btn btn--neutral" style="margin-top: var(--space-3);">Clear Filter</button>
+      </div>
+
+    </div>
   </main>
 
   <Footer />
@@ -207,262 +193,322 @@ const sortedTags = Object.entries(tagCounts).sort((a, b) => b[1] - a[1]);
 </html>
 
 <style>
-  .page-hero {
-    padding-top: calc(72px + var(--space-4xl));
-    padding-bottom: var(--space-3xl);
-  }
-  .page-hero h1 { margin-bottom: var(--space-md); }
-  .page-hero__desc { max-width: 600px; font-size: 1.1rem; color: var(--text-secondary); }
-
-  .empty-state { text-align: center; padding: var(--space-5xl) 0; }
-  .empty-state__icon { font-size: 3rem; margin-bottom: var(--space-md); color: var(--accent); }
-  .empty-state h3 { margin-bottom: var(--space-sm); }
-  .empty-state p { color: var(--text-muted); max-width: 400px; margin: 0 auto; }
-
-  /* Blog layout with sidebar */
-  .blog-layout {
-    display: grid;
-    grid-template-columns: 1fr 280px;
-    gap: var(--space-3xl);
-    align-items: start;
+  .blog-page {
+    padding-top: calc(60px + var(--space-7));
+    padding-bottom: var(--space-8);
   }
 
-  /* Blog list */
-  .blog-list { display: flex; flex-direction: column; gap: 0; }
-
-  .blog-list-item {
+  /* Search & RSS bar */
+  .blog-search-bar {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    padding: var(--space-xl) 0;
-    border-bottom: 1px solid var(--border-subtle);
-    text-decoration: none;
-    color: inherit;
-    transition: all var(--duration-fast) var(--ease-out);
+    gap: var(--space-3);
+    margin-bottom: var(--space-7);
   }
-  .blog-list-item:first-child { border-top: 1px solid var(--border-subtle); }
-  .blog-list-item:hover { padding-left: var(--space-md); }
-  .blog-list-item.hidden { display: none; }
 
-  .blog-list-item__meta { font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted); margin-bottom: var(--space-sm); }
-  .blog-list-item__title { font-size: 1.3rem; margin-bottom: var(--space-sm); transition: color var(--duration-fast) var(--ease-out); }
-  .blog-list-item:hover .blog-list-item__title { color: var(--accent); }
-  .blog-list-item__desc { font-size: 0.9rem; color: var(--text-muted); margin-bottom: var(--space-sm); }
-  .blog-list-item__tags { display: flex; flex-wrap: wrap; gap: var(--space-xs); }
-  .blog-list-item__arrow { font-size: 1rem; color: var(--text-muted); transition: all var(--duration-fast) var(--ease-out); flex-shrink: 0; margin-left: var(--space-xl); }
-  .blog-list-item:hover .blog-list-item__arrow { color: var(--accent); transform: translateX(4px); }
-
-  .blog-empty-filter {
-    text-align: center;
-    padding: var(--space-3xl) 0;
-    color: var(--text-muted);
+  .search-input-wrapper {
+    position: relative;
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
   }
-  .blog-empty-filter i { font-size: 2rem; margin-bottom: var(--space-md); display: block; }
 
-  /* Sidebar */
-  .blog-sidebar {
+  .search-input-wrapper::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border: 1.5px solid var(--ink);
+    border-radius: var(--radius-pill);
+    pointer-events: none;
+  }
+
+  .search-icon {
+    position: absolute;
+    left: var(--space-4);
+    color: var(--text-faint);
+    pointer-events: none;
+  }
+
+  .blog-search-input {
+    width: 100%;
+    background: var(--bg-card);
+    border: none;
+    border-radius: var(--radius-pill);
+    padding: 0.625rem 2.5rem 0.625rem 2.625rem;
+    font-family: var(--font-sans);
+    font-size: var(--fs-md);
+    color: var(--text-strong);
+    outline: none;
+    transition: background-color var(--duration) var(--ease-out);
+  }
+
+  .blog-search-input:focus {
+    background: var(--bg-card-hover);
+  }
+
+  .blog-search-input::placeholder {
+    color: var(--text-faint);
+    font-family: var(--font-mono);
+    font-size: var(--fs-sm);
+  }
+
+  .search-clear-btn {
+    position: absolute;
+    right: var(--space-4);
+    background: none;
+    border: none;
+    color: var(--text-faint);
+    font-size: var(--fs-xs);
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 50%;
+  }
+  .search-clear-btn:hover { color: var(--text-strong); }
+
+  .rss-btn {
+    flex-shrink: 0;
+    min-height: 2.375rem;
+    padding-inline: var(--space-4);
+    gap: 6px;
+  }
+
+  /* Articles Feed matching Screenshot 3 */
+  .blog-feed {
     display: flex;
     flex-direction: column;
-    gap: var(--space-xl);
-    position: sticky;
-    top: 90px;
+    gap: var(--space-7);
   }
 
-  .sidebar-card {
-    background: var(--bg-surface);
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-lg);
-    padding: var(--space-xl);
+  .blog-article-item {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding-bottom: var(--space-6);
+    border-bottom: 1px solid var(--border-muted);
+    transition: opacity var(--duration) var(--ease-out);
   }
 
-  .sidebar-card__title {
-    font-size: 0.85rem;
-    font-weight: 600;
-    margin-bottom: var(--space-lg);
+  .blog-article-item:last-child {
+    border-bottom: none;
+  }
+
+  .blog-article-item.hidden {
+    display: none;
+  }
+
+  .blog-article__top {
     display: flex;
     align-items: center;
-    gap: var(--space-sm);
-  }
-  .sidebar-card__title i { color: var(--accent); font-size: 0.8rem; }
-
-  /* Tag buttons */
-  .sidebar-tags { display: flex; flex-wrap: wrap; gap: var(--space-xs); }
-
-  .sidebar-tag {
+    gap: var(--space-3);
     font-family: var(--font-mono);
-    font-size: 0.7rem;
-    font-weight: 500;
-    color: var(--text-secondary);
-    background: var(--bg-elevated);
-    border: 1px solid var(--border-subtle);
-    padding: 0.3rem 0.7rem;
-    border-radius: var(--radius-full);
-    cursor: pointer;
-    transition: all var(--duration-fast) var(--ease-out);
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
+    font-size: var(--fs-xs);
+    color: var(--text-faint);
   }
 
-  .sidebar-tag:hover {
-    border-color: var(--accent);
+  .blog-article__date {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    letter-spacing: 0.05em;
+  }
+
+  .badge-latest {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.04em;
+    padding: 1px 8px;
+    border-radius: var(--radius-pill);
+    background: rgb(255 255 255 / 0.1);
+    color: var(--text-strong);
+    border: 1px solid var(--ink-faint);
+  }
+
+  .blog-article__title {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 3.5vw, 1.95rem);
+    font-weight: 520;
+    line-height: 1.22;
+    margin: 2px 0;
+  }
+
+  .blog-article__title a {
+    color: var(--text-strong);
+    text-decoration: none;
+    transition: color var(--duration) var(--ease-out);
+  }
+
+  .blog-article__title a:hover {
     color: var(--accent);
   }
 
-  .sidebar-tag--active {
-    background: var(--accent);
-    color: #fff;
-    border-color: var(--accent);
-  }
-  .sidebar-tag--active:hover {
-    background: var(--accent-light);
-    color: #fff;
+  .blog-article__desc {
+    font-size: var(--fs-md);
+    line-height: 1.65;
+    color: var(--text-muted);
+    margin: 0;
+    max-width: 68ch;
   }
 
-  .sidebar-tag__count {
-    font-size: 0.6rem;
-    opacity: 0.7;
-  }
-
-  /* Archive */
-  .archive-year { margin-bottom: var(--space-sm); }
-  .archive-year:last-child { margin-bottom: 0; }
-
-  .archive-year__toggle {
-    font-family: var(--font-body);
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: var(--text-primary);
-    background: none;
-    border: none;
-    cursor: pointer;
+  .blog-article__meta {
     display: flex;
     align-items: center;
-    gap: var(--space-sm);
-    width: 100%;
-    padding: var(--space-xs) 0;
-    transition: color var(--duration-fast) var(--ease-out);
+    gap: var(--space-2);
+    margin-top: var(--space-2);
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    flex-wrap: wrap;
   }
-  .archive-year__toggle:hover { color: var(--accent); }
-  .archive-year__toggle i { font-size: 0.6rem; color: var(--text-muted); transition: transform var(--duration-fast); }
-  .archive-year__count { margin-left: auto; font-size: 0.7rem; color: var(--text-muted); font-weight: 400; }
 
-  .archive-months { padding-left: var(--space-lg); }
-
-  .archive-month {
-    font-family: var(--font-body);
-    font-size: 0.8rem;
-    color: var(--text-secondary);
-    background: none;
-    border: none;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: var(--space-sm);
-    width: 100%;
-    padding: var(--space-2xs) 0;
-    transition: color var(--duration-fast) var(--ease-out);
+  .blog-article__words {
+    color: var(--text-faint);
   }
-  .archive-month:hover { color: var(--accent); }
-  .archive-month--active { color: var(--accent); font-weight: 600; }
 
-  /* RSS link */
-  .sidebar-rss {
-    display: flex;
-    align-items: center;
-    gap: var(--space-sm);
-    background: var(--bg-surface);
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-lg);
-    padding: var(--space-md) var(--space-xl);
-    color: var(--text-secondary);
-    font-size: 0.85rem;
-    text-decoration: none;
-    transition: all var(--duration-fast) var(--ease-out);
+  .meta-dot {
+    color: var(--ink);
   }
-  .sidebar-rss i { color: var(--accent); }
-  .sidebar-rss:hover { border-color: var(--accent); color: var(--accent); }
 
-  /* Mobile */
-  @media (max-width: 768px) {
-    .blog-layout { grid-template-columns: 1fr; gap: var(--space-2xl); }
-    .blog-sidebar { position: static; order: -1; }
+  /* Color-coded category badges matching Screenshot 3 */
+  .category-badge {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: 4px;
+    display: inline-block;
+  }
+
+  .badge-green {
+    background: oklch(0.24 0.05 155 / 0.35);
+    color: #34d399;
+    border: 1px solid oklch(0.45 0.1 155 / 0.3);
+  }
+
+  .badge-cyan {
+    background: oklch(0.24 0.05 210 / 0.35);
+    color: #38bdf8;
+    border: 1px solid oklch(0.45 0.1 210 / 0.3);
+  }
+
+  .badge-purple {
+    background: oklch(0.24 0.05 300 / 0.35);
+    color: #c084fc;
+    border: 1px solid oklch(0.45 0.1 300 / 0.3);
+  }
+
+  .badge-pink {
+    background: oklch(0.24 0.05 350 / 0.35);
+    color: #f472b6;
+    border: 1px solid oklch(0.45 0.1 350 / 0.3);
+  }
+
+  .badge-blue {
+    background: oklch(0.24 0.05 250 / 0.35);
+    color: #60a5fa;
+    border: 1px solid oklch(0.45 0.1 250 / 0.3);
+  }
+
+  .badge-red {
+    background: oklch(0.24 0.05 25 / 0.35);
+    color: #f87171;
+    border: 1px solid oklch(0.45 0.1 25 / 0.3);
+  }
+
+  html.light-mode .badge-green { color: #065f46; background: #d1fae5; border-color: #a7f3d0; }
+  html.light-mode .badge-cyan { color: #075985; background: #e0f2fe; border-color: #bae6fd; }
+  html.light-mode .badge-purple { color: #6b21a8; background: #f3e8ff; border-color: #e9d5ff; }
+  html.light-mode .badge-pink { color: #9d174d; background: #fce7f3; border-color: #fbcfe8; }
+  html.light-mode .badge-blue { color: #1e3a8a; background: #dbeafe; border-color: #bfdbfe; }
+  html.light-mode .badge-red { color: #991b1b; background: #fee2e2; border-color: #fecaca; }
+  html.light-mode .badge-yellow { color: #92400e; background: #fef3c7; border-color: #fde68a; }
+
+  .badge-yellow {
+    background: oklch(0.24 0.05 85 / 0.35);
+    color: #fbbf24;
+    border: 1px solid oklch(0.45 0.1 85 / 0.3);
+  }
+
+  /* Empty state */
+  .blog-search-empty {
+    text-align: center;
+    padding: var(--space-8) 0;
+    color: var(--text-muted);
+  }
+
+  @media (max-width: 640px) {
+    .blog-search-bar {
+      flex-direction: row;
+    }
+    .blog-article__title {
+      font-size: 1.35rem;
+    }
   }
 </style>
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {
-    const items = document.querySelectorAll<HTMLElement>('.blog-list-item');
-    const tagBtns = document.querySelectorAll<HTMLButtonElement>('.sidebar-tag');
-    const monthBtns = document.querySelectorAll<HTMLButtonElement>('.archive-month');
-    const emptyFilter = document.getElementById('blog-empty-filter');
-    const clearBtn = document.getElementById('clear-filter-btn');
+    const input = document.getElementById('blog-search-input') as HTMLInputElement | null;
+    const clearBtn = document.getElementById('search-clear-btn') as HTMLButtonElement | null;
+    const resetBtn = document.getElementById('reset-search-btn') as HTMLButtonElement | null;
+    const emptyState = document.getElementById('blog-search-empty');
+    const emptyQueryText = document.getElementById('empty-query-text');
+    const items = document.querySelectorAll<HTMLElement>('.blog-article-item');
 
-    let activeTag = 'all';
-    let activeYear = '';
-    let activeMonth = '';
-
-    function filterPosts() {
+    function applyFilter(query: string) {
+      const q = query.trim().toLowerCase();
       let visibleCount = 0;
+
       items.forEach(item => {
-        const postTags = item.dataset.tags?.split(',') || [];
-        const postYear = item.dataset.year || '';
-        const postMonth = item.dataset.month || '';
+        const title = item.dataset.title || '';
+        const desc = item.dataset.desc || '';
+        const tags = item.dataset.tags || '';
 
-        let show = true;
-        if (activeTag !== 'all' && !postTags.includes(activeTag)) show = false;
-        if (activeYear && postYear !== activeYear) show = false;
-        if (activeMonth && postMonth !== activeMonth) show = false;
-
-        item.classList.toggle('hidden', !show);
-        if (show) visibleCount++;
+        const match = !q || title.includes(q) || desc.includes(q) || tags.includes(q);
+        item.classList.toggle('hidden', !match);
+        if (match) visibleCount++;
       });
 
-      if (emptyFilter) {
-        emptyFilter.style.display = visibleCount === 0 ? 'block' : 'none';
+      if (clearBtn) {
+        clearBtn.style.display = q ? 'block' : 'none';
+      }
+
+      if (emptyState && emptyQueryText) {
+        if (visibleCount === 0 && q) {
+          emptyState.style.display = 'block';
+          emptyQueryText.textContent = `"${query}"`;
+        } else {
+          emptyState.style.display = 'none';
+        }
       }
     }
 
-    // Tag filtering
-    tagBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        tagBtns.forEach(b => b.classList.remove('sidebar-tag--active'));
-        btn.classList.add('sidebar-tag--active');
-        activeTag = btn.dataset.tag || 'all';
-        filterPosts();
-      });
+    input?.addEventListener('input', (e) => {
+      applyFilter((e.target as HTMLInputElement).value);
     });
 
-    // Archive month filtering
-    monthBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        const clickedYear = btn.dataset.year || '';
-        const clickedMonth = btn.dataset.month || '';
-
-        // Toggle off if same
-        if (activeYear === clickedYear && activeMonth === clickedMonth) {
-          activeYear = '';
-          activeMonth = '';
-          monthBtns.forEach(b => b.classList.remove('archive-month--active'));
-        } else {
-          activeYear = clickedYear;
-          activeMonth = clickedMonth;
-          monthBtns.forEach(b => b.classList.remove('archive-month--active'));
-          btn.classList.add('archive-month--active');
-        }
-        filterPosts();
-      });
-    });
-
-    // Clear button
     clearBtn?.addEventListener('click', () => {
-      activeTag = 'all';
-      activeYear = '';
-      activeMonth = '';
-      tagBtns.forEach(b => b.classList.remove('sidebar-tag--active'));
-      tagBtns[0]?.classList.add('sidebar-tag--active');
-      monthBtns.forEach(b => b.classList.remove('archive-month--active'));
-      filterPosts();
+      if (input) {
+        input.value = '';
+        input.focus();
+      }
+      applyFilter('');
+    });
+
+    resetBtn?.addEventListener('click', () => {
+      if (input) {
+        input.value = '';
+        input.focus();
+      }
+      applyFilter('');
+    });
+
+    // Handle Escape key to clear search
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && document.activeElement === input) {
+        if (input) {
+          input.value = '';
+        }
+        applyFilter('');
+      }
     });
   });
 </script>

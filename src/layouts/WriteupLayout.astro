@@ -1,0 +1,710 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import SiteAnalytics from '../components/SiteAnalytics.astro';
+import NonBlockingFontAwesome from '../../src/components/NonBlockingFontAwesome.astro';
+import InteractiveBackground from '../components/InteractiveBackground.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  category: 'offensive' | 'defensive';
+  labType?: string;
+  difficulty?: 'Easy' | 'Medium' | 'Hard' | 'Insane';
+  pubDate: Date;
+  updatedDate?: Date;
+  tags?: string[];
+  image?: string;
+  targetOs?: string;
+  toolsUsed?: string[];
+}
+
+const {
+  title,
+  description,
+  category,
+  labType,
+  difficulty = 'Medium',
+  pubDate,
+  updatedDate,
+  tags = [],
+  image,
+  targetOs,
+  toolsUsed = []
+} = Astro.props;
+
+const formattedDate = pubDate.toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric'
+});
+
+const updatedFormatted = updatedDate?.toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric'
+});
+
+const base = import.meta.env.BASE_URL;
+const siteTitle = `${title} — Cybersecurity Lab Writeup | Md. Zahid Hasan`;
+const canonicalURL = Astro.url.href;
+const shareUrl = encodeURIComponent(canonicalURL);
+const shareTitle = encodeURIComponent(title);
+
+function getDifficultyClass(diff?: string) {
+  switch (diff?.toLowerCase()) {
+    case 'easy':
+      return 'diff-easy';
+    case 'medium':
+      return 'diff-medium';
+    case 'hard':
+      return 'diff-hard';
+    case 'insane':
+      return 'diff-insane';
+    default:
+      return 'diff-default';
+  }
+}
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <SiteAnalytics />
+  <meta name="generator" content={Astro.generator} />
+
+  <title>{siteTitle}</title>
+  <meta name="description" content={description} />
+  <meta name="author" content="Md. Zahid Hasan" />
+  <link rel="canonical" href={canonicalURL} />
+
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content={canonicalURL} />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:image" content={new URL(`${base}og-default.png`, Astro.site).href} />
+  <meta property="article:published_time" content={pubDate.toISOString()} />
+  {updatedDate && <meta property="article:modified_time" content={updatedDate.toISOString()} />}
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@z4hiid" />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={new URL(`${base}og-default.png`, Astro.site).href} />
+
+  <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
+  <NonBlockingFontAwesome />
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "TechArticle",
+        "headline": title,
+        "description": description,
+        "image": image ? new URL(image, Astro.site).href : new URL(`${base}og-default.png`, Astro.site).href,
+        "datePublished": pubDate.toISOString(),
+        "dateModified": (updatedDate || pubDate).toISOString(),
+        "author": {
+          "@type": "Person",
+          "name": "Md. Zahid Hasan",
+          "url": new URL(base, Astro.site).href,
+          "jobTitle": "AI & Cybersecurity Engineer",
+          "worksFor": { "@type": "Organization", "name": "BrainSpark Digital", "url": "https://brainsparkd.com/" }
+        },
+        "publisher": {
+          "@type": "Person",
+          "name": "Md. Zahid Hasan",
+          "url": new URL(base, Astro.site).href,
+          "logo": {
+            "@type": "ImageObject",
+            "url": new URL(`${base}favicon.svg`, Astro.site).href
+          }
+        },
+        "mainEntityOfPage": {
+          "@type": "WebPage",
+          "@id": canonicalURL
+        },
+        "keywords": [...tags, ...toolsUsed, category, "Cybersecurity"].join(', '),
+        "articleSection": category === 'offensive' ? "Offensive Security" : "Defensive Security"
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": new URL(base, Astro.site).href },
+          { "@type": "ListItem", "position": 2, "name": "Writeups", "item": new URL(`${base}writeups`, Astro.site).href },
+          { "@type": "ListItem", "position": 3, "name": title, "item": canonicalURL }
+        ]
+      }
+    ]
+  })} />
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Skip to content</a>
+  
+  <style>
+    body {
+      background-color: var(--bg-canvas) !important;
+    }
+  </style>
+
+  <!-- Reading progress bar -->
+  <div class="reading-progress" id="reading-progress" aria-hidden="true">
+    <div class="reading-progress__bar" id="reading-progress-bar"></div>
+  </div>
+
+  <Header />
+
+  <main id="main-content">
+    <article class="post section">
+      <div class="container container--narrow">
+        
+        <header class="post__header">
+          <!-- Breadcrumb navigation -->
+          <nav class="post__breadcrumb" aria-label="Breadcrumb">
+            <a href={`${base}`}>Home</a>
+            <span class="post__breadcrumb-sep">/</span>
+            <a href={`${base}writeups`}>Writeups</a>
+            <span class="post__breadcrumb-sep">/</span>
+            <span class:list={['writeup-cat-crumb', category === 'offensive' ? 'crumb-red' : 'crumb-blue']}>
+              {category.toUpperCase()}
+            </span>
+          </nav>
+
+          <!-- Top Meta row -->
+          <div class="writeup-header-meta">
+            <div class="writeup-badges-wrap">
+              <span class:list={['badge-category', category === 'offensive' ? 'badge-cat--red' : 'badge-cat--blue']}>
+                {category === 'offensive' ? 'OFFENSIVE SECURITY' : 'DEFENSIVE SECURITY'}
+              </span>
+              <span class:list={['badge-difficulty', getDifficultyClass(difficulty)]}>
+                {difficulty}
+              </span>
+              {labType && <span class="badge-labtype">{labType}</span>}
+            </div>
+
+            <div class="post__meta">
+              <time datetime={pubDate.toISOString()}>{formattedDate}</time>
+              {updatedFormatted && (
+                <span class="post__updated"> · Updated {updatedFormatted}</span>
+              )}
+              <span class="post__reading-time" id="reading-time"></span>
+            </div>
+          </div>
+
+          <h1 class="post__title">{title}</h1>
+          <p class="post__description">{description}</p>
+
+          <!-- Lab Specs Box (Target OS & Tools) -->
+          {(targetOs || toolsUsed.length > 0 || tags.length > 0) && (
+            <div class="lab-specs-box">
+              {targetOs && (
+                <div class="spec-row">
+                  <span class="spec-lbl">TARGET OS:</span>
+                  <span class="spec-val">{targetOs}</span>
+                </div>
+              )}
+              {toolsUsed.length > 0 && (
+                <div class="spec-row">
+                  <span class="spec-lbl">TOOLS:</span>
+                  <div class="spec-pills">
+                    {toolsUsed.map(tool => (
+                      <span class="tool-chip">{tool}</span>
+                    ))}
+                  </div>
+                </div>
+              )}
+              {tags.length > 0 && (
+                <div class="spec-row">
+                  <span class="spec-lbl">TAGS:</span>
+                  <div class="spec-pills">
+                    {tags.map(tag => (
+                      <span class="tag-chip">#{tag}</span>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+        </header>
+
+        <!-- Table of Contents -->
+        <nav class="toc" id="toc" aria-label="Table of Contents">
+          <details open>
+            <summary class="toc__toggle">
+              <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="15" y2="12"/><line x1="3" y1="18" x2="9" y2="18"/></svg>
+              Table of Contents
+            </summary>
+            <ol class="toc__list" id="toc-list"></ol>
+          </details>
+        </nav>
+
+        <!-- Markdown Content -->
+        <div class="prose" id="article-content">
+          <slot />
+        </div>
+
+        <!-- Share buttons -->
+        <div class="post__share">
+          <span class="post__share-label">Share this writeup</span>
+          <div class="post__share-buttons">
+            <a href={`https://twitter.com/intent/tweet?text=${shareTitle}&url=${shareUrl}`} target="_blank" rel="noopener noreferrer" class="post__share-btn post__share-btn--twitter" title="Share on X/Twitter">
+              <i class="fa-brands fa-x-twitter"></i>
+            </a>
+            <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${shareUrl}`} target="_blank" rel="noopener noreferrer" class="post__share-btn post__share-btn--linkedin" title="Share on LinkedIn">
+              <i class="fa-brands fa-linkedin-in"></i>
+            </a>
+            <a href={`https://news.ycombinator.com/submitlink?u=${shareUrl}&t=${shareTitle}`} target="_blank" rel="noopener noreferrer" class="post__share-btn post__share-btn--hn" title="Share on Hacker News">
+              <i class="fa-brands fa-hacker-news"></i>
+            </a>
+            <button class="post__share-btn post__share-btn--copy" id="copy-link-btn" title="Copy link">
+              <i class="fa-solid fa-link"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Author bio -->
+        <footer class="post__author">
+          <div class="post__author-info">
+            <div class="post__author-avatar">ZH</div>
+            <div>
+              <strong class="post__author-name">Md. Zahid Hasan</strong>
+              <p class="post__author-bio">
+                Cybersecurity Expert & AI Engineer at <a href="https://brainsparkd.com/" target="_blank" rel="noopener noreferrer">BrainSpark Digital</a>. Conducting offensive red teaming, penetration testing, exploit labs, and defensive threat hunting/forensics.
+              </p>
+            </div>
+          </div>
+        </footer>
+
+        <!-- Back to writeups CTA -->
+        <div class="post__cta">
+          <p class="post__cta-text">Looking for more security labs or penetration testing writeups?</p>
+          <a href={`${base}writeups`} class="btn btn--filled">Browse All Writeups →</a>
+        </div>
+
+      </div>
+    </article>
+  </main>
+
+  <Footer />
+</body>
+</html>
+
+<style>
+  /* Reading progress bar */
+  .reading-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    z-index: 9999;
+    background: transparent;
+  }
+
+  .reading-progress__bar {
+    height: 100%;
+    width: 0%;
+    background: var(--accent);
+    transition: width 50ms linear;
+    border-radius: 0 2px 2px 0;
+  }
+
+  .post__header {
+    margin-bottom: var(--space-6);
+    padding-top: calc(60px + var(--space-6));
+  }
+
+  .post__breadcrumb {
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    color: var(--text-muted);
+    margin-bottom: var(--space-4);
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+  }
+
+  .post__breadcrumb a {
+    color: var(--text-muted);
+    transition: color var(--duration) var(--ease-out);
+  }
+  .post__breadcrumb a:hover {
+    color: var(--text-strong);
+  }
+
+  .post__breadcrumb-sep {
+    color: var(--text-faint);
+  }
+
+  .crumb-red {
+    color: #f87171;
+    font-weight: 600;
+  }
+  .crumb-blue {
+    color: #38bdf8;
+    font-weight: 600;
+  }
+
+  .writeup-header-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-bottom: var(--space-3);
+  }
+
+  .writeup-badges-wrap {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .badge-category {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+
+  .badge-cat--red {
+    background: rgba(239, 68, 68, 0.2);
+    color: #f87171;
+    border: 1px solid rgba(239, 68, 68, 0.35);
+  }
+
+  .badge-cat--blue {
+    background: rgba(56, 189, 248, 0.2);
+    color: #38bdf8;
+    border: 1px solid rgba(56, 189, 248, 0.35);
+  }
+
+  .badge-difficulty {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: 500;
+  }
+
+  .diff-easy {
+    background: rgba(52, 211, 153, 0.2);
+    color: #34d399;
+    border: 1px solid rgba(52, 211, 153, 0.35);
+  }
+  .diff-medium {
+    background: rgba(251, 191, 36, 0.2);
+    color: #fbbf24;
+    border: 1px solid rgba(251, 191, 36, 0.35);
+  }
+  .diff-hard {
+    background: rgba(239, 68, 68, 0.2);
+    color: #f87171;
+    border: 1px solid rgba(239, 68, 68, 0.35);
+  }
+  .diff-insane {
+    background: rgba(192, 132, 252, 0.2);
+    color: #c084fc;
+    border: 1px solid rgba(192, 132, 252, 0.35);
+  }
+  .diff-default {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-muted);
+  }
+
+  .badge-labtype {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--text-faint);
+    padding: 2px 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 4px;
+  }
+
+  .post__meta {
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    color: var(--text-faint);
+  }
+
+  .post__title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 550;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin-bottom: var(--space-3);
+    color: var(--text-strong);
+  }
+
+  .post__description {
+    font-size: var(--fs-lg);
+    line-height: 1.6;
+    color: var(--text-muted);
+    margin-bottom: var(--space-5);
+  }
+
+  /* Lab Specs Box */
+  .lab-specs-box {
+    background: var(--bg-card);
+    border: 1px solid var(--border-muted);
+    border-radius: 10px;
+    padding: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    margin-bottom: var(--space-4);
+  }
+
+  .spec-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+  }
+
+  .spec-lbl {
+    color: var(--text-faint);
+    min-width: 90px;
+    font-weight: 600;
+  }
+
+  .spec-val {
+    color: var(--text-strong);
+  }
+
+  .spec-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .tool-chip {
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--text-strong);
+  }
+
+  .tag-chip {
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--text-muted);
+  }
+
+  /* Table of Contents */
+  .toc {
+    margin-bottom: var(--space-6);
+    background: var(--bg-card);
+    border: 1px solid var(--border-muted);
+    border-radius: var(--radius-card);
+    padding: var(--space-4);
+  }
+
+  .toc__toggle {
+    font-family: var(--font-mono);
+    font-size: var(--fs-sm);
+    font-weight: 500;
+    color: var(--text-strong);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    user-select: none;
+  }
+
+  .toc__list {
+    margin-top: var(--space-3);
+    padding-left: var(--space-5);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    list-style: decimal;
+  }
+
+  .toc__list a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: var(--fs-sm);
+    transition: color var(--duration) var(--ease-out);
+  }
+
+  .toc__list a:hover {
+    color: var(--text-strong);
+  }
+
+  /* Share section */
+  .post__share {
+    margin-top: var(--space-7);
+    padding-top: var(--space-5);
+    border-top: 1px solid var(--border-muted);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+
+  .post__share-label {
+    font-family: var(--font-mono);
+    font-size: var(--fs-sm);
+    color: var(--text-muted);
+  }
+
+  .post__share-buttons {
+    display: flex;
+    gap: var(--space-2);
+  }
+
+  .post__share-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-pill);
+    background: var(--btn-neutral-bg);
+    border: 1px solid var(--border-muted);
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: var(--fs-sm);
+    text-decoration: none;
+    transition: all var(--duration) var(--ease-out);
+  }
+
+  .post__share-btn:hover {
+    color: var(--text-strong);
+    background: var(--btn-neutral-bg-hover);
+  }
+
+  /* Author bio */
+  .post__author {
+    margin-top: var(--space-7);
+    padding: var(--space-5);
+    background: var(--bg-card);
+    border: 1px solid var(--border-muted);
+    border-radius: var(--radius-card);
+  }
+
+  .post__author-info {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+  }
+
+  .post__author-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #000;
+    font-weight: 700;
+    font-size: var(--fs-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .post__author-name {
+    font-size: var(--fs-md);
+    color: var(--text-strong);
+    display: block;
+    margin-bottom: 2px;
+  }
+
+  .post__author-bio {
+    font-size: var(--fs-sm);
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .post__author-bio a {
+    color: var(--text-strong);
+    text-decoration: underline;
+  }
+
+  /* CTA */
+  .post__cta {
+    margin-top: var(--space-6);
+    padding: var(--space-6);
+    border: 1px solid var(--border-muted);
+    border-radius: var(--radius-card);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+    background: var(--bg-inset);
+  }
+
+  .post__cta-text {
+    font-size: var(--fs-md);
+    color: var(--text-muted);
+    margin: 0;
+  }
+
+  .post__cta-text strong {
+    color: var(--text-strong);
+  }
+</style>
+
+<script>
+  // Reading Progress Bar
+  const progressBar = document.getElementById('reading-progress-bar');
+  window.addEventListener('scroll', () => {
+    const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = totalHeight > 0 ? (window.scrollY / totalHeight) * 100 : 0;
+    if (progressBar) progressBar.style.width = `${progress}%`;
+  }, { passive: true });
+
+  // Reading time estimate
+  const article = document.getElementById('article-content');
+  const readingTimeEl = document.getElementById('reading-time');
+  if (article && readingTimeEl) {
+    const text = article.innerText || '';
+    const words = text.trim().split(/\s+/).filter(Boolean).length;
+    const minutes = Math.max(1, Math.ceil(words / 200));
+    readingTimeEl.textContent = ` · ${minutes} min read`;
+  }
+
+  // Auto-generate TOC from H2 headers
+  const tocList = document.getElementById('toc-list');
+  const headings = article?.querySelectorAll('h2');
+  if (tocList && headings && headings.length > 0) {
+    headings.forEach((h, i) => {
+      if (!h.id) h.id = `section-${i + 1}`;
+      const li = document.createElement('li');
+      const a = document.createElement('a');
+      a.href = `#${h.id}`;
+      a.textContent = h.textContent;
+      li.appendChild(a);
+      tocList.appendChild(li);
+    });
+  } else {
+    document.getElementById('toc')?.remove();
+  }
+
+  // Copy link
+  document.getElementById('copy-link-btn')?.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      const btn = document.getElementById('copy-link-btn');
+      if (btn) btn.innerHTML = '<i class="fa-solid fa-check"></i>';
+      setTimeout(() => {
+        if (btn) btn.innerHTML = '<i class="fa-solid fa-link"></i>';
+      }, 2000);
+    } catch {}
+  });
+</script>

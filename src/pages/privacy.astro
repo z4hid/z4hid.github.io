@@ -1,0 +1,134 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import SiteAnalytics from '../components/SiteAnalytics.astro';
+import NonBlockingFontAwesome from '../components/NonBlockingFontAwesome.astro';
+
+const base = import.meta.env.BASE_URL;
+const description = 'Privacy Policy for Md. Zahid Hasan portfolio and blog website. Details data collection, analytics, and contact information.';
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <SiteAnalytics />
+  <meta name="generator" content={Astro.generator} />
+
+  <title>Privacy Policy | Md. Zahid Hasan</title>
+  <meta name="description" content={description} />
+  <meta name="author" content="Md. Zahid Hasan" />
+  <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site).href} />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content={new URL(Astro.url.pathname, Astro.site).href} />
+  <meta property="og:title" content="Privacy Policy — Md. Zahid Hasan" />
+  <meta property="og:description" content={description} />
+  <meta property="og:image" content={new URL(`${base}og-default.png`, Astro.site).href} />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@z4hiid" />
+  <meta name="twitter:title" content="Privacy Policy — Md. Zahid Hasan" />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={new URL(`${base}og-default.png`, Astro.site).href} />
+
+  <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
+  <NonBlockingFontAwesome />
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Skip to content</a>
+  <Header />
+
+  <main id="main-content" class="privacy-page">
+    <div class="container container--narrow">
+
+      <nav class="post__breadcrumb" aria-label="Breadcrumb" style="margin-bottom: var(--space-4);">
+        <a href={`${base}`}>Home</a>
+        <span class="post__breadcrumb-sep">/</span>
+        <span>Privacy Policy</span>
+      </nav>
+
+      <section class="page-hero" style="padding-top: var(--space-4);">
+        <h1 class="page-title">Privacy Policy</h1>
+        <p class="page-desc">Last updated: February 2026</p>
+      </section>
+
+      <div class="prose privacy-prose">
+        <h2>1. Overview</h2>
+        <p>
+          This website (<strong>z4hid.github.io</strong>) is a personal portfolio and technical blog operated by Md. Zahid Hasan. I respect your privacy and am committed to protecting any information you share while visiting this site.
+        </p>
+
+        <h2>2. Information Collected</h2>
+        <p>
+          <strong>Contact Inquiries:</strong> When you send a message through the contact form, your name, email address, topic, and message content are transmitted securely via Web3Forms exclusively to allow me to respond to your inquiry. This information is never sold, rented, or used for unsolicited marketing.
+        </p>
+        <p>
+          <strong>Anonymous Analytics:</strong> This site uses privacy-friendly Google Analytics 4 (GA4) with IP anonymization enabled to analyze aggregate traffic patterns (page views, referrers, device categories). No personally identifiable information (PII) is stored.
+        </p>
+
+        <h2>3. Cookies & Local Storage</h2>
+        <p>
+          This site uses browser <code>localStorage</code> solely to remember your UI color theme preference (Light / Dark mode). No tracking cookies are used for ad profiling.
+        </p>
+
+        <h2>4. External Links</h2>
+        <p>
+          This site contains links to external platforms including GitHub, LinkedIn, X/Twitter, Hugging Face, Kaggle, and BrainSpark Digital (<a href="https://brainsparkd.com/" target="_blank" rel="noopener noreferrer">brainsparkd.com</a>). I am not responsible for the privacy practices of external websites.
+        </p>
+
+        <h2>5. Your Rights & Contact</h2>
+        <p>
+          You have the right to request deletion of any correspondence sent through the contact form. For inquiries or data requests, contact:
+        </p>
+        <p>
+          <strong>Email:</strong> <a href="mailto:zahidhasan9297@gmail.com">zahidhasan9297@gmail.com</a>
+        </p>
+      </div>
+
+    </div>
+  </main>
+
+  <Footer />
+</body>
+</html>
+
+<style>
+  .privacy-page {
+    padding-top: calc(60px + var(--space-7));
+    padding-bottom: var(--space-8);
+  }
+
+  .post__breadcrumb {
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .post__breadcrumb a {
+    color: var(--text-muted);
+    text-decoration: none;
+  }
+  .post__breadcrumb a:hover {
+    color: var(--text-strong);
+  }
+
+  .page-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.2rem, 5vw, 3.2rem);
+    font-weight: 550;
+    line-height: 1.15;
+    margin-bottom: var(--space-2);
+    color: var(--text-strong);
+  }
+
+  .page-desc {
+    font-family: var(--font-mono);
+    font-size: var(--fs-sm);
+    color: var(--text-faint);
+  }
+</style>

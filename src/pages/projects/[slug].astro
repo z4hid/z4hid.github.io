@@ -1,0 +1,490 @@
+---
+import '../../styles/global.css';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import SiteAnalytics from '../../components/SiteAnalytics.astro';
+import NonBlockingFontAwesome from '../../components/NonBlockingFontAwesome.astro';
+import InteractiveBackground from '../../components/InteractiveBackground.astro';
+import { projects, type Project } from '../../data/projects';
+
+export async function getStaticPaths() {
+  return projects.map(project => ({
+    params: { slug: project.slug },
+    props: { project },
+  }));
+}
+
+interface Props {
+  project: Project;
+}
+
+const { project } = Astro.props;
+const base = import.meta.env.BASE_URL;
+
+const siteTitle = `${project.title} — AI & Engineering Project | Md. Zahid Hasan`;
+const canonicalURL = Astro.url.href;
+
+// Next and previous projects for navigation
+const currentIndex = projects.findIndex(p => p.slug === project.slug);
+const prevProject = currentIndex > 0 ? projects[currentIndex - 1] : null;
+const nextProject = currentIndex < projects.length - 1 ? projects[currentIndex + 1] : null;
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <SiteAnalytics />
+  <meta name="generator" content={Astro.generator} />
+
+  <title>{siteTitle}</title>
+  <meta name="description" content={project.description} />
+  <meta name="author" content="Md. Zahid Hasan" />
+  <link rel="canonical" href={canonicalURL} />
+
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content={canonicalURL} />
+  <meta property="og:title" content={`${project.title} — Project Details`} />
+  <meta property="og:description" content={project.description} />
+  <meta property="og:image" content={new URL(`${base}og-default.png`, Astro.site).href} />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@z4hiid" />
+  <meta name="twitter:title" content={`${project.title} — Project Details`} />
+  <meta name="twitter:description" content={project.description} />
+  <meta name="twitter:image" content={new URL(`${base}og-default.png`, Astro.site).href} />
+
+  <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
+  <NonBlockingFontAwesome />
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": new URL(base, Astro.site).href },
+          { "@type": "ListItem", "position": 2, "name": "Projects", "item": new URL(`${base}projects`, Astro.site).href },
+          { "@type": "ListItem", "position": 3, "name": project.title, "item": canonicalURL }
+        ]
+      },
+      {
+        "@type": "SoftwareSourceCode",
+        "name": project.title,
+        "description": project.description,
+        "codeRepository": project.github,
+        "programmingLanguage": project.techStack,
+        "author": {
+          "@type": "Person",
+          "name": "Md. Zahid Hasan",
+          "url": new URL(base, Astro.site).href
+        },
+        "about": project.category
+      }
+    ]
+  })} />
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Skip to content</a>
+  <InteractiveBackground />
+  <Header />
+
+  <main id="main-content" class="project-detail-page">
+    <div class="container container--narrow">
+
+      <!-- Breadcrumb -->
+      <nav class="project-nav" aria-label="Project Navigation">
+        <a href={`${base}projects`} class="project-nav__back">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+          <span>OPEN SOURCE</span>
+        </a>
+      </nav>
+
+      <!-- Metadata Line -->
+      <div class="project-meta-line">
+        <span>{project.category.toUpperCase()}</span>
+        <span class="meta-dot">·</span>
+        <span>{project.role || 'AUTHOR'}</span>
+        <span class="meta-dot">·</span>
+        <span>{project.status || 'MAINTAINED'}</span>
+        {project.since && (
+          <>
+            <span class="meta-dot">·</span>
+            <span>SINCE {project.since}</span>
+          </>
+        )}
+      </div>
+
+      <!-- Title -->
+      <h1 class="project-title">{project.title}</h1>
+
+      <!-- Short Subtitle Description -->
+      <p class="project-subtitle">{project.description}</p>
+
+      <!-- Action Buttons -->
+      <div class="project-badges-row">
+        <div class="project-actions">
+          <a href={project.github} target="_blank" rel="noopener noreferrer" class="btn btn--filled project-source-btn">
+            <span>SOURCE</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+          </a>
+          {project.demo && (
+            <a href={project.demo} target="_blank" rel="noopener noreferrer" class="btn btn--neutral project-demo-btn">
+              <span>LIVE DEMO</span>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+            </a>
+          )}
+        </div>
+      </div>
+
+      <!-- Hand-drawn Divider Line -->
+      <div class="rough-divider" aria-hidden="true"></div>
+
+      <!-- Main Project Body Content -->
+      <div class="project-prose prose">
+        {project.overview && (
+          <section class="project-section">
+            <h2>Overview</h2>
+            <p>{project.overview}</p>
+          </section>
+        )}
+
+        {project.metrics && project.metrics.length > 0 && (
+          <section class="project-section">
+            <h2>Key Metrics & Performance</h2>
+            <div class="project-metrics-grid">
+              {project.metrics.map(m => (
+                <div class="metric-card">
+                  <span class="metric-card__val">{m.value}</span>
+                  <span class="metric-card__label">{m.label}</span>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {project.architecture && (
+          <section class="project-section">
+            <h2>Architecture & Design</h2>
+            <p>{project.architecture}</p>
+          </section>
+        )}
+
+        {project.keyFeatures && project.keyFeatures.length > 0 && (
+          <section class="project-section">
+            <h2>Key Capabilities</h2>
+            <ul>
+              {project.keyFeatures.map(feat => (
+                <li>{feat}</li>
+              ))}
+            </ul>
+          </section>
+        )}
+
+        {project.codeSnippet && (
+          <section class="project-section">
+            <h2>Usage & Integration</h2>
+            <pre><code>{project.codeSnippet.code}</code></pre>
+          </section>
+        )}
+
+        <section class="project-section">
+          <h2>Tech Stack & Tools</h2>
+          <div class="project-tags-list">
+            {project.techStack.map(tech => (
+              <span class="tag tag--accent">{tech}</span>
+            ))}
+          </div>
+        </section>
+      </div>
+
+      <!-- Hand-drawn Divider Line -->
+      <div class="rough-divider" aria-hidden="true"></div>
+
+      <!-- Project Navigation Footer -->
+      <nav class="project-bottom-nav">
+        {prevProject ? (
+          <a href={`${base}projects/${prevProject.slug}`} class="project-bottom-link prev">
+            <span class="project-bottom-link__sub">← PREVIOUS PROJECT</span>
+            <span class="project-bottom-link__title">{prevProject.title}</span>
+          </a>
+        ) : <div />}
+
+        {nextProject ? (
+          <a href={`${base}projects/${nextProject.slug}`} class="project-bottom-link next">
+            <span class="project-bottom-link__sub">NEXT PROJECT →</span>
+            <span class="project-bottom-link__title">{nextProject.title}</span>
+          </a>
+        ) : <div />}
+      </nav>
+
+    </div>
+  </main>
+
+  <Footer />
+</body>
+</html>
+
+<style>
+  .project-detail-page {
+    padding-top: calc(60px + var(--space-7));
+    padding-bottom: var(--space-8);
+  }
+
+  .project-nav {
+    margin-bottom: var(--space-5);
+  }
+
+  .project-nav__back {
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    text-transform: uppercase;
+    transition: color var(--duration) var(--ease-out);
+  }
+
+  .project-nav__back:hover {
+    color: var(--text-strong);
+  }
+
+  .project-meta-line {
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    letter-spacing: 0.06em;
+    color: var(--text-faint);
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-bottom: var(--space-3);
+  }
+
+  .meta-dot {
+    color: var(--ink);
+  }
+
+  .project-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 6vw, 3.75rem);
+    font-weight: 550;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: var(--space-4);
+  }
+
+  .project-subtitle {
+    font-size: var(--fs-xl);
+    line-height: 1.6;
+    color: var(--text-body);
+    margin-bottom: var(--space-6);
+  }
+
+  /* Badges row matching Screenshot 2 */
+  .project-badges-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    flex-wrap: wrap;
+    margin-bottom: var(--space-6);
+  }
+
+  .project-stats-group {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+  }
+
+  .stat-badge {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: 0.5rem 0.875rem;
+    background: var(--bg-card);
+    border-radius: var(--radius-card);
+  }
+
+  .stat-badge::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border: 1.5px solid var(--ink);
+    border-radius: inherit;
+    pointer-events: none;
+  }
+
+  .stat-badge__icon {
+    font-size: 1rem;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  .stat-badge__content {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+  }
+
+  .stat-badge__val {
+    font-family: var(--font-mono);
+    font-size: var(--fs-sm);
+    font-weight: 700;
+    color: var(--text-strong);
+  }
+
+  .stat-badge__label {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.05em;
+    color: var(--text-faint);
+  }
+
+  .stat-badge__asof {
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    color: var(--text-faint);
+    margin-left: var(--space-1);
+  }
+
+  .project-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  .project-source-btn {
+    min-height: 2.25rem;
+    padding-inline: var(--space-5);
+  }
+
+  /* Hand-drawn rough divider line */
+  .rough-divider {
+    position: relative;
+    width: 100%;
+    height: 1px;
+    margin: var(--space-6) 0 var(--space-7);
+    background-color: var(--border-muted);
+  }
+
+  .rough-divider::before {
+    content: '';
+    position: absolute;
+    inset: -1px 0 0 0;
+    border-top: 1.5px solid var(--ink);
+    pointer-events: none;
+  }
+
+  /* Content sections */
+  .project-section {
+    margin-bottom: var(--space-7);
+  }
+
+  .project-section h2 {
+    font-size: var(--fs-2xl);
+    margin-bottom: var(--space-4);
+    font-weight: 550;
+  }
+
+  .project-metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: var(--space-4);
+    margin: var(--space-4) 0;
+  }
+
+  .metric-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-muted);
+    border-radius: var(--radius-card);
+    padding: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .metric-card__val {
+    font-family: var(--font-mono);
+    font-size: var(--fs-2xl);
+    font-weight: 700;
+    color: var(--text-strong);
+  }
+
+  .metric-card__label {
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    color: var(--text-muted);
+  }
+
+  .project-tags-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  /* Bottom navigation between projects */
+  .project-bottom-nav {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-5);
+    margin-top: var(--space-7);
+  }
+
+  .project-bottom-link {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    text-decoration: none;
+    padding: var(--space-3) var(--space-4);
+    background: var(--bg-card);
+    border: 1px solid var(--border-muted);
+    border-radius: var(--radius-card);
+    transition: border-color var(--duration) var(--ease-out),
+                background-color var(--duration) var(--ease-out);
+    min-width: 180px;
+  }
+
+  .project-bottom-link.next {
+    text-align: right;
+    margin-left: auto;
+  }
+
+  .project-bottom-link:hover {
+    border-color: var(--border-strong);
+    background: var(--bg-card-hover);
+  }
+
+  .project-bottom-link__sub {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.05em;
+    color: var(--text-faint);
+  }
+
+  .project-bottom-link__title {
+    font-family: var(--font-display);
+    font-size: var(--fs-md);
+    font-weight: 550;
+    color: var(--text-strong);
+  }
+
+  @media (max-width: 640px) {
+    .project-badges-row {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .project-bottom-nav {
+      flex-direction: column;
+    }
+    .project-bottom-link.next {
+      text-align: left;
+      margin-left: 0;
+    }
+  }
+</style>

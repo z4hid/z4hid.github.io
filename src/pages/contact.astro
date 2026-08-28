@@ -4,9 +4,10 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import SiteAnalytics from '../components/SiteAnalytics.astro';
 import NonBlockingFontAwesome from '../components/NonBlockingFontAwesome.astro';
+import InteractiveBackground from '../components/InteractiveBackground.astro';
 
 const base = import.meta.env.BASE_URL;
-const description = 'Contact me for AI engineering work including chatbot development, agentic workflows, RAG systems, and computer vision projects. I typically respond within 24 hours.';
+const description = 'Contact Md. Zahid Hasan for AI engineering, LLM chatbots, agentic workflows, and cybersecurity audits. Direct 24-hour response.';
 const contactFormAccessKey = (import.meta.env.PUBLIC_WEB3FORMS_KEY || '').trim();
 ---
 <!DOCTYPE html>
@@ -15,18 +16,18 @@ const contactFormAccessKey = (import.meta.env.PUBLIC_WEB3FORMS_KEY || '').trim()
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <SiteAnalytics />
-  <title>Contact | Md. Zahid Hasan — AI Engineer</title>
+  <title>Contact | Md. Zahid Hasan — AI & Security</title>
   <meta name="description" content={description} />
   <meta name="author" content="Md. Zahid Hasan" />
   <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site).href} />
-  <meta property="og:title" content="Contact Md. Zahid Hasan — AI Engineer" />
+  <meta property="og:title" content="Contact Md. Zahid Hasan — AI & Security" />
   <meta property="og:description" content={description} />
   <meta property="og:type" content="website" />
   <meta property="og:url" content={new URL(Astro.url.pathname, Astro.site).href} />
   <meta property="og:image" content={new URL(`${base}og-default.png`, Astro.site).href} />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:site" content="@z4hiid" />
-  <meta name="twitter:title" content="Contact Md. Zahid Hasan — AI Engineer" />
+  <meta name="twitter:title" content="Contact Md. Zahid Hasan — AI & Security" />
   <meta name="twitter:description" content={description} />
   <meta name="twitter:image" content={new URL(`${base}og-default.png`, Astro.site).href} />
   <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
@@ -54,6 +55,7 @@ const contactFormAccessKey = (import.meta.env.PUBLIC_WEB3FORMS_KEY || '').trim()
 </head>
 <body>
   <a href="#main-content" class="skip-link">Skip to content</a>
+  <InteractiveBackground />
   <Header />
 
   <main id="main-content">
@@ -102,16 +104,17 @@ const contactFormAccessKey = (import.meta.env.PUBLIC_WEB3FORMS_KEY || '').trim()
               <input type="hidden" name="access_key" value={contactFormAccessKey} />
               <input type="hidden" name="subject" value="New Contact from Portfolio" />
               <input type="hidden" name="from_name" value="Portfolio Contact Form" />
-              <input type="checkbox" name="botcheck" style="display: none;" />
+              <label for="botcheck-field" class="sr-only">Leave empty if human</label>
+              <input type="checkbox" id="botcheck-field" name="botcheck" aria-label="Spam bot check" style="display: none;" tabindex="-1" />
 
               <div class="form-row">
                 <div class="form-group">
                   <label for="name" class="form-label"><i class="fa-regular fa-user"></i> Name</label>
-                  <input type="text" id="name" name="name" class="form-input" placeholder="Zahid Hasan" required />
+                  <input type="text" id="name" name="name" class="form-input" placeholder="Zahid Hasan" autocomplete="name" enterkeyhint="next" required />
                 </div>
                 <div class="form-group">
                   <label for="email" class="form-label"><i class="fa-regular fa-envelope"></i> Email</label>
-                  <input type="email" id="email" name="email" class="form-input" placeholder="you@company.com" required />
+                  <input type="email" id="email" name="email" class="form-input" placeholder="you@company.com" autocomplete="email" enterkeyhint="next" required />
                 </div>
               </div>
 
@@ -120,6 +123,8 @@ const contactFormAccessKey = (import.meta.env.PUBLIC_WEB3FORMS_KEY || '').trim()
                 <select id="subject" name="form_subject" class="form-input" required>
                   <option value="" disabled selected>Select a topic</option>
                   <option value="AI Chatbot / Agent Development">AI Chatbot / Agent Development</option>
+                  <option value="Cybersecurity Audit / Red Team">Cybersecurity Audit / Red Team</option>
+                  <option value="Defensive Security / Incident Response">Defensive Security / Incident Response</option>
                   <option value="RAG System / LLM Integration">RAG System / LLM Integration</option>
                   <option value="Computer Vision Project">Computer Vision Project</option>
                   <option value="Full-Stack AI Application">Full-Stack AI Application</option>
@@ -131,10 +136,10 @@ const contactFormAccessKey = (import.meta.env.PUBLIC_WEB3FORMS_KEY || '').trim()
 
               <div class="form-group">
                 <label for="message" class="form-label"><i class="fa-regular fa-message"></i> Your message</label>
-                <textarea id="message" name="message" class="form-textarea" placeholder="What problem are you trying to solve? What would success look like?" rows="5" required></textarea>
+                <textarea id="message" name="message" class="form-textarea" placeholder="What problem are you trying to solve? What would success look like?" rows="5" enterkeyhint="send" required></textarea>
               </div>
 
-              <button type="submit" class="btn btn--primary contact-submit" id="submit-btn">
+              <button type="submit" class="btn btn--filled contact-submit" id="submit-btn">
                 <i class="fa-solid fa-paper-plane"></i>
                 Send Message
               </button>
@@ -208,44 +213,42 @@ const contactFormAccessKey = (import.meta.env.PUBLIC_WEB3FORMS_KEY || '').trim()
 
 <style>
   .contact-hero {
-    padding-top: calc(72px + var(--space-4xl));
-    padding-bottom: var(--space-3xl);
+    padding-top: calc(60px + var(--space-7));
+    padding-bottom: var(--space-6);
   }
 
   .contact-hero h1 {
-    margin-bottom: var(--space-md);
+    margin-bottom: var(--space-3);
   }
 
-  .text-accent { color: var(--accent); }
-
   .contact-hero__desc {
-    max-width: 520px;
-    font-size: 1.1rem;
-    color: var(--text-secondary);
-    line-height: 1.7;
+    max-width: 52ch;
+    font-size: var(--fs-lg);
+    color: var(--text-muted);
+    line-height: 1.65;
   }
 
   /* Trust indicators */
   .contact-trust {
     display: flex;
-    gap: var(--space-2xl);
-    margin-bottom: var(--space-3xl);
-    padding: var(--space-xl) var(--space-2xl);
-    background: var(--bg-surface);
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-lg);
+    gap: var(--space-6);
+    flex-wrap: wrap;
+    margin-bottom: var(--space-6);
+    padding: var(--space-4) 0;
+    border-top: 1px solid var(--border-muted);
+    border-bottom: 1px solid var(--border-muted);
   }
 
   .contact-trust__item {
     display: flex;
     align-items: center;
-    gap: var(--space-md);
+    gap: var(--space-3);
   }
 
   .contact-trust__icon {
-    font-size: 1.2rem;
+    font-size: 1rem;
     color: var(--accent);
-    width: 36px;
+    width: 32px;
     text-align: center;
     flex-shrink: 0;
   }
@@ -256,162 +259,151 @@ const contactFormAccessKey = (import.meta.env.PUBLIC_WEB3FORMS_KEY || '').trim()
   }
 
   .contact-trust__item strong {
-    color: var(--text-primary);
-    font-size: 0.85rem;
-    font-weight: 600;
+    color: var(--text-strong);
+    font-size: var(--fs-md);
+    font-weight: 550;
   }
 
   .contact-trust__item span {
     color: var(--text-muted);
-    font-size: 0.75rem;
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
   }
 
   /* Layout */
   .contact-layout {
     display: grid;
-    grid-template-columns: 1.4fr 1fr;
-    gap: var(--space-2xl);
+    grid-template-columns: 1.5fr 1fr;
+    gap: var(--space-6);
     align-items: start;
   }
 
   /* Form card */
   .contact-form-card {
-    background: var(--bg-surface);
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-xl);
-    padding: var(--space-2xl);
+    background: var(--bg-card);
+    border: 1px solid var(--border-muted);
+    border-radius: var(--radius-card);
+    padding: var(--space-6);
   }
 
   .contact-form-card__title {
-    font-size: 1.3rem;
-    margin-bottom: var(--space-xs);
+    font-size: var(--fs-2xl);
+    margin-bottom: var(--space-1);
     display: flex;
     align-items: center;
-    gap: var(--space-sm);
+    gap: var(--space-2);
   }
 
-  .contact-form-card__title i {
-    color: var(--accent);
-  }
+  .contact-form-card__title i { color: var(--accent); }
 
   .contact-form-card__subtitle {
     color: var(--text-muted);
-    font-size: 0.9rem;
-    margin-bottom: var(--space-xl);
+    font-size: var(--fs-md);
+    margin-bottom: var(--space-5);
   }
 
   .form-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: var(--space-lg);
+    gap: var(--space-4);
   }
 
   .form-label i {
-    color: var(--text-muted);
-    margin-right: 4px;
-    font-size: 0.75rem;
+    margin-right: 2px;
+    font-size: 0.7rem;
+    opacity: 0.7;
   }
 
   .contact-submit {
     width: 100%;
-    justify-content: center;
-    padding: 0.9rem 2rem;
-    font-size: 0.95rem;
-    margin-top: var(--space-sm);
+    min-height: 2.75rem;
+    font-size: var(--fs-md);
+    margin-top: var(--space-2);
   }
 
   .form-privacy {
     text-align: center;
-    color: var(--text-muted);
-    font-size: 0.75rem;
-    margin-top: var(--space-md);
+    color: var(--text-faint);
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    margin-top: var(--space-3);
   }
 
   .form-privacy i {
     margin-right: 4px;
-    color: var(--accent);
     opacity: 0.7;
   }
 
-  .form-status { margin-top: var(--space-md); text-align: center; }
-  .form-status.success { color: #4ade80; }
+  .form-status { margin-top: var(--space-3); text-align: center; font-family: var(--font-mono); font-size: var(--fs-sm); }
+  .form-status.success { color: var(--success); }
   .form-status.error { color: var(--danger); }
 
   /* Sidebar */
   .contact-sidebar {
     display: flex;
     flex-direction: column;
-    gap: var(--space-lg);
+    gap: var(--space-4);
   }
 
   .contact-info-card {
-    background: var(--bg-surface);
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-lg);
-    padding: var(--space-xl);
-    transition: all var(--duration-normal) var(--ease-out);
+    background: var(--bg-card);
+    border: 1px solid var(--border-muted);
+    border-radius: var(--radius-card);
+    padding: var(--space-5);
+    transition: border-color var(--duration) var(--ease-out),
+                background-color var(--duration) var(--ease-out);
   }
 
   .contact-info-card:hover {
-    border-color: var(--border-accent);
-    transform: translateY(-2px);
+    border-color: var(--border-strong);
+    background: var(--bg-card-hover);
   }
 
   .contact-info-card__icon {
-    width: 40px;
-    height: 40px;
-    border-radius: var(--radius-md);
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1rem;
-    margin-bottom: var(--space-md);
-  }
-
-  .contact-info-card__icon--email {
-    background: rgba(61, 132, 212, 0.1);
-    color: #3d84d4;
-  }
-
-  .contact-info-card__icon--location {
-    background: rgba(168, 85, 247, 0.1);
-    color: #a855f7;
-  }
-
-  .contact-info-card__icon--social {
-    background: rgba(6, 182, 212, 0.1);
-    color: #06b6d4;
+    font-size: 0.9rem;
+    margin-bottom: var(--space-3);
+    background: var(--btn-neutral-bg);
+    color: var(--accent);
   }
 
   .contact-info-card__title {
-    font-size: 0.95rem;
+    font-size: var(--fs-lg);
     font-weight: 600;
-    margin-bottom: var(--space-xs);
+    margin-bottom: var(--space-1);
   }
 
   .contact-info-card__link {
-    color: var(--accent-light);
-    font-size: 0.9rem;
+    color: var(--accent);
+    font-family: var(--font-mono);
+    font-size: var(--fs-sm);
     word-break: break-all;
   }
+  .contact-info-card__link:hover { color: var(--text-strong); }
 
   .contact-info-card__text {
-    color: var(--text-secondary);
-    font-size: 0.9rem;
+    color: var(--text-body);
+    font-size: var(--fs-md);
     margin-bottom: 0;
   }
 
   .contact-info-card__note {
-    color: var(--text-muted);
-    font-size: 0.8rem;
-    margin-top: var(--space-xs);
+    color: var(--text-faint);
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    margin-top: var(--space-1);
   }
 
   /* Social icons */
   .contact-socials {
     display: flex;
-    gap: var(--space-sm);
-    margin-top: var(--space-sm);
+    gap: var(--space-1);
+    margin-top: var(--space-1);
   }
 
   .contact-social {
@@ -420,54 +412,54 @@ const contactFormAccessKey = (import.meta.env.PUBLIC_WEB3FORMS_KEY || '').trim()
     justify-content: center;
     width: 38px;
     height: 38px;
-    border-radius: var(--radius-md);
-    border: 1px solid var(--border-subtle);
-    color: var(--text-secondary);
-    font-size: 1rem;
-    transition: all var(--duration-fast) var(--ease-out);
+    border-radius: var(--radius-pill);
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    transition: color var(--duration) var(--ease-out),
+                background-color var(--duration) var(--ease-out);
   }
 
   .contact-social:hover {
-    color: var(--accent);
-    border-color: var(--accent);
-    background: var(--accent-subtle);
-    transform: translateY(-2px);
+    color: var(--text-strong);
+    background: var(--btn-neutral-bg);
   }
 
   /* CV download button */
   .contact-cv-btn {
     display: flex;
     align-items: center;
-    gap: var(--space-md);
-    background: var(--bg-surface);
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-lg);
-    padding: var(--space-lg) var(--space-xl);
+    gap: var(--space-3);
+    background: var(--bg-card);
+    border: 1px solid var(--border-muted);
+    border-radius: var(--radius-card);
+    padding: var(--space-4) var(--space-5);
     text-decoration: none;
-    transition: all var(--duration-normal) var(--ease-out);
+    transition: border-color var(--duration) var(--ease-out),
+                background-color var(--duration) var(--ease-out);
   }
 
   .contact-cv-btn:hover {
-    border-color: var(--accent);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-glow);
+    border-color: var(--border-strong);
+    background: var(--bg-card-hover);
   }
 
   .contact-cv-btn i {
-    font-size: 1.4rem;
+    font-size: 1.15rem;
     color: var(--accent);
   }
 
   .contact-cv-btn strong {
     display: block;
-    color: var(--text-primary);
-    font-size: 0.9rem;
+    color: var(--text-strong);
+    font-size: var(--fs-md);
+    font-weight: 550;
   }
 
   .contact-cv-btn span {
     display: block;
-    color: var(--text-muted);
-    font-size: 0.75rem;
+    color: var(--text-faint);
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
   }
 
   /* Mobile */
@@ -476,12 +468,13 @@ const contactFormAccessKey = (import.meta.env.PUBLIC_WEB3FORMS_KEY || '').trim()
       grid-template-columns: 1fr;
     }
     .contact-trust {
+      gap: var(--space-4);
       flex-direction: column;
-      gap: var(--space-lg);
     }
     .form-row {
       grid-template-columns: 1fr;
     }
+    .contact-form-card { padding: var(--space-5); }
   }
 </style>
 

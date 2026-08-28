@@ -10,8 +10,8 @@ test('has title', async ({ page }) => {
 test('navigation links work', async ({ page }) => {
   await page.goto('/');
   
-  // Click the projects link.
-  await page.getByRole('link', { name: 'Projects' }).first().click();
+  // Click the projects / open source link.
+  await page.locator('a[href$="projects"]').first().click();
 
   // Expects the URL to contain projects.
   await expect(page).toHaveURL(/.*projects/);

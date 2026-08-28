@@ -1,6 +1,6 @@
 ---
-title: 'Getting Started with Agentic AI: Building Your First AI Agent'
-description: 'A hands-on guide to building AI agents that can plan, reason, and take action. Covers architectures, frameworks like LangChain and Agno, memory systems, and production deployment patterns.'
+title: 'Getting Started with Agentic AI: Autonomous Workflows'
+description: 'A hands-on guide to building autonomous AI agents that plan, reason, and execute tools using Python and Agno.'
 pubDate: 2025-10-15
 updatedDate: 2026-03-19
 tags: ['Agentic AI', 'LLMs', 'Python', 'Tutorial']

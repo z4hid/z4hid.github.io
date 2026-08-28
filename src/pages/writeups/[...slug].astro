@@ -1,0 +1,49 @@
+---
+import { getCollection, render } from 'astro:content';
+import WriteupLayout from '../../layouts/WriteupLayout.astro';
+
+export async function getStaticPaths() {
+  const writeups = await getCollection('writeups');
+  const paths: any[] = [];
+
+  writeups.forEach(item => {
+    const fullSlug = item.id.replace(/\.md$/, '');
+    paths.push({
+      params: { slug: fullSlug },
+      props: { item },
+    });
+
+    // Also support short slug if nested e.g. /writeups/active-directory-kerberoasting-privesc
+    const parts = fullSlug.split('/');
+    if (parts.length > 1) {
+      const shortSlug = parts[parts.length - 1];
+      paths.push({
+        params: { slug: shortSlug },
+        props: { item },
+      });
+    }
+  });
+
+  return paths;
+}
+
+const { item } = Astro.props;
+const { Content } = await render(item);
+const category = item.data.category || (item.id.toLowerCase().includes('offensive') ? 'offensive' : 'defensive');
+---
+
+<WriteupLayout
+  title={item.data.title}
+  description={item.data.description}
+  category={category}
+  labType={item.data.labType}
+  difficulty={item.data.difficulty}
+  pubDate={item.data.pubDate}
+  updatedDate={item.data.updatedDate}
+  tags={item.data.tags}
+  image={item.data.image}
+  targetOs={item.data.targetOs}
+  toolsUsed={item.data.toolsUsed}
+>
+  <Content />
+</WriteupLayout>

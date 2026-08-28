@@ -4,6 +4,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import SiteAnalytics from '../components/SiteAnalytics.astro';
 import NonBlockingFontAwesome from '../components/NonBlockingFontAwesome.astro';
+import InteractiveBackground from '../components/InteractiveBackground.astro';
 import { certificates } from '../data/certificates';
 import { Image } from 'astro:assets';
 
@@ -71,6 +72,7 @@ const description = 'Browse my AI and machine learning certifications, including
 </head>
 <body>
   <a href="#main-content" class="skip-link">Skip to content</a>
+  <InteractiveBackground />
   <Header />
 
   <main id="main-content">
@@ -99,7 +101,7 @@ const description = 'Browse my AI and machine learning certifications, including
                 <p class="cert-full-card__issuer">{cert.issuer}</p>
                 <p class="cert-full-card__date">{cert.date}</p>
                 {cert.verifyUrl && (
-                  <a href={cert.verifyUrl} class="btn btn--ghost" target="_blank" rel="noopener noreferrer" style="margin-top: 0.5rem; padding: 0.25rem 0;">
+                  <a href={cert.verifyUrl} class="btn btn--ghost" target="_blank" rel="noopener noreferrer" aria-label={`Verify ${cert.title} certificate from ${cert.issuer}`} style="margin-top: 0.5rem; padding: 0.25rem 0;">
                     Verify →
                   </a>
                 )}
@@ -124,57 +126,52 @@ const description = 'Browse my AI and machine learning certifications, including
 </html>
 
 <style>
-
   .page-hero {
-    padding-top: calc(72px + var(--space-4xl));
-    padding-bottom: var(--space-3xl);
+    padding-top: calc(60px + var(--space-7));
+    padding-bottom: var(--space-6);
   }
 
-  .page-hero h1 { margin-bottom: var(--space-md); }
+  .page-hero h1 { margin-bottom: var(--space-3); }
 
   .page-hero__desc {
-    max-width: 600px;
-    font-size: 1.1rem;
-    color: var(--text-secondary);
+    max-width: 58ch;
+    font-size: var(--fs-lg);
+    color: var(--text-muted);
+    line-height: 1.65;
   }
 
   .cert-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: var(--space-2xl);
+    gap: var(--space-5);
   }
 
   .cert-full-card {
-    background: var(--bg-surface);
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-lg);
+    background: var(--bg-card);
+    border: 1px solid var(--border-muted);
+    border-radius: var(--radius-card);
     overflow: hidden;
-    transition: all var(--duration-normal) var(--ease-out);
+    transition: border-color var(--duration) var(--ease-out),
+                background-color var(--duration) var(--ease-out);
   }
 
   .cert-full-card:hover {
-    border-color: var(--border-default);
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-lg);
+    border-color: var(--border-strong);
+    background: var(--bg-card-hover);
   }
 
   .cert-full-card__img-wrap {
     position: relative;
-    aspect-ratio: 16/11;
+    aspect-ratio: 16 / 11;
     overflow: hidden;
     cursor: pointer;
-    background: var(--bg-elevated);
+    background: var(--bg-inset);
   }
 
   .cert-full-card__img-wrap img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform var(--duration-slow) var(--ease-out);
-  }
-
-  .cert-full-card:hover .cert-full-card__img-wrap img {
-    transform: scale(1.03);
   }
 
   .cert-full-card__overlay {
@@ -184,38 +181,42 @@ const description = 'Browse my AI and machine learning certifications, including
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: var(--space-sm);
-    background: rgba(8, 8, 10, 0.7);
-    color: var(--text-primary);
-    font-size: 0.85rem;
+    gap: var(--space-2);
+    background: color-mix(in oklab, var(--bg-canvas) 70%, transparent);
+    color: var(--text-strong);
+    font-family: var(--font-mono);
+    font-size: var(--fs-sm);
     opacity: 0;
-    transition: opacity var(--duration-normal) var(--ease-out);
+    transition: opacity var(--duration) var(--ease-out);
   }
 
-  .cert-full-card__img-wrap:hover .cert-full-card__overlay {
+  .cert-full-card__img-wrap:hover .cert-full-card__overlay,
+  .cert-full-card__img-wrap:focus-visible .cert-full-card__overlay {
     opacity: 1;
   }
 
   .cert-full-card__info {
-    padding: var(--space-xl);
+    padding: var(--space-4) var(--space-5);
   }
 
   .cert-full-card__title {
-    font-size: 1.15rem;
-    font-weight: 600;
-    margin-bottom: var(--space-xs);
+    font-size: var(--fs-lg);
+    font-weight: 550;
+    margin-bottom: var(--space-1);
   }
 
   .cert-full-card__issuer {
-    font-size: 0.9rem;
+    font-family: var(--font-mono);
+    font-size: var(--fs-sm);
     color: var(--accent);
-    margin-bottom: var(--space-xs);
+    margin-bottom: var(--space-1);
   }
 
   .cert-full-card__date {
-    font-size: 0.8rem;
-    color: var(--text-muted);
-    margin: 0;
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    color: var(--text-faint);
+    margin: 0 0 var(--space-2);
   }
 
   /* Lightbox */
@@ -223,14 +224,14 @@ const description = 'Browse my AI and machine learning certifications, including
     position: fixed;
     inset: 0;
     z-index: 2000;
-    background: rgba(8, 8, 10, 0.95);
+    background: color-mix(in oklab, var(--bg-canvas) 95%, transparent);
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: var(--space-2xl);
+    padding: var(--space-5);
     opacity: 0;
     visibility: hidden;
-    transition: all var(--duration-normal) var(--ease-out);
+    transition: opacity var(--duration) var(--ease-out), visibility var(--duration);
   }
 
   .lightbox.active {
@@ -240,23 +241,26 @@ const description = 'Browse my AI and machine learning certifications, including
 
   .lightbox__close {
     position: absolute;
-    top: var(--space-xl);
-    right: var(--space-xl);
+    top: var(--space-4);
+    right: var(--space-4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-pill);
     background: none;
     border: none;
-    color: var(--text-primary);
+    color: var(--text-strong);
     cursor: pointer;
-    padding: var(--space-sm);
-    transition: color var(--duration-fast) var(--ease-out);
+    transition: background-color var(--duration) var(--ease-out);
   }
-
-  .lightbox__close:hover { color: var(--accent); }
+  .lightbox__close:hover { background: var(--btn-neutral-bg); }
 
   .lightbox__img {
     max-width: 90%;
     max-height: 85vh;
-    border-radius: var(--radius-md);
-    box-shadow: var(--shadow-lg);
+    border-radius: var(--radius-card);
   }
 
   @media (max-width: 768px) {

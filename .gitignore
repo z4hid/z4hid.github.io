@@ -31,3 +31,9 @@ pnpm-debug.log*
 # Agent/AI tool configs (optional, remove if you want to track)
 .agent/
 .gemini/
+shots/
+scratch/
+*.png
+!public/**/*.png
+!public/*.png
+

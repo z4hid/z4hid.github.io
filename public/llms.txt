@@ -1,0 +1,33 @@
+# Md. Zahid Hasan — AI & Cybersecurity Engineer
+
+> AI Engineer & Cybersecurity Specialist building production LLM chatbots, agentic multi-step workflows, offensive red-team penetration testing labs, and defensive memory forensics pipelines.
+
+## Profile & Expertise
+- **Name**: Md. Zahid Hasan
+- **Role**: AI Engineer & Cybersecurity Expert at BrainSpark Digital (https://brainsparkd.com/)
+- **Education**: B.Sc. in Computer Science & Engineering from Uttara University
+- **Email**: zahidhasan9297@gmail.com
+- **Website**: https://z4hid.github.io/
+- **GitHub**: https://github.com/z4hid
+- **LinkedIn**: https://linkedin.com/in/z4hid
+
+## Core Specializations
+
+### 1. Artificial Intelligence & Machine Learning
+- Large Language Models (LLMs), Prompt Optimization (DSPy), fine-tuning (QLoRA)
+- Agentic AI Workflows & Autonomous Multi-Agent Topologies (LangChain, Agno)
+- Retrieval-Augmented Generation (RAG) Pipelines (Vector DBs, BM25, Cross-Encoders)
+- Computer Vision (PyTorch, TensorFlow, OpenCV, CNNs, Saliency Heatmaps)
+
+### 2. Cybersecurity (Offensive & Defensive)
+- **Offensive Security / Red Teaming**: Penetration Testing, Active Directory Exploitation, Kerberoasting, Privilege Escalation, Web Application Vulnerabilities.
+- **Defensive Security / Blue Teaming**: Volatile Memory Forensics (Volatility 3), Malware Triaging, C2 Beacon Decoding, Threat Hunting, Incident Response.
+
+## Key Sections & Links
+
+- [About](https://z4hid.github.io/about/): Background, credentials, education, and technical philosophy.
+- [Projects](https://z4hid.github.io/projects/): 17+ production-ready AI, ML, computer vision, and web systems.
+- [Cybersecurity Writeups](https://z4hid.github.io/writeups/): Hands-on offensive and defensive security lab breakdowns.
+- [AI Engineering Blog](https://z4hid.github.io/blog/): Practical in-depth guides on building and shipping AI systems.
+- [Certifications](https://z4hid.github.io/certificates/): Verified accreditations from DeepLearning.AI, Hugging Face, Kaggle, and Semrush.
+- [Contact](https://z4hid.github.io/contact/): Direct contact for engineering consultations and collaborations.

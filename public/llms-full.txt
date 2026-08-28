@@ -1,0 +1,25 @@
+# Md. Zahid Hasan — AI & Cybersecurity Engineer (Full Technical Profile)
+
+## Overview
+Md. Zahid Hasan is an AI Engineer and Cybersecurity Specialist at BrainSpark Digital (https://brainsparkd.com/) based in Bangladesh. With a B.Sc. in Computer Science & Engineering from Uttara University, he specializes in engineering production Large Language Model (LLM) agents, RAG knowledge retrieval systems, computer vision pipelines, and conducting offensive and defensive cybersecurity audits.
+
+## Contact & Links
+- Website: https://z4hid.github.io/
+- Email: zahidhasan9297@gmail.com
+- GitHub: https://github.com/z4hid
+- LinkedIn: https://linkedin.com/in/z4hid
+- X/Twitter: https://twitter.com/z4hiid
+- Hugging Face: https://huggingface.co/z4hid
+- Kaggle: https://kaggle.com/z4hid
+
+## Featured Engineering Projects
+- SparkFrame: AI visual storytelling platform using Gemini Nano vision anchoring. (https://z4hid.github.io/projects/sparkframe)
+- PromptXpert: Automated prompt-engineering toolkit built on DSPy and Bayesian optimization. (https://z4hid.github.io/projects/promptxpert)
+- MASA: Multi-Modal Adaptive Study Agent with RAG and knowledge graphs. (https://z4hid.github.io/projects/masa)
+- SparkBot: Production customer support AI chatbot deployed at BrainSpark Digital. (https://z4hid.github.io/projects/sparkbot)
+- Email Automation Agent: Autonomous multi-agent framework for inbox classification and draft generation. (https://z4hid.github.io/projects/email-automation-agent)
+- GCC Daily Bazar: Live hyper-local online supermarket with cash on delivery and real-time tracking (https://gccdailybazar.shop/). (https://z4hid.github.io/projects/gcc-daily-bazar)
+
+## Cybersecurity Writeups & Technical Audits
+- Offensive Security: Active Directory exploitation, Kerberoasting, ACL abuse, and Domain Controller compromise. (https://z4hid.github.io/writeups/offensive/active-directory-kerberoasting-privesc)
+- Defensive Security: Volatile memory forensics, Volatility 3, process hollowing detection, and Cobalt Strike Beacon configuration decoding. (https://z4hid.github.io/writeups/defensive/memory-forensics-volatility-malware-analysis)
